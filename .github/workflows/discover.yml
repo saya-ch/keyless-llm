@@ -169,5 +169,13 @@ jobs:
             echo "候选清单无变化"
           else
             git commit -m "chore(discover): agent 搜索到的新候选来源"
-            git push
+            # probe 可能同时在跑并把快照提交推了上去，直接 push 会被拒。
+            # 先 rebase 到远端最新，失败重试，最多 4 次。
+            ok=0
+            for i in 1 2 3 4; do
+              git pull --rebase --autostash origin "$GITHUB_REF_NAME" && git push && ok=1 && break
+              echo "push 第${i}次被拒（并发提交竞争），10s 后重试"
+              sleep 10
+            done
+            [ "$ok" = "1" ] || { echo "::error::push 重试 4 次仍失败"; exit 1; }
           fi
