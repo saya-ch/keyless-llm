@@ -1,0 +1,193 @@
+{
+  "generatedAt": "2026-10-25T15:01:54.578Z",
+  "summary": {
+    "providers": 3,
+    "freeModels": 22,
+    "healthy": 17,
+    "limited": 3,
+    "blocked": 0,
+    "failed": 2
+  },
+  "providers": [
+    {
+      "id": "kilo",
+      "label": "Kilo Code",
+      "enabled": true,
+      "base": "https://api.kilo.ai/api/gateway",
+      "rate": "200 req/h/IP",
+      "modelsError": "",
+      "modelsFound": 401,
+      "freeModels": 16,
+      "ok": 12,
+      "limited": 3,
+      "blocked": 0,
+      "failed": 1,
+      "models": [
+        {
+          "model": "kilo-auto/free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nvidia/nemotron-3.5-super-vl:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "reflection/beam-free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "recursive/flint-v1.0:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "xingchen-agi/xing4.0-29b-a4b:free",
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
+        },
+        {
+          "model": "dots-studio/dots-3-note-preview:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "liquid/lfm-2.5-2.6b:free",
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
+        },
+        {
+          "model": "nvidia/nemotron-3.5-lightning:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "poolside/laguna-s-2.1:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "poolside/laguna-xs-2.1:free",
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
+        },
+        {
+          "model": "cohere/north-mini-code:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nvidia/nemotron-3.5-content-safety:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nvidia/nemotron-3-super-120b-a12b:free",
+          "status": 404,
+          "state": "unknown",
+          "error": "Provider returned error"
+        },
+        {
+          "model": "openrouter/free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "pollinations",
+      "label": "Pollinations",
+      "enabled": true,
+      "base": "https://text.pollinations.ai/openai",
+      "rate": "4 req/min",
+      "modelsError": "",
+      "modelsFound": 1,
+      "freeModels": 1,
+      "ok": 1,
+      "limited": 0,
+      "blocked": 0,
+      "failed": 0,
+      "models": [
+        {
+          "model": "openai-fast",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        }
+      ]
+    },
+    {
+      "id": "blockrun",
+      "label": "BlockRun",
+      "enabled": true,
+      "base": "https://blockrun.ai/api/v1",
+      "rate": "IP 限流（免费容量常满）",
+      "modelsError": "",
+      "modelsFound": 5,
+      "freeModels": 5,
+      "ok": 4,
+      "limited": 0,
+      "blocked": 0,
+      "failed": 1,
+      "models": [
+        {
+          "model": "nvidia/gpt-oss-120b",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nvidia/deepseek-v4-flash",
+          "status": 400,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nvidia/step-3.7-flash",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nvidia/mistral-nemotron",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        }
+      ]
+    }
+  ]
+}

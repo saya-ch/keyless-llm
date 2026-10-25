@@ -1,0 +1,60 @@
+name: probe
+
+# 每日探测：确认已登记的免鉴权来源今天还能不能用
+# 纯确定性探测，不需要任何 API key，也不需要 LLM。
+# 结果写入 snapshots/status.json 并自动提交，便于在 README 里展示实时可用性。
+
+on:
+  schedule:
+    # GitHub Actions 用 UTC：每天 03:17（北京时间 11:17）
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "providers.json"
+      - "scripts/probe-sources.mjs"
+      - ".github/workflows/probe.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 探测全部来源
+        run: node scripts/probe-sources.mjs --out snapshots/status.json
+
+      - name: 校验快照格式
+        run: |
+          node -e '
+            const s = require("./snapshots/status.json");
+            if (!s.generatedAt) throw new Error("缺少 generatedAt");
+            if (!Array.isArray(s.providers) || !s.providers.length) throw new Error("快照为空");
+            console.log("来源:", s.providers.map(p => `${p.id}=${p.ok}/${p.freeModels}`).join(" "));
+            console.log("合计:", JSON.stringify(s.summary));
+          '
+
+      - name: 提交快照
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add snapshots/status.json
+          if git diff --staged --quiet; then
+            echo "快照无变化"
+          else
+            git commit -m "chore(snapshot): 更新来源可用性快照"
+            git push
+          fi

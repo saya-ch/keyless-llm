@@ -1,0 +1,29 @@
+# 运行产物
+logs/
+egress.json
+*.log
+
+# 逆向原始产物（含上游发布文件，不入库）
+raw/
+
+# 依赖与临时文件
+node_modules/
+*.tmp
+*.lnk
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 巡检产物（快照由 CI 自动提交，本地生成的忽略）
+snapshots/daily-report.md
+candidates.json
+
+# 逆向过程的临时脚本（依赖 raw/ 下不入库的原始产物）
+scripts/extract_providers*.py
+scripts/ctx.py
+scripts/probe_live.js
+scripts/probe_quota.js
+scripts/_mk_test_panel.py

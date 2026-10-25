@@ -1,0 +1,90 @@
+name: discover
+
+# 发现新的免鉴权大模型服务 —— 这一层用 agent，不用脚本
+#
+# 为什么要 agent：
+#   「搜索」不是确定性任务。需要读文档、猜 API 路径、辨别「真的免鉴权」
+#   还是「藏了个注册墙」、判断是否只是临时促销端点、评估合规性。
+#   这些都是语义判断，脚本做不了，硬写规则只会得到一堆假阳性。
+#
+# 分工：
+#   agent 负责 —— 搜索 + 语义判断 + 产出候选（candidates.json）
+#   脚本负责 —— 实测候选是否真的免鉴权（validate-source.mjs）
+#
+# 本 workflow 只在有 agent 运行环境时启用（例如设置了 OPENAI_API_KEY）。
+# 未配置 key 时自动跳过，不影响仓库的日常 CI。
+
+on:
+  schedule:
+    # 每天 04:23 UTC（北京时间 12:23），和 probe 错开，避免同一分钟抢资源
+    - cron: "23 4 * * *"
+  workflow_dispatch:
+    inputs:
+      query:
+        description: "自定义搜索词（留空则用默认关键词组）"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: discover
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # 没有 agent 运行所需的密钥就跳过，不让 CI 变红
+    if: ${{ github.event_name == 'workflow_dispatch' || secrets.AGENT_API_KEY != '' }}
+    env:
+      AGENT_API_KEY: ${{ secrets.AGENT_API_KEY }}
+      AGENT_BASE_URL: ${{ secrets.AGENT_BASE_URL }}
+      AGENT_MODEL: ${{ secrets.AGENT_MODEL }}
+      SEARCH_QUERY: ${{ inputs.query }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Agent 搜索并产出候选来源
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/discover-with-agent.mjs
+
+      - name: 实测候选是否真的免鉴权
+        run: |
+          if [ ! -f candidates.json ]; then
+            echo "agent 未产出候选文件，跳过"
+            exit 0
+          fi
+          node scripts/validate-source.mjs --file candidates.json --json | tee /tmp/candidates-report.json || true
+
+      - name: 汇总结果
+        run: |
+          if [ -f /tmp/candidates-report.json ]; then
+            node -e '
+              const r = require("/tmp/candidates-report.json");
+              const k = r.filter(x => x.verdict === "keyless");
+              const l = r.filter(x => x.verdict === "limited");
+              console.log(`新增免鉴权来源 ${k.length} 个，受限 ${l.length} 个`);
+              for (const x of k) console.log(`  ✓ ${x.label} ${x.base}`);
+              for (const x of l) console.log(`  △ ${x.label} ${x.base}（当前限流）`);
+            '
+          fi
+
+      - name: 提交候选清单（供人工评审）
+        if: always() && hashFiles('candidates.json') != ''
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add candidates.json
+          if git diff --staged --quiet; then
+            echo "候选清单无变化"
+          else
+            git commit -m "chore(discover): agent 搜索到的新候选来源"
+            git push
+          fi

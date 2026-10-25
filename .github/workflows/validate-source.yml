@@ -1,0 +1,86 @@
+name: validate-source
+
+# 新增来源的卡口：任何改动 providers.json 的 PR 都必须通过
+#
+# 两层校验，分工明确：
+#   1) 确定性校验（scripts/validate-source.mjs）—— 不带任何鉴权头实测，
+#      证明它真的不需要 API key。这一层必须是硬门禁，不通过就 fail。
+#   2) Agent 评审（可选）—— 由仓库维护者用 agent 判断"该不该收录"
+#      （合规性、稳定性、是否只是临时促销端点）。
+#
+# 第 1 层不消耗 LLM 额度、不需要任何密钥，CI 里 100% 可复现。
+
+on:
+  pull_request:
+    paths:
+      - "providers.json"
+      - "scripts/validate-source.mjs"
+  workflow_dispatch:
+    inputs:
+      base:
+        description: "要校验的来源 base URL（留空则校验 providers.json 里全部来源）"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 校验 providers.json 中每个来源确实免鉴权
+        if: ${{ inputs.base == '' }}
+        run: |
+          set -euo pipefail
+          node -e '
+            const cfg = require("./providers.json");
+            const enabled = (cfg.providers || []).filter(p => p.enabled !== false);
+            if (!enabled.length) { console.log("没有启用的来源"); process.exit(0); }
+            console.log(JSON.stringify({
+              candidates: enabled.map(p => ({
+                label: p.label || p.id,
+                base: p.base,
+                testModel: (p.staticModels && p.staticModels[0]) || null,
+              })),
+            }, null, 2));
+          ' > /tmp/candidates.json
+          node scripts/validate-source.mjs --file /tmp/candidates.json --json | tee /tmp/report.json
+
+      - name: 校验单个候选来源
+        if: ${{ inputs.base != '' }}
+        run: |
+          node scripts/validate-source.mjs --base "${{ inputs.base }}" --json | tee /tmp/report.json
+
+      - name: 判定门禁
+        run: |
+          node -e '
+            const fs = require("fs");
+            const report = JSON.parse(fs.readFileSync("/tmp/report.json", "utf8"));
+            const bad = report.filter(r => r.verdict === "not-keyless");
+            const limited = report.filter(r => r.verdict === "limited");
+            const keyless = report.filter(r => r.verdict === "keyless");
+            console.log(`免鉴权 ${keyless.length} · 受限 ${limited.length} · 非免鉴权 ${bad.length}`);
+            if (bad.length) {
+              console.error("\n以下来源未通过免鉴权校验：");
+              for (const b of bad) {
+                console.error(`  - ${b.label || b.base}`);
+                for (const r of b.reasons) console.error(`      ${r}`);
+              }
+              process.exit(1);
+            }
+          '
+
+      - name: 上传报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-validation-report
+          path: /tmp/report.json

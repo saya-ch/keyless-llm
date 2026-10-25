@@ -1,0 +1,72 @@
+{
+  "_comment": "免鉴权免费大模型来源。freeRule 决定哪些模型算免费；staticModels 是拉不到 /models 时的兜底。",
+  "providers": [
+    {
+      "id": "kilo",
+      "label": "Kilo Code",
+      "base": "https://api.kilo.ai/api/gateway",
+      "modelsPath": "/models",
+      "freeRule": { "type": "suffix", "value": ":free" },
+      "extraFree": ["kilo-auto/free", "reflection/beam-free", "openrouter/free"],
+      "rate": "200 req/h/IP",
+      "enabled": true,
+      "staticModels": [
+        "kilo-auto/free",
+        "reflection/beam-free",
+        "recursive/flint-v1.0:free",
+        "nvidia/nemotron-3.5-super-vl:free",
+        "nvidia/nemotron-3.5-lightning:free",
+        "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "nvidia/nemotron-3-super-120b-a12b:free",
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        "poolside/laguna-s-2.1:free",
+        "poolside/laguna-xs-2.1:free",
+        "cohere/north-mini-code:free",
+        "dots-studio/dots-3-note-preview:free",
+        "xingchen-agi/xing4.0-29b-a4b:free",
+        "liquid/lfm-2.5-2.6b:free",
+        "openrouter/free"
+      ]
+    },
+    {
+      "id": "pollinations",
+      "label": "Pollinations",
+      "base": "https://text.pollinations.ai/openai",
+      "modelsPath": "/models",
+      "freeRule": { "type": "field", "field": "tier", "value": "anonymous" },
+      "extraFree": ["openai-fast"],
+      "rate": "4 req/min",
+      "enabled": true,
+      "staticModels": ["openai-fast"]
+    },
+    {
+      "id": "blockrun",
+      "label": "BlockRun",
+      "base": "https://blockrun.ai/api/v1",
+      "modelsPath": "/models",
+      "discover": false,
+      "freeRule": { "type": "prefix", "value": "nvidia/" },
+      "extraFree": [],
+      "rate": "IP 限流（免费容量常满）",
+      "enabled": true,
+      "staticModels": [
+        "nvidia/gpt-oss-120b",
+        "nvidia/deepseek-v4-flash",
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "nvidia/step-3.7-flash",
+        "nvidia/mistral-nemotron"
+      ]
+    },
+    {
+      "id": "opencode",
+      "label": "OpenCode",
+      "base": "https://opencode.ai/inference/v1",
+      "modelsPath": "/models",
+      "freeRule": { "type": "contains", "value": "-free" },
+      "extraFree": ["big-pickle", "beam-free", "grok-code"],
+      "rate": "按 IP（当前整体 429）",
+      "enabled": false,
+      "staticModels": []
+    }
+  ]
+}
