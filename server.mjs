@@ -33,6 +33,14 @@ const CFG = {
   catalogPath: env("CATALOG", path.join(__dirname, "models.catalog.json")),
   providersPath: env("PROVIDERS", path.join(__dirname, "providers.json")),
   maxAttempts: int(env("ATTEMPTS", 2), 2),       // 含首次，最多转移次数
+  // ── auto 伪模型 ────────────────────────────────────────────────
+  autoNames: (env("AUTO_NAMES", "auto,auto-fast,auto-thinking") || "auto").split(",").map((s) => s.trim()).filter(Boolean),
+  autoAttempts: int(env("AUTO_ATTEMPTS", 6), 6),  // auto 模式最多试几个模型
+  autoSticky: int(env("AUTO_STICKY", 1), 1),       // 成功过的模型是否优先复用（会话亲和）
+  // 超时（毫秒）：auto 模式单次请求更快失败好换模型；普通模式留足生成时间
+  timeout: int(env("TIMEOUT", 120000), 120000),
+  timeoutStream: int(env("TIMEOUT_STREAM", 300000), 300000),
+  autoTimeout: int(env("AUTO_TIMEOUT", 45000), 45000),   // auto 模式单模型超时
 };
 function int(v, d) { const n = parseInt(v, 10); return Number.isFinite(n) ? n : d; }
 
@@ -151,6 +159,8 @@ async function refreshModels(force = false) {
 }
 
 // ── 状态机 ────────────────────────────────────────────────────────
+// status 约定：HTTP 状态码；-1 表示网络异常；
+// 特殊值 200 表示「HTTP 成功但内容为空」，按降级处理（不算健康）
 function markResult(id, status, errMsg) {
   const st = ensureState(id);
   st.stateAt = Date.now();
@@ -169,6 +179,15 @@ function markResult(id, status, errMsg) {
     st.state = "unknown"; st.lastError = `${status} ${errMsg || ""}`.trim();
   }
 }
+
+// 空响应专用标记：HTTP 200 但没内容 —— 模型能连上，只是这次没产出
+// 不算 healthy，但也不该进长冷却（换个模型可能就好了）
+function markEmpty(id, msg) {
+  const st = ensureState(id);
+  st.stateAt = Date.now();
+  st.lastError = msg || "empty_response";
+  if (st.state === "healthy") st.state = "unknown";
+}
 function available(key) {
   const st = ensureState(key);
   return st.state === "healthy" || st.state === "unknown" || Date.now() >= st.cooldownUntil;
@@ -181,6 +200,9 @@ function available(key) {
 function resolveKey(requested) {
   if (!requested) return null;
   const want = String(requested);
+  // auto 是伪模型，不在注册表里，必须提前返回，
+  // 否则会误匹配到名字里含 "auto" 的真实模型（如 kilo-auto/free）
+  if (isAutoName(want)) return null;
   if (registry.has(want)) return want;
   const keys = freeKeys();
   const exact = keys.filter((k) => modelOf(k) === want);
@@ -217,6 +239,74 @@ function pickModel(requested) {
     return { key: hit || keys[0] || null, failover: false };
   }
   return { key: chosen, failover: chosen !== requested };
+}
+
+// ── auto 伪模型 ────────────────────────────────────────────────────
+// 客户端传 model="auto"，网关自己挑一个当下最靠谱的模型；
+// 失败（限流/封禁/上游错误）自动换下一个模型重试，直到成功或试完。
+//
+// 为什么要它：免费来源的可用性是动态的。客户端写死 "beam-free"，
+// 那个模型一旦被限流，整条链路就断了，只能等冷却结束。
+// auto 把「选模型」这件事交给网关，让调用方永远只关心「能不能通」。
+
+function isAutoName(requested) {
+  if (!requested) return false;
+  return CFG.autoNames.includes(String(requested).trim().toLowerCase());
+}
+
+// 给模型打分，分数越高越优先被 auto 选中
+// 维度：健康状态 > 实测 TPS > 上下文长度 > 冷却剩余 > 最近使用时间
+function scoreModel(key) {
+  const e = registry.get(key);
+  const st = ensureState(key);
+  if (!e) return -Infinity;
+
+  let score = 0;
+
+  // 1) 健康状态：healthy 远好于 unknown（未探测），limited/blocked 最低
+  if (st.state === "healthy") score += 1000;
+  else if (st.state === "unknown") score += 400;
+  else score += 50;
+
+  // 2) 实测 TPS：测过的模型优先，且 TPS 越高越好（归一化到 0~200）
+  if (st.tps && st.tps > 0) {
+    score += Math.min(200, st.tps * 10);
+    // 首字延迟也纳入：越低越好
+    if (st.ttft && st.ttft > 0) score += Math.max(0, 100 - st.ttft / 50);
+  }
+
+  // 3) 上下文长度：长上下文更通用（归一化到 0~150，1M 拿满分）
+  if (e.context) score += Math.min(150, Math.log10(e.context / 1000 + 1) * 60);
+
+  // 4) 冷却剩余时间：冷却中的模型分数要低，但不为 0（万一马上解冻）
+  if (st.cooldownUntil > Date.now()) {
+    const remain = (st.cooldownUntil - Date.now()) / 1000;
+    score -= Math.min(300, remain / 2);
+  }
+
+  // 5) 最近使用时间：久未使用的优先，避免单个模型被反复消耗（轮转）
+  const idle = Date.now() - (st.lastUsedAt || 0);
+  score += Math.min(80, idle / 60000);
+
+  return score;
+}
+
+// 选出当前最优的模型；exclude 是本次请求已试过、要跳过的 key
+function pickAutoModel(exclude = new Set()) {
+  const cands = freeKeys().filter((k) => available(k) && !exclude.has(k));
+  if (!cands.length) return null;
+  cands.sort((a, b) => scoreModel(b) - scoreModel(a));
+  return cands[0];
+}
+
+// auto 模式下的一次尝试：返回被选中的 key
+// preferUsed 开启时优先复用上次成功的模型（会话亲和，减少来回切换）
+let lastAutoKey = null;
+function pickAuto(preferUsed = false) {
+  if (CFG.autoSticky && preferUsed && lastAutoKey && available(lastAutoKey)) {
+    return lastAutoKey;
+  }
+  return pickAutoModel(new Set());
 }
 
 // ── 探测（花额度，默认 30 分钟一次；面板 R 键手动全量）──────────────
@@ -270,15 +360,32 @@ class UpstreamError extends Error {
   constructor(status, type, message, model) { super(message); this.status = status; this.type = type; this.model = model; }
 }
 
-async function callUpstream(key, body, stream) {
+async function callUpstream(key, body, stream, timeoutMs = 0) {
   const e = registry.get(key);
   const p = e && providerOf(key);
   if (!p) throw new UpstreamError(503, "no_provider", `未知来源: ${key}`, key);
-  const res = await fetch(`${p.base}/chat/completions`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "User-Agent": CFG.ua },
-    body: JSON.stringify({ ...body, model: e.model, stream }),
-  });
+
+  // 超时控制：免费来源偶尔会「连上但不响应」，没有超时会让整个请求卡死。
+  // auto 模式用较短的超时（快速失败换模型），普通模式留足生成时间。
+  const ms = timeoutMs || (stream ? CFG.timeoutStream : CFG.timeout);
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ms);
+
+  let res;
+  try {
+    res = await fetch(`${p.base}/chat/completions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "User-Agent": CFG.ua },
+      body: JSON.stringify({ ...body, model: e.model, stream }),
+      signal: ctrl.signal,
+    });
+  } catch (err) {
+    clearTimeout(timer);
+    const timedOut = err.name === "AbortError";
+    throw new UpstreamError(timedOut ? 504 : -1, timedOut ? "upstream_timeout" : "network_error",
+      timedOut ? `上游超时 (${ms}ms)` : (err.message || "网络错误"), key);
+  }
+
   if (!res.ok) {
     let type = "upstream_error", message = `${res.status}`;
     try {
@@ -286,29 +393,104 @@ async function callUpstream(key, body, stream) {
       type = j.error?.type || j.error_type || j.type || type;
       message = j.error?.message || j.message || message;
     } catch {}
+    clearTimeout(timer);
     throw new UpstreamError(res.status, type, message, key);
   }
+
+  // 空响应检测（仅非流式）：有些免费模型会返回 200 但内容为空
+  // （实测：推理型模型把 max_tokens 全烧在 reasoning 上，JSON/正文出不来）。
+  // 对调用方来说这是「成功但没结果」，比报错更难排查，所以在 auto 模式下
+  // 直接判为失败并换下一个模型。流式场景响应头已发出，无法再换，只能放过。
+  if (!stream) {
+    let text = "";
+    try {
+      text = await res.text();
+    } catch (err) {
+      clearTimeout(timer);
+      const timedOut = err.name === "AbortError";
+      throw new UpstreamError(timedOut ? 504 : 502,
+        timedOut ? "upstream_timeout" : "read_error",
+        timedOut ? `读取上游响应超时 (${ms}ms)` : (err.message || "读取失败"), key);
+    }
+    clearTimeout(timer);
+    let j = null;
+    try { j = JSON.parse(text); } catch {}
+    if (j) {
+      const ch = j.choices?.[0];
+      const content = ch?.message?.content ?? ch?.text ?? ch?.delta?.content;
+      const empty = content === null || content === undefined || content === "";
+      if (empty && ch?.finish_reason === "length") {
+        // 截断且无内容 —— 几乎可以肯定是 reasoning 吃光了预算
+        throw new UpstreamError(200, "empty_response", "上游返回空内容（可能 max_tokens 被 reasoning 耗尽）", key);
+      }
+      // 重新包装成可被调用方正常解析的 Response
+      const r2 = new Response(text, { status: res.status, headers: res.headers });
+      return r2;
+    }
+    // 不是 JSON 的响应：包一层 error，让下游统一走错误分支
+    throw new UpstreamError(502, "bad_response", "上游返回非 JSON 响应", key);
+  }
+  // 流式：timer 交给调用方在流结束时清理，这里不 clear
+  res.__keylessTimer = timer;
   return res;
 }
 
 // 带轮换/转移的调用：返回 {res, model: key, failover}
+//
+// 两种模式：
+//   普通模式（指定了具体模型）：最多试 CFG.maxAttempts 次，
+//     优先同来源轮换，再跨来源；非限流类错误（4xx 且非 429/403）不转移。
+//   auto 模式（model="auto"）：网关自己选模型，最多试 CFG.autoAttempts 次，
+//     每次失败（限流/封禁/上游错误/空响应）都换一个模型重试，
+//     直到成功或所有候选都试过。这是「保证可用」的关键路径。
 async function callWithRotation(requested, body, stream) {
+  const auto = isAutoName(requested);
+  const maxTry = auto ? CFG.autoAttempts : CFG.maxAttempts;
   let attempt = 0, lastErr = null;
   const tried = [];
-  while (attempt < CFG.maxAttempts) {
-    const pick = attempt === 0 ? pickModel(requested) : pickModel(null);
-    if (!pick.key) throw new UpstreamError(503, "no_model", "没有可用的免费模型", null);
-    if (tried.includes(pick.key)) break;
-    tried.push(pick.key);
-    ensureState(pick.key).lastUsedAt = Date.now();
+
+  while (attempt < maxTry) {
+    let key, failover;
+
+    if (auto) {
+      // auto：每次都从「未试过且当前可用」的候选里挑最优的
+      key = pickAutoModel(new Set(tried));
+      if (!key) {
+        // 没有可用候选了：如果还有没试过的（可能处于冷却中），也试一下
+        const fallback = freeKeys().find((k) => !tried.includes(k));
+        if (!fallback) break;
+        key = fallback;
+      }
+      failover = true;
+    } else {
+      const pick = attempt === 0 ? pickModel(requested) : pickModel(null);
+      if (!pick.key) throw new UpstreamError(503, "no_model", "没有可用的免费模型", null);
+      key = pick.key;
+      failover = pick.failover;
+    }
+
+    if (tried.includes(key)) break;
+    tried.push(key);
+    ensureState(key).lastUsedAt = Date.now();
+
     try {
-      const res = await callUpstream(pick.key, body, stream);
-      markResult(pick.key, 200);
-      return { res, model: pick.key, failover: pick.failover };
+      // auto 模式用更短的单请求超时：宁可快速失败换下一个模型，
+      // 也不要卡在一个不响应的上游上把整个请求拖死
+      const tmo = auto ? CFG.autoTimeout : 0;
+      const res = await callUpstream(key, body, stream, tmo);
+      markResult(key, 200);
+      if (auto) lastAutoKey = key;      // 记住成功的模型，下次优先复用
+      return { res, model: key, failover };
     } catch (e) {
       lastErr = e;
-      markResult(pick.key, e.status, e.message);
-      if (e.status !== 429 && e.status !== 403 && e.status < 500) break; // 非限流类错误不转移
+      if (e.status === 200) markEmpty(key, e.message);   // HTTP 200 但空内容
+      else markResult(key, e.status, e.message);
+      // auto 模式对所有上游故障都换模型重试（这是它存在的意义）
+      // 普通模式只对限流类故障转移
+      if (!auto) {
+        const transient = e.status === 429 || e.status === 403 || e.status >= 500 || e.status === 200;
+        if (!transient) break;
+      }
       attempt++;
     }
   }
@@ -320,20 +502,25 @@ async function* parseUpstreamSSE(res) {
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buf = "";
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buf += decoder.decode(value, { stream: true });
-    let idx;
-    while ((idx = buf.indexOf("\n")) >= 0) {
-      const line = buf.slice(0, idx).trim();
-      buf = buf.slice(idx + 1);
-      if (line.startsWith("data:")) {
-        const data = line.slice(5).trim();
-        if (data === "[DONE]") { yield { done: true }; return; }
-        try { yield { chunk: JSON.parse(data) }; } catch {}
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      let idx;
+      while ((idx = buf.indexOf("\n")) >= 0) {
+        const line = buf.slice(0, idx).trim();
+        buf = buf.slice(idx + 1);
+        if (line.startsWith("data:")) {
+          const data = line.slice(5).trim();
+          if (data === "[DONE]") { yield { done: true }; return; }
+          try { yield { chunk: JSON.parse(data) }; } catch {}
+        }
       }
     }
+  } finally {
+    // 流结束（或异常）后清掉上游超时定时器，否则 Node 进程挂住不退出
+    try { clearTimeout(res.__keylessTimer); } catch {}
   }
 }
 
@@ -354,12 +541,15 @@ async function handleOpenAI(req, res, body) {
   if (!stream) {
     const j = await up.json();
     tallyUsage(j.usage);
+    // auto 模式下把响应体里的 model 换成实际选中的模型，方便排查
+    if (isAutoName(body.model) && j && typeof j === "object") j.model = model;
     return sendJson(res, 200, j);
   }
   sseHeaders(res);
   for await (const ev of parseUpstreamSSE(up)) {
     if (ev.done) { res.write("data: [DONE]\n\n"); break; }
     if (ev.chunk?.usage) tallyUsage(ev.chunk.usage);
+    if (isAutoName(body.model) && ev.chunk && typeof ev.chunk === "object") ev.chunk.model = model;
     res.write(`data: ${JSON.stringify(ev.chunk)}\n\n`);
   }
   res.end();
@@ -633,7 +823,13 @@ const server = http.createServer(async (req, res) => {
         id: key, object: "model", created: 0,
         owned_by: e.pid, provider: e.pid, free: true,
       }));
-      return sendJson(res, 200, { object: "list", data });
+      // auto 伪模型排在最前：它是「保证可用」的推荐入口
+      const autoModels = CFG.autoNames.map((n) => ({
+        id: n, object: "model", created: 0, owned_by: "keyless-llm",
+        provider: "auto", free: true, virtual: true,
+        description: "自动选择当前最优可用模型，失败自动换模型重试",
+      }));
+      return sendJson(res, 200, { object: "list", data: [...autoModels, ...data] });
     }
     if (req.method === "POST" && ["/v1/chat/completions", "/v1/messages", "/v1/responses"].includes(url.pathname)) {
       const body = await readJson(req);

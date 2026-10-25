@@ -27,6 +27,11 @@ on:
 
 permissions:
   contents: write
+  # 让 GITHUB_TOKEN 能调用 GitHub Models 作为 agent 的 LLM 后端。
+  # 为什么不用我们的网关：GitHub Actions 是共享出口 IP，
+  # 免费来源普遍按 IP 限流，网关在 CI 上很可能一到就全部 429。
+  # GitHub Models 走官方通道，零配置、无 secret，是 CI 场景的可靠后端。
+  models: read
 
 concurrency:
   group: discover
@@ -36,13 +41,14 @@ jobs:
   discover:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # 没有 agent 运行所需的密钥就跳过，不让 CI 变红
-    if: ${{ github.event_name == 'workflow_dispatch' || secrets.AGENT_API_KEY != '' }}
+    # 不再依赖任何外部密钥：GITHUB_TOKEN 走 GitHub Models，零配置即可运行。
+    # 脚本内部仍有完整降级链，任何一档后端失败都不会让 job 失败。
     env:
-      AGENT_API_KEY: ${{ secrets.AGENT_API_KEY }}
       AGENT_BASE_URL: ${{ secrets.AGENT_BASE_URL }}
+      AGENT_API_KEY: ${{ secrets.AGENT_API_KEY }}
       AGENT_MODEL: ${{ secrets.AGENT_MODEL }}
       SEARCH_QUERY: ${{ inputs.query }}
+      KEYLESS_PROBE_ENV: ci
     steps:
       - uses: actions/checkout@v4
 

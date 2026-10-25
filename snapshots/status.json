@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-10-25T15:01:54.578Z",
+  "generatedAt": "2026-10-25T15:48:01.637Z",
+  "env": "ci",
   "summary": {
     "providers": 3,
     "freeModels": 22,
-    "healthy": 17,
-    "limited": 3,
+    "healthy": 18,
+    "limited": 2,
     "blocked": 0,
     "failed": 2
   },
@@ -18,8 +19,8 @@
       "modelsError": "",
       "modelsFound": 401,
       "freeModels": 16,
-      "ok": 12,
-      "limited": 3,
+      "ok": 14,
+      "limited": 1,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -61,9 +62,9 @@
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -79,9 +80,9 @@
         },
         {
           "model": "poolside/laguna-xs-2.1:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "cohere/north-mini-code:free",
@@ -119,7 +120,9 @@
           "state": "healthy",
           "error": ""
         }
-      ]
+      ],
+      "failStreak": 0,
+      "suggestDead": false
     },
     {
       "id": "pollinations",
@@ -141,7 +144,9 @@
           "state": "healthy",
           "error": ""
         }
-      ]
+      ],
+      "failStreak": 0,
+      "suggestDead": false
     },
     {
       "id": "blockrun",
@@ -152,8 +157,8 @@
       "modelsError": "",
       "modelsFound": 5,
       "freeModels": 5,
-      "ok": 4,
-      "limited": 0,
+      "ok": 3,
+      "limited": 1,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -171,9 +176,9 @@
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "nvidia/step-3.7-flash",
@@ -187,7 +192,9 @@
           "state": "healthy",
           "error": ""
         }
-      ]
+      ],
+      "failStreak": 0,
+      "suggestDead": false
     }
   ]
 }

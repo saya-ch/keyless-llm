@@ -35,6 +35,10 @@ jobs:
           node-version: "20"
 
       - name: 探测全部来源
+        env:
+          # 标注探测环境：CI 的共享出口 IP 容易被按 IP 限流，
+          # 单次失败不能判定来源死亡，脚本据此提高死亡判定阈值
+          KEYLESS_PROBE_ENV: ci
         run: node scripts/probe-sources.mjs --out snapshots/status.json
 
       - name: 校验快照格式
@@ -43,8 +47,12 @@ jobs:
             const s = require("./snapshots/status.json");
             if (!s.generatedAt) throw new Error("缺少 generatedAt");
             if (!Array.isArray(s.providers) || !s.providers.length) throw new Error("快照为空");
+            console.log("环境:", s.env || "(未标注)");
             console.log("来源:", s.providers.map(p => `${p.id}=${p.ok}/${p.freeModels}`).join(" "));
             console.log("合计:", JSON.stringify(s.summary));
+            for (const p of s.providers) {
+              if (p.suggestDead) console.warn(`⚠ ${p.id} 连续 ${p.failStreak} 轮无可用模型，建议人工复核`);
+            }
           '
 
       - name: 提交快照

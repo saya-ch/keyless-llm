@@ -35,6 +35,12 @@ const OUT = path.resolve(ROOT, arg("--out", "snapshots/status.json"));
 const QUIET = has("--quiet");
 const UA = "keyless-llm-probe/1.0";
 
+// 探测环境：CI 的共享出口 IP 容易被免费来源按 IP 限流，
+// 所以 CI 上的失败**不能**等同于来源死亡 —— 快照里必须标注来源，
+// 判定"来源已死"需要连续多天失败，见 README「防误报」一节。
+const ENV_LABEL = process.env.KEYLESS_PROBE_ENV
+  || (process.env.CI ? "ci" : "local");
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const log = (...a) => { if (!QUIET) console.log(...a); };
 
@@ -194,8 +200,29 @@ async function main() {
     }
   }
 
+  // ── 连续失败计数（防误报）─────────────────────────────────────
+  // 读上一次快照，对每个来源累计「本轮没有任何可用模型」的次数。
+  // 只有连续 N 次全失败才建议标记 dead —— 单次失败（尤其是 CI 上）
+  // 很可能只是出口 IP 被限流，而不是来源真的消失了。
+  const DEAD_THRESHOLD = parseInt(process.env.KEYLESS_DEAD_THRESHOLD || "3", 10);
+  let prev = null;
+  try { prev = JSON.parse(fs.readFileSync(OUT, "utf8")); } catch { /* 首次运行没有历史 */ }
+  const prevStreak = {};
+  if (prev?.providers) {
+    for (const p of prev.providers) prevStreak[p.id] = p.failStreak || 0;
+  }
+
+  for (const p of out) {
+    const allDown = p.freeModels > 0 && p.ok === 0;
+    p.failStreak = allDown ? (prevStreak[p.id] || 0) + 1 : 0;
+    // 达到阈值才建议标记死亡；CI 环境下要求更高（更容易是 IP 问题）
+    const threshold = ENV_LABEL === "ci" ? DEAD_THRESHOLD + 2 : DEAD_THRESHOLD;
+    p.suggestDead = p.failStreak >= threshold;
+  }
+
   const snap = {
     generatedAt: new Date().toISOString(),
+    env: ENV_LABEL,
     summary: {
       providers: out.length,
       freeModels: out.reduce((a, x) => a + x.freeModels, 0),
@@ -210,14 +237,19 @@ async function main() {
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify(snap, null, 2) + "\n", "utf8");
 
-  log(`\n快照写入 ${path.relative(ROOT, OUT)}`);
+  log(`\n快照写入 ${path.relative(ROOT, OUT)}  [环境: ${ENV_LABEL}]`);
   log(`总计 ${snap.summary.healthy}/${snap.summary.freeModels} 可用` +
       (snap.summary.limited ? `，${snap.summary.limited} 限流` : "") +
       (snap.summary.blocked ? `，${snap.summary.blocked} 封禁` : "") +
       (snap.summary.failed ? `，${snap.summary.failed} 异常` : ""));
 
-  // 全部来源都挂掉时返回非零，让 CI 报警
-  if (snap.summary.healthy === 0) process.exitCode = 1;
+  const dying = out.filter((p) => p.suggestDead);
+  if (dying.length) {
+    log(`\n⚠ 连续失败已达阈值，建议复核是否真的失效：`);
+    for (const p of dying) log(`   ${p.id} 连续 ${p.failStreak} 轮无可用模型`);
+  }
+  // 单次全失败不报警：很可能是出口 IP 被限流，不是来源真死
+  if (snap.summary.healthy === 0 && dying.length) process.exitCode = 1;
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

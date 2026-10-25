@@ -148,6 +148,37 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
                                  └─────────────┘            └────────────────┘
 ```
 
+### agent 跑在哪里：本地和 CI 用不同的 LLM 后端
+
+这是本仓库最反直觉的一点，**也是最容易踩的坑**：
+
+| 场景 | agent 的 LLM 后端 | 原因 |
+| --- | --- | --- |
+| **本地**（WorkBuddy 定时任务） | 本项目自己的网关 `model=auto` | 家用/办公 IP 信誉好、有代理多出口、配额充足。自举：用聚合来的免费模型维护聚合清单。 |
+| **CI**（GitHub Actions） | ① 网关（可能限流）→ ② **GitHub Models**（`GITHUB_TOKEN`） | GitHub Actions 是**共享出口 IP**，免费来源普遍按 IP 限流，网关在 CI 上很可能一到就全部 429。 |
+
+为什么 CI 不能只靠我们自己的网关：
+
+- **共享 IP 被限流**：Runner 的 IP 段被无数项目共用，Kilo 的 200 次/小时/IP 这类配额早被别人吃光
+- **数据中心 IP 被反爬**：DuckDuckGo / Bing 对数据中心 IP 的容忍度远低于住宅 IP
+- **误报最致命**：CI 上探测失败 ≠ 来源真死了。若据此判断，每日快照会**大量误报"来源已死"**
+
+GitHub Models 是 CI 的最优解：`permissions: models: read` + 内置 `GITHUB_TOKEN` 即可调用，**零配置、无 secret、免费**（[官方文档](https://github.blog/ai-and-ml/llms/solving-the-inference-problem-for-open-source-ai-projects-with-github-models/)）。
+
+### 防误报：CI 失败不等于来源已死
+
+`probe-sources.mjs` 对每个来源累计 `failStreak`（连续多少轮没有可用模型）：
+
+- 有任何一个模型可用 → streak 立即归零
+- 连续失败达到阈值才标记 `suggestDead: true`，且**仅仅是"建议人工复核"，不会自动删除来源**
+- CI 环境下阈值自动 +2（默认 3 → 5），因为 CI 的失败更可能是 IP 问题而非来源问题
+
+快照里同时记录 `env: ci | local`，便于事后区分"这是哪台机器看到的结果"。
+
+```bash
+KEYLESS_PROBE_ENV=ci node scripts/probe-sources.mjs   # 手动模拟 CI 环境探测
+```
+
 ### 用法
 
 **手动探测**（本地随时跑）：
@@ -173,7 +204,7 @@ node scripts/validate-source.mjs --base https://example.com/api/v1 --model xxx
 | ------------------ | --------------------------------- | -------------------------------------- |
 | `probe.yml`        | 每日定时 + 改 `providers.json` 时        | 探测全部来源，自动提交 `snapshots/status.json` |
 | `validate-source.yml` | 改动 `providers.json` 的 PR        | **硬门禁**：新增来源必须通过免鉴权实测，不通过就 fail |
-| `discover.yml`     | 每日定时（需配置 `AGENT_API_KEY`）        | agent 搜索新来源 → 候选清单 → 实测        |
+| `discover.yml`     | 每日定时（**零配置**，`GITHUB_TOKEN` 即可）   | agent 搜索新来源 → 候选清单 → 实测        |
 
 `discover.yml` 没配 `AGENT_API_KEY` 时会自动跳过，不影响日常 CI。CI 里的 agent 用的是标准 OpenAI 兼容接口，配 `AGENT_API_KEY` / `AGENT_BASE_URL` / `AGENT_MODEL` 三个变量即可。
 
@@ -189,6 +220,55 @@ node scripts/validate-source.mjs --file candidates.json
 # 3. 通过的才写进 providers.json，然后用 PR 提交
 #    → validate-source.yml 会自动实测校验，不通过就卡住
 ```
+
+## auto 模型：自动调度，失败自动换模型
+
+免鉴权来源最大的问题是**可用性是动态的**：客户端写死 `beam-free`，那个模型一旦被限流，整条链路就断了，只能干等冷却。
+
+所以网关提供了一个伪模型 `auto`——把「选模型」这件事交给网关，调用方只关心「能不能通」：
+
+```bash
+curl http://127.0.0.1:8788/v1/chat/completions \
+  -H "Authorization: Bearer sk-keyless-local" -H "Content-Type: application/json" \
+  -d '{"model":"auto","messages":[{"role":"user","content":"hi"}],"max_tokens":50,"stream":false}'
+```
+
+响应体里的 `model` 字段会被替换成**实际选中的模型**（如 `kilo/reflection/beam-free`），响应头 `x-keyless-model` 也会带上，方便排查。
+
+### 怎么选
+
+`auto` 对每个可用模型打分，取最高分：
+
+| 维度 | 权重 | 说明 |
+| --- | --- | --- |
+| 健康状态 | 最高 | `healthy` ≫ `unknown`（未探测）≫ `limited`/`blocked` |
+| 实测 TPS / TTFT | 高 | 跑过 TPS 测速的模型优先，越快分越高 |
+| 上下文长度 | 中 | 长上下文更通用 |
+| 冷却剩余 | 负分 | 冷却中的模型降权，但不为 0 |
+| 空闲时长 | 轻微正分 | 久未使用的优先，避免单个模型被反复消耗 |
+
+### 怎么重试
+
+失败时**换一个模型继续试**，最多 `KEYLESS_AUTO_ATTEMPTS`（默认 6）次：
+
+- `429` / `403` / `5xx` / 网络错误 → 换模型重试
+- **HTTP 200 但内容为空** → 也算失败，换模型重试
+- auto 模式单请求超时 `KEYLESS_AUTO_TIMEOUT`（默认 45s），宁可快速失败换下一个，也不卡死在不响应的上游上
+
+「200 但空内容」这条是实测踩出来的：推理型模型（gpt-oss、step-3.7 等）会把 `max_tokens` 全烧在 reasoning 上，`finish_reason=length` 而正文一个字都没有。对调用方来说这是「成功但没结果」，比报错更难排查。
+
+实测 8 次连续请求 `auto`，**8/8 成功**，其中多次自动绕开被限流的模型切到可用模型。
+
+### 相关配置
+
+| 环境变量 | 默认 | 说明 |
+| --- | --- | --- |
+| `KEYLESS_AUTO_NAMES` | `auto,auto-fast,auto-thinking` | 识别为 auto 的模型名（多个等价于同一个策略） |
+| `KEYLESS_AUTO_ATTEMPTS` | `6` | 最多试几个模型 |
+| `KEYLESS_AUTO_TIMEOUT` | `45000` | auto 单模型超时（毫秒） |
+| `KEYLESS_AUTO_STICKY` | `1` | 记住上次成功的模型并优先复用（减少切换开销） |
+| `KEYLESS_TIMEOUT` | `120000` | 普通（非 auto）请求的上游超时 |
+| `KEYLESS_ATTEMPTS` | `2` | 指定具体模型时的最大转移次数 |
 
 ## 模型命名
 
