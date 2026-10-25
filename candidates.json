@@ -1,0 +1,341 @@
+{
+  "generatedAt": "2026-10-25T16:30:30.784Z",
+  "queries": [
+    "free no-auth OpenAI-compatible API endpoint no API key required",
+    "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
+    "\"no API key\" LLM inference endpoint openai compatible free tier",
+    "openrouter alternative anonymous free api no signup",
+    "免费大模型 API 匿名调用 chat completions 不用注册",
+    "public inference API free without key openai format"
+  ],
+  "searchBackend": "duckduckgo",
+  "llmBackend": "网关(auto)",
+  "rounds": [
+    {
+      "query": "free no-auth OpenAI-compatible API endpoint no API key required",
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 2
+    },
+    {
+      "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 8
+    },
+    {
+      "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 4
+    },
+    {
+      "query": "openrouter alternative anonymous free api no signup",
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 25
+    },
+    {
+      "query": "免费大模型 API 匿名调用 chat completions 不用注册",
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 7
+    },
+    {
+      "query": "public inference API free without key openai format",
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 5
+    }
+  ],
+  "candidates": [
+    {
+      "label": "Puter.js Free AI API",
+      "base": "https://developer.puter.com",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "FreeLLMPool (may host proxy/API)",
+      "base": "https://0xzr.github.io/freellmpool",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Zhihu Article (Likely contains API list)",
+      "base": "https://zhuanlan.zhihu.com/p/2042023140583268884",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Zhihu Article (Likely contains API list)",
+      "base": "https://zhuanlan.zhihu.com/p/2050524686992380835",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Jishuzhan Article (Likely contains API list)",
+      "base": "https://jishuzhan.net/article/2061973168230838274",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "CSDN Article (Likely contains API list)",
+      "base": "https://blog.csdn.net/aidoudoulong/article/details/162830579",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "CSDN DevPress Article (Likely contains API list)",
+      "base": "https://devpress.csdn.net/v1/article/detail/162830579",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Jishuzhan Article (Likely contains API list)",
+      "base": "https://jishuzhan.net/article/2051477220120657922",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "SegmentFault Article (Likely contains API list)",
+      "base": "https://segmentfault.com/a/1190000048018486",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "CSDN Article (Likely contains API list)",
+      "base": "https://blog.csdn.net/qq_51946265/article/details/163764302",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "OpenAI Proxy",
+      "base": "https://api.openai-proxy.org/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Churchless Tech",
+      "base": "https://free.churchless.tech/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Yandex Cloud (may require auth)",
+      "base": "https://llm.api.cloud.yandex.net/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Inference.net",
+      "base": "https://api.inference.net/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Groq Cloud",
+      "base": "https://api.groq.com/openai/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Together AI",
+      "base": "https://api.together.xyz/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "DeepInfra",
+      "base": "https://api.deepinfra.com/v1/openai",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Fireworks AI",
+      "base": "https://api.fireworks.ai/inference/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Hugging Face Inference API",
+      "base": "https://api-inference.huggingface.co",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Replicate",
+      "base": "https://api.replicate.com/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Perplexity Labs",
+      "base": "https://api.perplexity.ai",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "OpenRouter (reference)",
+      "base": "https://openrouter.ai/api/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Google AI Studio (Gemini)",
+      "base": "https://generativelanguage.googleapis.com",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Mistral AI",
+      "base": "https://api.mistral.ai/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Cohere",
+      "base": "https://api.cohere.ai/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "xAI Grok",
+      "base": "https://api.x.ai/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "DeepSeek",
+      "base": "https://api.deepseek.com/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Moonshot AI (Kimi)",
+      "base": "https://api.moonshot.cn/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Z.ai GLM",
+      "base": "https://api.z.ai/api/paas/v4",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Zhipu AI",
+      "base": "https://open.bigmodel.cn/api/paas/v4",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "SiliconFlow",
+      "base": "https://api.siliconflow.cn/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "302.AI",
+      "base": "https://api.302.ai/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Tencent Hunyuan",
+      "base": "https://api.lkeap.cloud.tencent.com/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Alibaba Qwen",
+      "base": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "ByteDance Doubao",
+      "base": "https://ark.cn-beijing.volces.com/api/v3",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "MiniMax",
+      "base": "https://api.minimax.chat/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "StepFun",
+      "base": "https://api.stepfun.com/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Baichuan AI",
+      "base": "https://api.baichuan-ai.com/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Yi (01.ai)",
+      "base": "https://api.01.ai/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "CSDN Free LLM API Blog",
+      "base": "https://blog.csdn.net/muyouhang/article/details/160583790",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "LM Speed Free API List",
+      "base": "https://lmspeed.net/zh/free",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "技术站 Free LLM API Article 2",
+      "base": "https://jishuzhan.net/article/2063413947407085569",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "知乎 Free LLM API Article 2",
+      "base": "https://zhuanlan.zhihu.com/p/30947514630",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "LLM API Public Stations (GitHub Pages)",
+      "base": "https://haha0510.github.io/llm-api-public-stations",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Puter AI",
+      "base": "https://api.puter.com/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Free Inference",
+      "base": "http://freeinference.org",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Logfare AI",
+      "base": "https://logfare.ai",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Free Inference Dev",
+      "base": "https://freeinference.dev",
+      "testModel": null,
+      "note": ""
+    }
+  ]
+}
