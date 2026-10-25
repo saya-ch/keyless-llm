@@ -94,6 +94,36 @@
       ]
     },
     {
+      "id": "vireonix",
+      "label": "Vireonix",
+      "base": "https://vireonix.ai/v1",
+      "modelsPath": "/models",
+      "discover": false,
+      "freeRule": { "type": "all" },
+      "extraFree": [],
+      "rate": "20M 输入/200K 输出 tokens 每小时每 IP，429 带 Retry-After",
+      "enabled": true,
+      "comment": "免 key 免账号，唯一公开模型 auto（上游池 MiniMax/Nemotron/GLM/Qwen/GPT-OSS，1M ctx，支持工具声明）。每小时预算从 /api/limits 与 X-RateLimit-* 头可查。提示词可能被用于训练。",
+      "staticModels": [
+        { "id": "auto", "context_length": 1000000, "supported_parameters": ["tools"] }
+      ]
+    },
+    {
+      "id": "chat",
+      "label": "ch.at",
+      "base": "https://ch.at/v1",
+      "modelsPath": "/models",
+      "discover": false,
+      "freeRule": { "type": "all" },
+      "extraFree": [],
+      "rate": "公平使用，未公开限额",
+      "enabled": true,
+      "comment": "免 key 的 OpenAI 兼容代理，接受任意模型名。/models 不返回真实清单（把请求也当聊天回答），只能静态声明。ctx 未知 → 不进 auto 池，靠显式模型名访问。",
+      "staticModels": [
+        { "id": "gpt-4o-mini" }
+      ]
+    },
+    {
       "id": "opencode",
       "label": "OpenCode",
       "base": "https://opencode.ai/inference/v1",

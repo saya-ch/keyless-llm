@@ -42,6 +42,9 @@ const CFG = {
   // 但通过显式模型名仍可访问；全不合格时降级放行，保证 auto 永不空转。
   autoMinCtx: int(env("AUTO_MIN_CTX", 256000), 256000),   // 最低上下文（默认 256k）
   autoRequireTools: int(env("AUTO_REQUIRE_TOOLS", 1), 1), // 要求工具调用（agent）能力
+  // 防限流：免费配额普遍按 IP 计，同一来源打太多并发只会把自己打爆。
+  // providerConcurrency 限制单来源在途请求数，超出的排队（队列也满则放弃该来源换模型）。
+  providerConcurrency: int(env("PROVIDER_CONCURRENCY", 3), 3),
   // 超时（毫秒）：auto 模式单次请求更快失败好换模型；普通模式留足生成时间
   timeout: int(env("TIMEOUT", 120000), 120000),
   timeoutStream: int(env("TIMEOUT_STREAM", 300000), 300000),
@@ -178,15 +181,17 @@ async function refreshModels(force = false) {
 // ── 状态机 ────────────────────────────────────────────────────────
 // status 约定：HTTP 状态码；-1 表示网络异常；
 // 特殊值 200 表示「HTTP 成功但内容为空」，按降级处理（不算健康）
-function markResult(id, status, errMsg) {
+// cdOverride：上游 Retry-After 给出的冷却秒数，优先于固定值
+function markResult(id, status, errMsg, cdOverride = 0) {
   const st = ensureState(id);
   st.stateAt = Date.now();
   if (status === 200) {
     if (st.state !== "healthy") log("info", `model ${id}: -> healthy`);
     st.state = "healthy"; st.cooldownUntil = 0; st.lastError = "";
   } else if (status === 429) {
-    if (st.state !== "limited") log("info", `model ${id}: -> limited (429) cd=${CFG.cooldown429}s`);
-    st.state = "limited"; st.cooldownUntil = Date.now() + CFG.cooldown429 * 1000; st.lastError = errMsg || "429";
+    const cd = cdOverride > 0 ? Math.min(cdOverride, 3600) : CFG.cooldown429;
+    if (st.state !== "limited") log("info", `model ${id}: -> limited (429) cd=${cd}s${cdOverride ? " (retry-after)" : ""}`);
+    st.state = "limited"; st.cooldownUntil = Date.now() + cd * 1000; st.lastError = errMsg || "429";
   } else if (status === 403) {
     if (st.state !== "blocked") log("info", `model ${id}: -> blocked (403) cd=${CFG.cooldown403}s`);
     st.state = "blocked"; st.cooldownUntil = Date.now() + CFG.cooldown403 * 1000; st.lastError = errMsg || "403";
@@ -392,6 +397,213 @@ class UpstreamError extends Error {
   constructor(status, type, message, model) { super(message); this.status = status; this.type = type; this.model = model; }
 }
 
+// ── 来源协议适配层 ────────────────────────────────────────────────
+// 对外统一三种协议（OpenAI Chat / Anthropic Messages / OpenAI Responses），
+// 内部以 OpenAI Chat 为 pivot。每个来源在 providers.json 里声明 api 字段：
+//   "openai-completions"（默认）  —— 直通，零转换
+//   "anthropic-messages"          —— 请求/响应/SSE 三路转换
+//   "openai-responses"            —— 请求/响应/SSE 三路转换
+// 网关的价值就在这里：客户端永远只学一种协议，来源爱说什么就说什么。
+
+// OpenAI Chat 请求 → Anthropic Messages 请求
+function openAIToAnthropic(oai, model) {
+  const sys = [];
+  const msgs = [];
+  for (const m of oai.messages ?? []) {
+    if (m.role === "system" || m.role === "developer") { sys.push(typeof m.content === "string" ? m.content : JSON.stringify(m.content)); continue; }
+    if (m.role === "tool") {
+      msgs.push({ role: "user", content: [{ type: "tool_result", tool_use_id: m.tool_call_id, content: typeof m.content === "string" ? m.content : JSON.stringify(m.content) }] });
+      continue;
+    }
+    const content = typeof m.content === "string"
+      ? m.content
+      : (Array.isArray(m.content) ? m.content.map((c) => (c.type === "text" ? { type: "text", text: c.text } : null)).filter(Boolean) : "");
+    if (m.role === "assistant" && Array.isArray(m.tool_calls) && m.tool_calls.length) {
+      const blocks = [];
+      if (typeof content === "string") { if (content) blocks.push({ type: "text", text: content }); }
+      else if (Array.isArray(content)) blocks.push(...content);
+      for (const tc of m.tool_calls) blocks.push({ type: "tool_use", id: tc.id, name: tc.function?.name, input: safeJson(tc.function?.arguments) ?? {} });
+      msgs.push({ role: "assistant", content: blocks });
+      continue;
+    }
+    msgs.push({ role: m.role, content });
+  }
+  const out = { model, max_tokens: oai.max_tokens ?? 1024, messages: msgs };
+  if (sys.length) out.system = sys.join("\n\n");
+  if (oai.temperature != null) out.temperature = oai.temperature;
+  if (oai.top_p != null) out.top_p = oai.top_p;
+  if (oai.stop) out.stop_sequences = Array.isArray(oai.stop) ? oai.stop : [oai.stop];
+  if (Array.isArray(oai.tools) && oai.tools.length) {
+    out.tools = oai.tools.map((t) => ({ name: t.function?.name, description: t.function?.description || "", input_schema: t.function?.parameters || { type: "object" } }));
+  }
+  if (oai.tool_choice) {
+    const tc = oai.tool_choice;
+    if (tc === "auto") out.tool_choice = { type: "auto" };
+    else if (tc === "none") delete out.tools;
+    else if (tc?.function?.name) out.tool_choice = { type: "tool", name: tc.function.name };
+  }
+  return out;
+}
+
+// Anthropic 响应 → OpenAI Chat 响应（pivot 反向）
+function anthropicToOpenAIResponse(j) {
+  const text = [], thinking = [], toolCalls = [];
+  for (const b of j.content ?? []) {
+    if (b.type === "text") text.push(b.text);
+    else if (b.type === "thinking") thinking.push(b.thinking);
+    else if (b.type === "tool_use") toolCalls.push({ id: b.id, type: "function", function: { name: b.name, arguments: JSON.stringify(b.input ?? {}) } });
+  }
+  const finish = j.stop_reason === "max_tokens" ? "length" : (j.stop_reason === "tool_use" ? "tool_calls" : "stop");
+  return {
+    id: j.id || "anthropic", object: "chat.completion", model: j.model,
+    choices: [{
+      index: 0,
+      message: { role: "assistant", content: text.join("") || "", ...(thinking.length ? { reasoning_content: thinking.join("") } : {}), ...(toolCalls.length ? { tool_calls: toolCalls } : {}) },
+      finish_reason: finish,
+    }],
+    usage: { prompt_tokens: j.usage?.input_tokens ?? 0, completion_tokens: j.usage?.output_tokens ?? 0 },
+  };
+}
+
+// Anthropic SSE 事件流 → OpenAI chunk 流（供三个 handler 统一消费）
+async function* anthropicSSEToChunks(up) {
+  const reader = up.body.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  let blockKind = null;   // 当前打开的 block 类型
+  let tcIndex = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let idx;
+      while ((idx = buf.indexOf("\n")) >= 0) {
+        const line = buf.slice(0, idx).trim();
+        buf = buf.slice(idx + 1);
+        if (!line.startsWith("data:")) continue;
+        const data = line.slice(5).trim();
+        if (!data || data === "[DONE]") continue;
+        let ev; try { ev = JSON.parse(data); } catch { continue; }
+        const base = { id: ev.message?.id || "anthropic", object: "chat.completion.chunk", model: ev.message?.model };
+        if (ev.type === "content_block_start") {
+          blockKind = ev.content_block?.type || null;
+          if (blockKind === "tool_use") {
+            yield { chunk: { ...base, choices: [{ index: 0, delta: { tool_calls: [{ index: tcIndex, id: ev.content_block.id, type: "function", function: { name: ev.content_block.name, arguments: "" } }] }, finish_reason: null }] } };
+          } else if (blockKind === "text") {
+            yield { chunk: { ...base, choices: [{ index: 0, delta: { role: "assistant", content: "" }, finish_reason: null }] } };
+          }
+        } else if (ev.type === "content_block_delta") {
+          const d = ev.delta || {};
+          if (d.type === "text_delta") yield { chunk: { ...base, choices: [{ index: 0, delta: { content: d.text }, finish_reason: null }] } };
+          else if (d.type === "thinking_delta") yield { chunk: { ...base, choices: [{ index: 0, delta: { reasoning_content: d.thinking }, finish_reason: null }] } };
+          else if (d.type === "input_json_delta") yield { chunk: { ...base, choices: [{ index: 0, delta: { tool_calls: [{ index: tcIndex, function: { arguments: d.partial_json || "" } }] }, finish_reason: null }] } };
+        } else if (ev.type === "content_block_stop") {
+          if (blockKind === "tool_use") tcIndex++;
+          blockKind = null;
+        } else if (ev.type === "message_delta") {
+          const fr = ev.delta?.stop_reason === "max_tokens" ? "length" : (ev.delta?.stop_reason === "tool_use" ? "tool_calls" : "stop");
+          yield { chunk: { ...base, choices: [{ index: 0, delta: {}, finish_reason: fr }], ...(ev.usage ? { usage: { prompt_tokens: ev.usage.input_tokens ?? 0, completion_tokens: ev.usage.output_tokens ?? 0 } } : {}) } };
+        } else if (ev.type === "message_stop") {
+          yield { done: true };
+          return;
+        }
+      }
+    }
+  } finally {
+    try { clearTimeout(up.__keylessTimer); } catch {}
+  }
+}
+
+// OpenAI Chat 请求 → OpenAI Responses 请求
+function openAIToResponses(oai, model) {
+  const sys = [];
+  const input = [];
+  for (const m of oai.messages ?? []) {
+    if (m.role === "system" || m.role === "developer") { sys.push(typeof m.content === "string" ? m.content : JSON.stringify(m.content)); continue; }
+    input.push({ role: m.role, content: [{ type: m.role === "assistant" ? "output_text" : "input_text", text: typeof m.content === "string" ? m.content : JSON.stringify(m.content) }] });
+  }
+  const out = { model, input };
+  if (sys.length) out.instructions = sys.join("\n\n");
+  if (oai.max_tokens != null) out.max_output_tokens = oai.max_tokens;
+  if (oai.temperature != null) out.temperature = oai.temperature;
+  if (oai.top_p != null) out.top_p = oai.top_p;
+  out.stream = !!oai.stream;
+  return out;
+}
+
+// Responses 响应 → OpenAI Chat 响应
+function responsesToOpenAIResponse(j) {
+  const text = [], toolCalls = [];
+  for (const item of j.output ?? []) {
+    if (item.type === "message") for (const c of item.content ?? []) if (c.type === "output_text") text.push(c.text);
+    if (item.type === "function_call") toolCalls.push({ id: item.id || "fc", type: "function", function: { name: item.name, arguments: item.arguments || "{}" } });
+  }
+  return {
+    id: j.id || "resp", object: "chat.completion", model: j.model,
+    choices: [{ index: 0, message: { role: "assistant", content: text.join("") || "", ...(toolCalls.length ? { tool_calls: toolCalls } : {}) }, finish_reason: "stop" }],
+    usage: { prompt_tokens: j.usage?.input_tokens ?? 0, completion_tokens: j.usage?.output_tokens ?? 0 },
+  };
+}
+
+// Responses SSE → OpenAI chunk 流
+async function* responsesSSEToChunks(up) {
+  const reader = up.body.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let idx;
+      while ((idx = buf.indexOf("\n")) >= 0) {
+        const line = buf.slice(0, idx).trim();
+        buf = buf.slice(idx + 1);
+        if (!line.startsWith("data:")) continue;
+        const data = line.slice(5).trim();
+        if (!data || data === "[DONE]") continue;
+        let ev; try { ev = JSON.parse(data); } catch { continue; }
+        const base = { id: ev.response?.id || ev.item_id || "resp", object: "chat.completion.chunk", model: ev.response?.model };
+        if (ev.type === "response.output_text.delta") {
+          yield { chunk: { ...base, choices: [{ index: 0, delta: { content: ev.delta }, finish_reason: null }] } };
+        } else if (ev.type === "response.function_call_arguments.delta") {
+          yield { chunk: { ...base, choices: [{ index: 0, delta: { tool_calls: [{ index: 0, function: { arguments: ev.delta } }] }, finish_reason: null }] } };
+        } else if (ev.type === "response.completed") {
+          const j = ev.response || {};
+          yield { chunk: { ...base, choices: [{ index: 0, delta: {}, finish_reason: "stop" }], ...(j.usage ? { usage: { prompt_tokens: j.usage.input_tokens ?? 0, completion_tokens: j.usage.output_tokens ?? 0 } } : {}) } };
+          yield { done: true };
+          return;
+        } else if (ev.type === "response.failed" || ev.type === "error") {
+          throw new UpstreamError(502, "upstream_error", ev.response?.error?.message || ev.error?.message || "responses 流失败", null);
+        }
+      }
+    }
+  } finally {
+    try { clearTimeout(up.__keylessTimer); } catch {}
+  }
+}
+
+// 统一的流式归一化出口：无论上游说什么协议，产出 OpenAI chunk 流
+function normalizeUpstreamSSE(up, api) {
+  if (api === "anthropic-messages") return anthropicSSEToChunks(up);
+  if (api === "openai-responses") return responsesSSEToChunks(up);
+  return parseUpstreamSSE(up);
+}
+
+// 同来源并发闸：acquire 返回 release 函数；排队过长返回 null（调用方放弃该来源换模型）
+// 闸只覆盖「发起请求 → 收到响应头」这一段——限流计数发生在请求时刻，
+// 响应体读取不占闸，流式长响应不会被卡住。
+const providerGates = new Map(); // pid -> {active, waiters:[]}
+function gateAcquire(pid) {
+  const g = providerGates.get(pid) || { active: 0, waiters: [] };
+  providerGates.set(pid, g);
+  const release = () => { g.active--; const w = g.waiters.shift(); if (w) { g.active++; w(); } };
+  if (g.active < CFG.providerConcurrency) { g.active++; return release; }
+  if (g.waiters.length >= 8) return null;
+  return new Promise((resolve) => g.waiters.push(() => { g.active++; resolve(release); }));
+}
+
 async function callUpstream(key, body, stream, timeoutMs = 0) {
   const e = registry.get(key);
   const p = e && providerOf(key);
@@ -403,20 +615,39 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ms);
 
+  // 按来源协议转换请求体与路径（pivot = OpenAI Chat）
+  const api = p.api || "openai-completions";
+  let url = `${p.base}/chat/completions`;
+  let payload = { ...body, model: e.model, stream };
+  if (api === "anthropic-messages") {
+    url = `${p.base}/messages`;
+    payload = { ...openAIToAnthropic(body, e.model), stream };
+  } else if (api === "openai-responses") {
+    url = `${p.base}/responses`;
+    payload = { ...openAIToResponses(body, e.model), stream };
+  }
+
+  let release = gateAcquire(p.id);
+  if (!release) {
+    throw new UpstreamError(429, "provider_busy", `来源并发已达上限(${CFG.providerConcurrency})且排队满，换模型重试`, key);
+  }
+
   let res;
   try {
-    res = await fetch(`${p.base}/chat/completions`, {
+    res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", "User-Agent": CFG.ua },
-      body: JSON.stringify({ ...body, model: e.model, stream }),
+      body: JSON.stringify(payload),
       signal: ctrl.signal,
     });
   } catch (err) {
+    release();
     clearTimeout(timer);
     const timedOut = err.name === "AbortError";
     throw new UpstreamError(timedOut ? 504 : -1, timedOut ? "upstream_timeout" : "network_error",
       timedOut ? `上游超时 (${ms}ms)` : (err.message || "网络错误"), key);
   }
+  release(); // 响应头已到，闸释放；后续读体/转换不占并发额度
 
   if (!res.ok) {
     let type = "upstream_error", message = `${res.status}`;
@@ -426,7 +657,17 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
       message = j.error?.message || j.message || message;
     } catch {}
     clearTimeout(timer);
-    throw new UpstreamError(res.status, type, message, key);
+    // 尊重上游的 Retry-After（秒数或 HTTP 日期）—— 它比我们的固定冷却更权威
+    let retryAfter = 0;
+    const ra = res.headers.get("retry-after");
+    if (ra) {
+      const secs = Number(ra);
+      retryAfter = Number.isFinite(secs) && secs > 0 ? secs : 0;
+      if (!retryAfter) { const d = Date.parse(ra); if (Number.isFinite(d)) retryAfter = Math.max(0, Math.round((d - Date.now()) / 1000)); }
+    }
+    const e = new UpstreamError(res.status, type, message, key);
+    e.retryAfter = retryAfter;
+    throw e;
   }
 
   // 空响应检测（仅非流式）：有些免费模型会返回 200 但内容为空
@@ -448,6 +689,10 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
     let j = null;
     try { j = JSON.parse(text); } catch {}
     if (j) {
+      // 非流式响应统一转回 OpenAI pivot，再做空响应检测与包装
+      if (api === "anthropic-messages" && j.type === "message") j = anthropicToOpenAIResponse(j);
+      else if (api === "openai-responses" && Array.isArray(j.output)) j = responsesToOpenAIResponse(j);
+      text = JSON.stringify(j);
       const ch = j.choices?.[0];
       const content = ch?.message?.content ?? ch?.text ?? ch?.delta?.content;
       const empty = content === null || content === undefined || content === "";
@@ -512,11 +757,12 @@ async function callWithRotation(requested, body, stream) {
       const res = await callUpstream(key, body, stream, tmo);
       markResult(key, 200);
       if (auto) lastAutoKey = key;      // 记住成功的模型，下次优先复用
-      return { res, model: key, failover };
+      const api = providerOf(key)?.api || "openai-completions";
+      return { res, model: key, failover, api };
     } catch (e) {
       lastErr = e;
       if (e.status === 200) markEmpty(key, e.message);   // HTTP 200 但空内容
-      else markResult(key, e.status, e.message);
+      else markResult(key, e.status, e.message, e.retryAfter || 0);
       // auto 模式对所有上游故障都换模型重试（这是它存在的意义）
       // 普通模式只对限流类故障转移
       if (!auto) {
@@ -559,7 +805,7 @@ async function* parseUpstreamSSE(res) {
 // ── 协议：OpenAI Chat Completions（近直通）────────────────────────
 async function handleOpenAI(req, res, body) {
   const stream = body.stream !== false;
-  const { res: up, model, failover } = await callWithRotation(body.model, {
+  const { res: up, model, failover, api } = await callWithRotation(body.model, {
     messages: body.messages,
     max_tokens: body.max_tokens,
     temperature: body.temperature,
@@ -578,7 +824,7 @@ async function handleOpenAI(req, res, body) {
     return sendJson(res, 200, j);
   }
   sseHeaders(res);
-  for await (const ev of parseUpstreamSSE(up)) {
+  for await (const ev of normalizeUpstreamSSE(up, api)) {
     if (ev.done) { res.write("data: [DONE]\n\n"); break; }
     if (ev.chunk?.usage) tallyUsage(ev.chunk.usage);
     if (isAutoName(body.model) && ev.chunk && typeof ev.chunk === "object") ev.chunk.model = model;
@@ -647,7 +893,7 @@ function anthropicStopReason(finish) {
 async function handleAnthropic(req, res, body) {
   const stream = body.stream === true;
   const oai = anthropicToOpenAI(body);
-  const { res: up, model, failover } = await callWithRotation(body.model, oai, stream);
+  const { res: up, model, failover, api } = await callWithRotation(body.model, oai, stream);
   setModelHeader(res, model, failover);
   const msgId = "msg_" + rid();
   if (!stream) {
@@ -674,7 +920,7 @@ async function handleAnthropic(req, res, body) {
   const startBlock = (cb) => { blockIdx++; openBlock = { kind: cb.type, index: blockIdx }; res.write(`event: content_block_start\ndata: ${JSON.stringify({ type: "content_block_start", index: blockIdx, content_block: cb })}\n\n`); };
   const stopBlock = () => { if (openBlock) { res.write(`event: content_block_stop\ndata: ${JSON.stringify({ type: "content_block_stop", index: openBlock.index })}\n\n`); openBlock = null; } };
   res.write(`event: message_start\ndata: ${JSON.stringify({ type: "message_start", message: { id: msgId, type: "message", role: "assistant", model, content: [], stop_reason: null, stop_sequence: null, usage: { input_tokens: 0, output_tokens: 0 } } })}\n\n`);
-  for await (const ev of parseUpstreamSSE(up)) {
+  for await (const ev of normalizeUpstreamSSE(up, api)) {
     if (ev.done) break;
     const c = ev.chunk?.choices?.[0];
     if (ev.chunk?.usage) { usage = ev.chunk.usage; }
@@ -741,7 +987,7 @@ function textOf(content) {
 async function handleResponses(req, res, body) {
   const stream = body.stream === true;
   const oai = responsesToOpenAI(body);
-  const { res: up, model, failover } = await callWithRotation(body.model, oai, stream);
+  const { res: up, model, failover, api } = await callWithRotation(body.model, oai, stream);
   setModelHeader(res, model, failover);
   const respId = "resp_" + rid();
   const itemId = "msg_" + rid();
@@ -765,7 +1011,7 @@ async function handleResponses(req, res, body) {
   send("response.content_part.added", { type: "response.content_part.added", item_id: itemId, output_index: 0, content_index: 0, part: { type: "output_text", text: "", annotations: [] } });
   let full = "", finishReason = null, usage = null;
   const toolCalls = [];
-  for await (const ev of parseUpstreamSSE(up)) {
+  for await (const ev of normalizeUpstreamSSE(up, api)) {
     if (ev.done) break;
     const c = ev.chunk?.choices?.[0];
     if (ev.chunk?.usage) usage = ev.chunk.usage;

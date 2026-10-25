@@ -60,6 +60,40 @@ const server = http.createServer(async (req, res) => {
       usage: { prompt_tokens: 7, completion_tokens: 5 },
     }));
   }
+  // ── Anthropic Messages 协议（验证网关的来源协议适配层）──
+  if (req.method === "POST" && url.pathname === "/v1/messages") {
+    const chunks = [];
+    for await (const c of req) chunks.push(c);
+    const body = JSON.parse(Buffer.concat(chunks).toString());
+    const text = `Hello from mock anthropic upstream! (model=${body.model})`;
+    if (!body.stream) {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({
+        id: "msg_mock1", type: "message", role: "assistant", model: body.model,
+        content: [
+          { type: "thinking", thinking: "user wants a greeting" },
+          { type: "text", text },
+        ],
+        stop_reason: "end_turn",
+        usage: { input_tokens: 9, output_tokens: 12 },
+      }));
+    }
+    res.writeHead(200, { "Content-Type": "text/event-stream" });
+    const send = (obj) => res.write(`event: ${obj.type}\ndata: ${JSON.stringify(obj)}\n\n`);
+    send({ type: "message_start", message: { id: "msg_mock1", type: "message", role: "assistant", model: body.model, content: [], usage: { input_tokens: 9, output_tokens: 0 } } });
+    send({ type: "content_block_start", index: 0, content_block: { type: "thinking", thinking: "" } });
+    send({ type: "content_block_delta", index: 0, delta: { type: "thinking_delta", thinking: "greeting..." } });
+    send({ type: "content_block_stop", index: 0 });
+    send({ type: "content_block_start", index: 1, content_block: { type: "text", text: "" } });
+    for (const w of ["Hello", " from", " mock", " anthropic!"]) {
+      send({ type: "content_block_delta", index: 1, delta: { type: "text_delta", text: w } });
+      await new Promise((r) => setTimeout(r, 20));
+    }
+    send({ type: "content_block_stop", index: 1 });
+    send({ type: "message_delta", delta: { stop_reason: "end_turn" }, usage: { input_tokens: 9, output_tokens: 12 } });
+    send({ type: "message_stop" });
+    return res.end();
+  }
   res.writeHead(404); res.end();
 });
 server.listen(9911, "127.0.0.1", () => console.log("mock upstream on 9911"));

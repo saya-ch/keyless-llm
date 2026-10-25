@@ -137,10 +137,25 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
 | `pollinations` | `text.pollinations.ai/openai` | `tier == "anonymous"` | 4 次/分钟，匿名 tier 只剩 1 个模型 |
 | `blockrun`     | `blockrun.ai/api/v1`          | id 以 `nvidia/` 开头     | 免费容量经常打满，返回 503         |
 | `ovh`          | `oai.endpoints.kepler.ai.cloud.ovh.net/v1` | `staticModels` 手工收录 | 2 req/min/IP/模型，匿名层，欧盟节点。只收对话模型——embedding/TTS/内容安全分类器一律不收 |
+| `vireonix`     | `vireonix.ai/v1`              | `staticModels` 手工收录 | 免 key 免账号，唯一模型 `auto`（1M ctx 路由），20M 入/200K 出 tokens 每小时每 IP |
+| `chat`         | `ch.at/v1`                    | `staticModels` 手工收录 | 免 key OpenAI 兼容代理，接受任意模型名；`/models` 是假的（把请求也当聊天），只能静态声明 |
 | `pollinations-gen` | `gen.pollinations.ai/v1`  | 全部                    | **已停用**：匿名额度极小，耗尽后 401，恢复前不启用 |
 | `opencode`     | `opencode.ai/inference/v1`    | id 含 `-free`          | **已停用**，匿名额度整体 429      |
 
 各来源的免费模型 id 规则完全不同（`:free` 后缀 / `tier` 字段 / 自由价），所以用 `freeRule` 区分，不要硬编码模型名。
+
+## 来源协议适配
+
+对外，网关永远说标准协议（OpenAI Chat / Anthropic Messages / OpenAI Responses）；对内，每个来源说什么协议由 `providers.json` 里的 `api` 字段声明，网关负责双向转换：
+
+| 上游 `api` 值 | 上游路径 | 转换内容 |
+| --- | --- | --- |
+| `openai-completions`（默认） | `/chat/completions` | 直通，零转换 |
+| `anthropic-messages` | `/messages` | system 提取、content blocks ↔ message、thinking ↔ reasoning_content、tool_use ↔ tool_calls、SSE 事件流互转 |
+| `openai-responses` | `/responses` | messages ↔ input、output_text 增量 ↔ chunk delta、usage 字段映射 |
+
+客户端永远只学一种协议，来源爱说什么就说什么。加一个只说 Anthropic 协议的来源只需两行：`"api": "anthropic-messages"` + 它的 base 地址。
+
 
 ## auto 模型：自动调度，失败自动换模型
 
@@ -170,20 +185,9 @@ curl http://127.0.0.1:8788/v1/chat/completions \
 
 被排除的模型通过显式模型名仍然可以访问，auto 只是不再自动选它们。
 
-### 怎么选
+### 怎么选、怎么重试
 
-`auto` 对每个可用模型打分，取最高分：
-
-| 维度 | 权重 | 说明 |
-| --- | --- | --- |
-| 健康状态 | 最高 | `healthy` ≫ `unknown`（未探测）≫ `limited`/`blocked` |
-| 实测 TPS / TTFT | 高 | 跑过 TPS 测速的模型优先，越快分越高 |
-| 上下文长度 | 中 | 长上下文更通用 |
-| 工具调用 | 加分 | 确认支持 tools 的模型加分 |
-| 冷却剩余 | 负分 | 冷却中的模型降权，但不为 0 |
-| 空闲时长 | 轻微正分 | 久未使用的优先，避免单个模型被反复消耗 |
-
-### 怎么重试
+`auto` 对每个可用模型打分取最高：健康状态（`healthy` ≫ `unknown` ≫ `limited`）> 实测 TPS/TTFT > 上下文长度 > 确认支持 tools 加分 > 冷却剩余（负分）> 空闲时长（轻微正分，避免单模型被反复消耗）。
 
 失败时**换一个模型继续试**，最多 `KEYLESS_AUTO_ATTEMPTS`（默认 6）次：
 
@@ -193,7 +197,13 @@ curl http://127.0.0.1:8788/v1/chat/completions \
 
 「200 但空内容」这条是实测踩出来的：推理型模型（gpt-oss、step-3.7 等）会把 `max_tokens` 全烧在 reasoning 上，`finish_reason=length` 而正文一个字都没有。对调用方来说这是「成功但没结果」，比报错更难排查。
 
-实测 8 次连续请求 `auto`，**8/8 成功**，其中多次自动绕开被限流的模型切到可用模型。
+### 防限流
+
+免鉴权额度普遍按 IP 计，最常见的翻车方式是**自己打爆自己**。网关内置三层防线：
+
+- **同来源并发闸**：单来源在途请求默认不超过 `KEYLESS_PROVIDER_CONCURRENCY`（3），超出的排队、队列满则换模型——流式长响应不占额度（闸只罩到响应头）
+- **尊重 Retry-After**：上游 429 带 `Retry-After` 头时按它冷却，没有才用默认的 `KEYLESS_CD429`（600s）
+- **冷却自动转移**：429/403/5xx 的模型自动进冷却，调度时跳过，冷却结束自动恢复
 
 ### 相关配置
 
@@ -205,6 +215,7 @@ curl http://127.0.0.1:8788/v1/chat/completions \
 | `KEYLESS_AUTO_MIN_CTX` | `256000` | auto 准入的最低上下文 |
 | `KEYLESS_AUTO_REQUIRE_TOOLS` | `1` | 要求工具调用能力，`0` 关闭准入 |
 | `KEYLESS_AUTO_STICKY` | `1` | 记住上次成功的模型并优先复用（减少切换开销） |
+| `KEYLESS_PROVIDER_CONCURRENCY` | `3` | 单来源最大在途请求数（防自己打爆自己的配额） |
 | `KEYLESS_TIMEOUT` | `120000` | 普通（非 auto）请求的上游超时 |
 | `KEYLESS_ATTEMPTS` | `2` | 指定具体模型时的最大转移次数 |
 
@@ -217,21 +228,7 @@ curl http://127.0.0.1:8788/v1/chat/completions \
 | **发现**    | 世界上又出现了哪些新的免鉴权服务                  | **agent**（LLM + 搜索） | 搜索是语义判断：要读文档、猜 API 路径、辨别「真免鉴权」还是「藏了注册墙」、评估合规性。脚本写不出这些规则，只会产出一堆假阳性。 |
 | **验证**    | 候选来源到底能不能免鉴权                       | **脚本**（确定性实测）      | 不带任何鉴权头发请求，看是否真能拿到 200 和真实文本。可复现、不烧额度、能当 PR 硬门禁。 |
 
-这条分界线是整个自动化的设计核心：**agent 只负责提候选，判定权交给实测**。
-
-```
-发现（agent）                    验证（脚本）                    巡检（脚本）
-┌──────────────────┐          ┌──────────────────┐        ┌──────────────────┐
-│ WebSearch 搜索   │          │ 不带鉴权头实测     │        │ 每日探测已登记来源   │
-│ 读文档、剔除假阳性 │  ──────►  │ 判定 keyless /   │        │ 输出状态快照        │
-│ 产出 candidates  │          │ limited / 拒绝     │        │ 失败如实上报        │
-└──────────────────┘          └────────┬─────────┘        └────────┬─────────┘
-                                        │                           │
-                                 ┌──────▼──────┐            ┌───────▼────────┐
-                                 │ PR 门禁      │            │ snapshots/      │
-                                 │ 不通过就 fail │            │ status.json     │
-                                 └─────────────┘            └────────────────┘
-```
+这条分界线是整个自动化的设计核心：**agent 只负责提候选，判定权交给实测**。三条链路：agent 发现（每日搜索 → 候选清单归档）→ 脚本验证（不带鉴权头实测，兼作 PR 硬门禁）→ 脚本巡检（每日探测已登记来源，快照自动提交）。
 
 维护全部在 GitHub Actions 上跑，本仓库**没有本地定时任务**：
 
@@ -260,7 +257,7 @@ node scripts/validate-source.mjs --base https://example.com/api/v1 --model xxx
 
 429 判成 `limited` 而不是 `not-keyless` 是个刻意的区分：前者说明「不需要 key」这件事成立，只是此刻没额度；后者说明它根本不是免鉴权来源。
 
-`discover.yml` 没配 agent 环境时会自动跳过，不影响日常 CI。CI 里的 agent 用标准 OpenAI 兼容接口，配 `AGENT_API_KEY` / `AGENT_BASE_URL` / `AGENT_MODEL` 三个变量即可。
+`discover.yml` 零配置可跑：CI 的 agent 优先用网关自举，不通就自动降级到 GitHub Models（内置 `GITHUB_TOKEN`），最后还有纯规则提取兜底。
 
 **加一个新来源的完整流程**：
 
