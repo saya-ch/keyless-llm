@@ -1,6 +1,7 @@
 name: validate-source
 
 # 新增来源的卡口：任何改动 providers.json 的 PR 都必须通过
+# （v2 触发索引）
 #
 # 两层校验，分工明确：
 #   1) 确定性校验（scripts/validate-source.mjs）—— 不带任何鉴权头实测，

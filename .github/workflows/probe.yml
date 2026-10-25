@@ -11,7 +11,7 @@ on:
     - cron: "17 3 * * *"
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [master, main]
     paths:
       - "providers.json"
       - "scripts/probe-sources.mjs"
