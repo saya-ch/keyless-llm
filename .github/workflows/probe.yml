@@ -1,6 +1,7 @@
 name: probe
 
 # 每日探测：确认已登记的免鉴权来源今天还能不能用
+# （v2 触发索引）
 # 纯确定性探测，不需要任何 API key，也不需要 LLM。
 # 结果写入 snapshots/status.json 并自动提交，便于在 README 里展示实时可用性。
 
