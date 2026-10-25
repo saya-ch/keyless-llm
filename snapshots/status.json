@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T17:34:47.024Z",
+  "generatedAt": "2026-10-25T17:35:42.716Z",
   "env": "ci",
   "summary": {
     "providers": 4,
@@ -26,15 +26,15 @@
       "models": [
         {
           "model": "kilo-auto/free",
-          "status": 503,
-          "state": "limited",
+          "status": 200,
+          "state": "healthy",
           "error": ""
         },
         {
           "model": "nvidia/nemotron-3.5-super-vl:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 502,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "reflection/beam-free",
@@ -164,9 +164,9 @@
       "models": [
         {
           "model": "nvidia/gpt-oss-120b",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/deepseek-v4-flash",
@@ -176,9 +176,9 @@
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": -1,
+          "status": 429,
           "state": "limited",
-          "error": "TIMEOUT"
+          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Message @bc1max on Telegram for help."
         },
         {
           "model": "nvidia/step-3.7-flash",
@@ -188,9 +188,9 @@
         },
         {
           "model": "nvidia/mistral-nemotron",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Message @bc1max on Telegram for help."
         }
       ],
       "failStreak": 0,
