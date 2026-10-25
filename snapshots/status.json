@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-10-25T18:23:04.665Z",
+  "generatedAt": "2026-10-25T18:27:39.288Z",
   "env": "ci",
   "summary": {
     "providers": 4,
     "freeModels": 29,
-    "healthy": 24,
-    "limited": 3,
+    "healthy": 22,
+    "limited": 5,
     "blocked": 0,
     "failed": 2
   },
@@ -19,15 +19,15 @@
       "modelsError": "",
       "modelsFound": 401,
       "freeModels": 16,
-      "ok": 13,
-      "limited": 2,
+      "ok": 14,
+      "limited": 1,
       "blocked": 0,
       "failed": 1,
       "models": [
         {
           "model": "kilo-auto/free",
-          "status": 503,
-          "state": "limited",
+          "status": 200,
+          "state": "healthy",
           "error": ""
         },
         {
@@ -62,9 +62,9 @@
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -80,9 +80,9 @@
         },
         {
           "model": "poolside/laguna-xs-2.1:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "cohere/north-mini-code:free",
@@ -157,16 +157,16 @@
       "modelsError": "",
       "modelsFound": 5,
       "freeModels": 5,
-      "ok": 4,
-      "limited": 0,
+      "ok": 1,
+      "limited": 3,
       "blocked": 0,
       "failed": 1,
       "models": [
         {
           "model": "nvidia/gpt-oss-120b",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "nvidia/deepseek-v4-flash",
@@ -176,9 +176,9 @@
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "nvidia/step-3.7-flash",
@@ -188,9 +188,9 @@
         },
         {
           "model": "nvidia/mistral-nemotron",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         }
       ],
       "failStreak": 0,
