@@ -142,9 +142,10 @@ async function probeProvider(p) {
     }
   }
 
-  // 2) 合并 staticModels 兜底
+  // 2) 合并 staticModels 兜底（支持字符串或 {id, context_length, ...} 对象形式）
   for (const m of p.staticModels || []) {
-    if (!found.has(m)) found.set(m, { id: m });
+    const mid = typeof m === "string" ? m : (m && m.id) || "";
+    if (mid && !found.has(mid)) found.set(mid, typeof m === "string" ? { id: mid } : m);
   }
 
   // 3) 挑出免费模型
