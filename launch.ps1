@@ -355,51 +355,60 @@ function Render {
   AddRow "OpenAI 兼容     http://${HostAddress}:${Port}/v1" "White"
   AddRow "Anthropic 兼容  http://${HostAddress}:${Port}" "White"
   AddRow "API Key         $ServerKey" "White"
-  AddRow "模型命名        <来源>/<模型>   例 kilo/reflection/beam-free" "DarkYellow"
   AddSep
 
   # ── 来源汇总 ──
-  AddRow "来源汇总   免鉴权聚合（模型清单来自各来源 /models）" "Cyan"
-  AddRow ((PadR "来源" 18) + (PadL "模型" 6) + (PadL "可用" 6) + (PadL "限流" 6) + (PadL "封禁" 6) + "  " + (PadR "说明" 18)) "DarkGray"
-  AddDiv
+  $okN = 0
   if ($script:status -and $script:status.providers) {
+    $all = @($script:status.models)
+    $okN = @($all | Where-Object { $_.state -eq "healthy" }).Count
+    $autoN = @($all | Where-Object { $_.auto }).Count
+    AddRow ("来源     $($script:status.providers.Count) 个 · 模型 $($all.Count) · 可调度 $okN · auto 池 $autoN") "Cyan"
+    AddRow ((PadR "  id" 19) + (PadR "名称" 15) + (PadL "模型" 4) + (PadL "可用" 4) + (PadL "auto" 5) + "  " + (PadR "限流说明" 20)) "DarkGray"
+    AddDiv
     foreach ($p in @($script:status.providers)) {
       $s = $p.summary
+      $mine = @($all | Where-Object { $_.provider -eq $p.id })
+      $autoC = @($mine | Where-Object { $_.auto }).Count
       $label = [string]$p.label
-      if (-not $p.enabled) { $label = $label + " 停用" }
+      if (-not $p.enabled) { $label += "（停用）" }
       $col = if (-not $p.enabled) { "DarkGray" } elseif ($s.healthy -gt 0) { "Green" } elseif ($s.total -gt 0) { "Yellow" } else { "DarkGray" }
-      AddRow ((PadR (Clip $label 18) 18) + (PadL ([string]$s.total) 6) + (PadL ([string]$s.healthy) 6) + (PadL ([string]$s.limited) 6) + (PadL ([string]$s.blocked) 6) + "  " + (PadR (Clip ([string]$p.rate) 18) 18)) $col
+      AddRow ((PadR ("  " + $p.id) 19) + (PadR (Clip $label 15) 15) + (PadL ([string]$s.total) 4) + (PadL ([string]$s.healthy) 4) + (PadL ([string]$autoC) 5) + "  " + (PadR (Clip ([string]$p.rate) 20) 20)) $col
     }
   } else {
-    AddRow "（状态获取失败，按 R 重试）" "DarkRed"
+    AddRow "来源     （状态获取失败，按 R 重试）" "DarkRed"
   }
 
-  # ── 可用模型（只列能调度的）──
+  # ── 模型 · 按来源分组（只列可调度的）──
   AddSep
-  $avail = @()
-  if ($script:status -and $script:status.models) {
-    $avail = @($script:status.models | Where-Object { $_.state -eq "healthy" })
-  }
-  $availTxt = if ($avail.Count -gt 0) { "$($avail.Count) 个可调度" } else { "暂无可用（按 R 轻探测，每模型仅 1 token）" }
-  AddRow ("可用模型   " + $availTxt) "Cyan"
-  if ($avail.Count -gt 0) {
-    AddRow ((PadR "模型" 40) + (PadL "上下文" 7) + (PadL "TPS" 6) + "  " + (PadR "来源" 12)) "DarkGray"
+  if ($okN -gt 0) {
+    AddRow "模型 · 按来源     auto = 准入 auto 池（ctx≥256K 且支持工具调用）" "Cyan"
     AddDiv
-    foreach ($m in ($avail | Select-Object -First 12)) {
-      $tps = "-"; $rowCol = "White"
-      if ($script:speed.ContainsKey($m.id)) {
-        $e = $script:speed[$m.id]
-        if ($e.kind -eq "error") { $tps = $e.code; $rowCol = "Red" }
-        else {
-          $tps = ("{0:0}" -f $e.tps)
-          if ($e.tps -ge 250) { $rowCol = "Green" } elseif ($e.tps -lt 120) { $rowCol = "DarkYellow" }
+    foreach ($p in @($script:status.providers | Where-Object { $_.enabled })) {
+      $mine = @($script:status.models | Where-Object { $_.provider -eq $p.id })
+      $h = @($mine | Where-Object { $_.state -eq "healthy" })
+      if ($h.Count -eq 0) { continue }
+      AddRow ("▸ " + (PadR (Clip ("$($p.id) · $($p.label)") 42) 42) + (PadL ("$($h.Count)/$($mine.Count)") 8) + (PadL "可调度" 8)) "Cyan"
+      foreach ($m in ($h | Sort-Object { if ($_.tps) { -[double]$_.tps } else { -999 } } | Select-Object -First 8)) {
+        $tps = "-"
+        $col = "White"
+        if ($script:speed.ContainsKey($m.id)) {
+          $e = $script:speed[$m.id]
+          if ($e.kind -eq "error") { $tps = [string]$e.code; $col = "Red" }
+          else {
+            $tps = ("{0:0}" -f $e.tps) + " t/s"
+            if ($e.tps -ge 250) { $col = "Green" } elseif ($e.tps -lt 120) { $col = "DarkYellow" }
+          }
         }
+        $autoT = if ($m.auto) { "auto" } else { "-" }
+        AddRow ((PadR ("      " + (Clip ([string]$m.model) 36)) 42) + (PadL (FmtCtx $m.ctx) 7) + (PadL $autoT 5) + (PadL $tps 9)) $col
       }
-      AddRow ((PadR (Clip ([string]$m.model) 40) 40) + (PadL (FmtCtx $m.ctx) 7) + (PadL $tps 6) + "  " + (PadR ([string]$m.provider) 12)) $rowCol
+      if ($h.Count -gt 8) { AddRow ("      … 另有 $($h.Count - 8) 个") "DarkGray" }
     }
-    if ($avail.Count -gt 12) { AddRow ("… 另有 " + ($avail.Count - 12) + " 个可用模型") "DarkGray" }
+  } else {
+    AddRow "模型 · 按来源     暂无可调度（按 R 轻探测，每模型仅 1 token）" "Yellow"
   }
-  AddRow "TPS 仅 T 键实测（真生成）；调用失败自动跨来源转移" "DarkGray"
+  AddRow "TPS 仅 T 键实测（真生成）；auto 调度失败自动换模型/跨来源" "DarkGray"
   if ($script:speedSummary) {
     AddRow ("测速结果  " + (Clip $script:speedSummary ($INNER - 14))) $script:speedSummaryColor
   }
@@ -408,19 +417,16 @@ function Render {
   $s = $script:status
   if ($s -and $s.summary) {
     $sum = $s.summary
-    AddRow ("网关模型   可用 $($sum.healthy) / 共 $($sum.total)   限流 $($sum.limited)   封禁 $($sum.blocked)   待验证 $($sum.unknown)") "Cyan"
-    AddRow ((PadR "指标" 12) + (PadL "值" 10) + "  " + (PadR "说明" 40)) "DarkGray"
+    AddRow "运行统计" "Cyan"
     AddDiv
-    $reqTxt = "$($s.stats.requests)"
-    $foTxt = "$($s.stats.failovers)"
     $tokTxt = "$($s.stats.tokensIn)/$($s.stats.tokensOut)"
-    AddRow ((PadR "累计请求" 12) + (PadL $reqTxt 10) + "  " + (PadR "经代理转发的请求总数" 40)) "White"
-    AddRow ((PadR "轮换转移" 12) + (PadL $foTxt 10) + "  " + (PadR "主模型超限后自动切换次数" 40)) "White"
-    AddRow ((PadR "token 入/出" 12) + (PadL $tokTxt 10) + "  " + (PadR "上游回报的 usage 累计" 40)) "White"
+    AddRow ((PadR "累计请求" 12) + (PadL ([string]$s.stats.requests) 8) + (PadR "  经代理转发的请求总数" 32)) "White"
+    AddRow ((PadR "轮换转移" 12) + (PadL ([string]$s.stats.failovers) 8) + (PadR "  超限后自动切换次数（同来源/跨来源）" 32)) "White"
+    AddRow ((PadR "token 入/出" 12) + (PadL $tokTxt 8) + (PadR "  上游回报的 usage 累计" 32)) "White"
     $lp = if ($s.lastProbeAt) { ([DateTimeOffset]::FromUnixTimeMilliseconds([int64]$s.lastProbeAt)).ToLocalTime().ToString("HH:mm:ss") } else { "-" }
-    AddRow ((PadR "最近探测" 12) + (PadL $lp 10) + "  " + (PadR "R 键轻探测（每模型 1 token）" 40)) "DarkGray"
+    AddRow ((PadR "最近探测" 12) + (PadL $lp 8) + (PadR "  R 键轻探测（每模型 1 token）" 32)) "DarkGray"
   } else {
-    AddRow "网关模型   （状态获取失败，按 R 重试）" "DarkRed"
+    AddRow "运行统计   （状态获取失败，按 R 重试）" "DarkRed"
   }
   AddSep
 

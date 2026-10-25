@@ -58,6 +58,42 @@
       ]
     },
     {
+      "id": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "base": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+      "modelsPath": "/models",
+      "discover": false,
+      "freeRule": { "type": "all" },
+      "extraFree": [],
+      "rate": "2 req/min/IP/模型（匿名层，欧盟节点）",
+      "enabled": true,
+      "comment": "匿名层无需注册和 key。只列对话模型——/models 里的 embedding/TTS/ASR/内容安全分类器一律不收。带 tools 元数据使 Qwen 大模型可进 auto 池。",
+      "staticModels": [
+        { "id": "Qwen3.8-27B", "context_length": 262144, "supported_parameters": ["tools"] },
+        { "id": "Qwen3.6-27B", "context_length": 262144, "supported_parameters": ["tools"] },
+        { "id": "Qwen3.5-397B-A17B", "context_length": 262144, "supported_parameters": ["tools"] },
+        { "id": "Qwen3.5-9B", "context_length": 262144, "supported_parameters": ["tools"] },
+        { "id": "gpt-oss-120b", "context_length": 131072, "supported_parameters": ["tools"] },
+        { "id": "Meta-Llama-3_3-70B-Instruct", "context_length": 131072 },
+        { "id": "Mistral-Small-3.2-24B-Instruct-2506", "context_length": 131072 }
+      ]
+    },
+    {
+      "id": "pollinations-gen",
+      "label": "Pollinations Gen",
+      "base": "https://gen.pollinations.ai/v1",
+      "modelsPath": "/models",
+      "discover": false,
+      "freeRule": { "type": "all" },
+      "extraFree": [],
+      "rate": "匿名额度极小，耗尽后 401",
+      "enabled": false,
+      "comment": "2026-10-25 实测：匿名调用 gpt-oss-20b 首次成功，随后持续 401 UNAUTHORIZED（要求 key）。匿名层仅偶发可用，/models 的 405 个模型与 paid_only=false 元数据不可信。停用观察，若恢复再启用。",
+      "staticModels": [
+        { "id": "openai/gpt-oss-20b", "context_length": 131072, "supported_parameters": ["tools"] }
+      ]
+    },
+    {
       "id": "opencode",
       "label": "OpenCode",
       "base": "https://opencode.ai/inference/v1",

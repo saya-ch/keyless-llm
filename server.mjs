@@ -37,6 +37,11 @@ const CFG = {
   autoNames: (env("AUTO_NAMES", "auto,auto-fast,auto-thinking") || "auto").split(",").map((s) => s.trim()).filter(Boolean),
   autoAttempts: int(env("AUTO_ATTEMPTS", 6), 6),  // auto 模式最多试几个模型
   autoSticky: int(env("AUTO_STICKY", 1), 1),       // 成功过的模型是否优先复用（会话亲和）
+  // ── auto 质量准入 ──────────────────────────────────────────────
+  // 过于拉跨的模型（小上下文、无工具调用）不进 auto 池，
+  // 但通过显式模型名仍可访问；全不合格时降级放行，保证 auto 永不空转。
+  autoMinCtx: int(env("AUTO_MIN_CTX", 256000), 256000),   // 最低上下文（默认 256k）
+  autoRequireTools: int(env("AUTO_REQUIRE_TOOLS", 1), 1), // 要求工具调用（agent）能力
   // 超时（毫秒）：auto 模式单次请求更快失败好换模型；普通模式留足生成时间
   timeout: int(env("TIMEOUT", 120000), 120000),
   timeoutStream: int(env("TIMEOUT_STREAM", 300000), 300000),
@@ -72,7 +77,7 @@ function loadProviders() {
     label: p.label || p.id,
     base: String(p.base || "").replace(/\/+$/, ""),
   }));
-  for (const p of providers) for (const m of p.staticModels) addModel(p, { id: m });
+  for (const p of providers) for (const m of p.staticModels) addModel(p, typeof m === "string" ? { id: m } : m);
   log("info", `providers: ${providers.filter((p) => p.enabled).length}/${providers.length} enabled, models=${registry.size}`);
 }
 
@@ -104,15 +109,27 @@ function addModel(p, m) {
   const mid = String(m.id || m.name || "").trim();
   if (!mid) return null;
   const key = keyOf(p.id, mid);
-  const ctx = m.context_length || m.context || (m.limit && m.limit.context) || (m.top_provider && m.top_provider.context_length) || null;
+  const ctx = m.context_length || m.context || (m.limit && m.limit.context) || (m.top_provider && m.top_provider.max_completion_tokens && m.top_provider.context_length) || (m.top_provider && m.top_provider.context_length) || null;
   const out = m.max_output || (m.limit && m.limit.output) || (m.top_provider && m.top_provider.max_completion_tokens) || null;
+  // 工具调用（agent 能力）检测：OpenRouter 系 /models 用 supported_parameters 数组，
+  // 其它实现可能用 capabilities.tools / tools 布尔字段。
+  // 三态：true（确认支持）/ false（确认不支持）/ null（未知，staticModels 兜底进来时）
+  const sp = m.supported_parameters || m.supportedParameters || [];
+  const caps = m.capabilities || {};
+  const tools = (Array.isArray(sp) && (sp.includes("tools") || sp.includes("tool_choice")))
+    || caps.tools === true || m.tools === true
+    ? true
+    : (Array.isArray(sp) && sp.length && !sp.includes("tools") && !sp.includes("tool_choice")) || caps.tools === false
+      ? false
+      : null;
   if (!registry.has(key)) {
-    registry.set(key, { pid: p.id, model: mid, free: isFreeModel(p, m), name: mid, context: ctx, output: out });
+    registry.set(key, { pid: p.id, model: mid, free: isFreeModel(p, m), name: mid, context: ctx, output: out, tools });
     ensureState(key);
   } else {
     const e = registry.get(key);
     if (ctx && !e.context) e.context = ctx;
     if (out && !e.output) e.output = out;
+    if (tools !== null && e.tools === null) e.tools = tools;   // live 元数据补齐静态清单的未知
   }
   return key;
 }
@@ -275,8 +292,12 @@ function scoreModel(key) {
     if (st.ttft && st.ttft > 0) score += Math.max(0, 100 - st.ttft / 50);
   }
 
-  // 3) 上下文长度：长上下文更通用（归一化到 0~150，1M 拿满分）
+  // 3) 上下文长度：长上下文更通用（归一化到 0~150，1M 拿满分）；未知 ctx 略降权
   if (e.context) score += Math.min(150, Math.log10(e.context / 1000 + 1) * 60);
+  else score -= 100;
+
+  // 3.5) agent 能力：确认支持工具调用加分；未知不奖不罚
+  if (e.tools === true) score += 50;
 
   // 4) 冷却剩余时间：冷却中的模型分数要低，但不为 0（万一马上解冻）
   if (st.cooldownUntil > Date.now()) {
@@ -292,11 +313,22 @@ function scoreModel(key) {
 }
 
 // 选出当前最优的模型；exclude 是本次请求已试过、要跳过的 key
+// auto 质量准入：先在「合格池」里挑（ctx≥autoMinCtx 且支持工具调用），
+// 合格池为空才降级到全量候选 —— 宁可调度到弱模型，也不让 auto 直接失败
+function autoEligible(key) {
+  const e = registry.get(key);
+  if (!e) return false;
+  if (e.context && e.context < CFG.autoMinCtx) return false;        // 上下文太小
+  if (CFG.autoRequireTools && e.tools === false) return false;      // 确认无 agent 能力
+  return true;                                                      // ctx/tools 未知的不误杀，靠评分降权
+}
+
 function pickAutoModel(exclude = new Set()) {
-  const cands = freeKeys().filter((k) => available(k) && !exclude.has(k));
-  if (!cands.length) return null;
-  cands.sort((a, b) => scoreModel(b) - scoreModel(a));
-  return cands[0];
+  const all = freeKeys().filter((k) => available(k) && !exclude.has(k));
+  const eligible = all.filter(autoEligible);
+  const pool = eligible.length ? eligible : all;
+  pool.sort((a, b) => scoreModel(b) - scoreModel(a));
+  return pool[0] || null;
 }
 
 // auto 模式下的一次尝试：返回被选中的 key
@@ -870,6 +902,7 @@ function statusPayload() {
       const row = {
         id: key, model: e.model, provider: p.id,
         name: e.name || e.model, ctx: e.context, out: e.output,
+        tools: e.tools, auto: autoEligible(key),
         state: st.state, stateAt: st.stateAt, cooldownUntil: st.cooldownUntil,
         lastError: st.lastError, tps: st.tps, ttft: st.ttft, lastUsedAt: st.lastUsedAt,
       };

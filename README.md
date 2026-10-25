@@ -8,11 +8,50 @@
 
 ![协议](https://img.shields.io/badge/API-OpenAI%20%2F%20Anthropic%20%2F%20Responses-blue.svg)
 
+<p align="center">
+  <a href="#快速开始">快速开始</a> ·
+  <a href="#为什么做这个">为什么做这个</a> ·
+  <a href="#只在免鉴权场景有意义">只在免鉴权场景有意义</a> ·
+  <a href="#接口">接口</a> ·
+  <a href="#客户端">客户端</a> ·
+  <a href="#来源">来源</a> ·
+  <a href="#auto-模型自动调度失败自动换模型">auto 模型</a> ·
+  <a href="#自动化agent-搜索脚本验证">自动化</a> ·
+  <a href="#模型命名">模型命名</a> ·
+  <a href="#面板">面板</a> ·
+  <a href="#实现">实现</a> ·
+  <a href="#配置">配置</a> ·
+  <a href="#安全">安全</a> ·
+  <a href="#故障排查">故障排查</a> ·
+  <a href="#卸载">卸载</a>
+</p>
+
 把**不需要 API key**的免费模型来源聚合成一个本地网关：改一个 `base_url` 就能用，任何 OpenAI / Anthropic / Responses 兼容的客户端都能接。
 
-[为什么做这个](#为什么做这个) · [只在免鉴权场景有意义](#只在免鉴权场景有意义) · [快速开始](#快速开始) · [接口](#接口) · [客户端](#客户端) · [来源](#来源) · [自动化](#自动化agent-搜索脚本验证) · [模型命名](#模型命名) · [面板](#面板) · [实现](#实现) · [配置](#配置) · [安全](#安全) · [故障排查](#故障排查) · [卸载](#卸载)
+免鉴权免费模型在 2026 年确实可用，但它们**分散、命名各异、且随时会死**。本项目提供的是一个**可执行的网关**：一个入口、自动发现各来源的模型、跨来源失败转移，而不是一份会过期的清单。清单的维护全部跑在 GitHub Actions 上，你不需要在本地做任何事。
 
-免鉴权免费模型在 2026 年确实可用，但它们**分散、命名各异、且随时会死**。本项目提供的是一个**可执行的网关**：一个入口、自动发现各来源的模型、跨来源失败转移，而不是一份会过期的清单。
+## 快速开始
+
+需要 Windows 10/11、PowerShell 5.1+、Node.js 22+。两条命令跑起来：
+
+```powershell
+cd C:\workspace\keyless-llm
+.\launch.ps1               # 启动；窗口开着就在跑，关窗即停
+```
+
+启动后面板会列出本地地址与各来源状态。可选：
+
+```powershell
+.\launch.ps1 -AutoSpeed    # 启动时顺便测速（默认不测，省额度）
+.\launch.ps1 -Port 8799    # 换端口
+node server.mjs            # 不带面板，只跑网关
+```
+
+桌面快捷方式：
+
+```powershell
+python scripts/make_lnk.py   # 生成 C:\Users\<你>\Desktop\keyless-llm.lnk
+```
 
 ## 为什么做这个
 
@@ -23,8 +62,9 @@
 | Kilo Code    | `api.kilo.ai/api/gateway`     | 16   | 12 | 200 次/小时/IP  |
 | Pollinations | `text.pollinations.ai/openai` | 1    | 1  | 4 次/分钟       |
 | BlockRun     | `blockrun.ai/api/v1`          | 5    | 4  | IP 限流，免费容量常满 |
+| OVHcloud     | `oai.endpoints.kepler.ai.cloud.ovh.net/v1` | 7 | 新增，待巡检 | 2 次/分钟/IP/模型 |
 
-合计 **22 个免费模型，17 个当前可调度**，其中 6 个是 1M 上下文。这些模型是 `gpt-oss`、`nemotron-3-ultra`、`beam-free`、`north-mini-code` 这类开源权重模型，跑在 NVIDIA、Poolside、Cohere 等基础设施上。
+合计 **4 个启用来源、29 个免费模型**，其中 beam-free 等支持 1M 上下文。这些模型是 `gpt-oss`、`nemotron-3-ultra`、`beam-free`、`north-mini-code` 这类开源权重模型，跑在 NVIDIA、Poolside、Cohere 等基础设施上。另有 2 个来源（pollinations-gen、opencode）停用观察中，见[来源](#来源)。
 
 问题在于它们不能直接拼在一起用：
 
@@ -50,30 +90,9 @@
 
 它适合个人开发、试用、离线实验、给 Agent 找一个不花钱的兜底。**不适合当作生产依赖**，也不适合承载不能外泄的代码——这些来源都声明提示词可能被记录或用于训练。
 
-## 快速开始
-
-需要 Windows 10/11、PowerShell 5.1+、Node.js 22+。
-
-```powershell
-cd C:\workspace\keyless-llm
-.\launch.ps1               # 启动；窗口开着就在跑，关窗即停
-```
-
-可选：
-
-```powershell
-.\launch.ps1 -AutoSpeed    # 启动时顺便测速（默认不测，省额度）
-.\launch.ps1 -Port 8799    # 换端口
-node server.mjs            # 不带面板，只跑网关
-```
-
-启动后面板会列出本地地址与各来源状态。桌面快捷方式：
-
-```powershell
-python scripts/make_lnk.py   # 生成 C:\Users\<你>\Desktop\keyless-llm.lnk
-```
-
 ## 接口
+
+三套协议共用一个端口，模型发现走标准端点。
 
 | 协议                      | 本地地址                       | 说明                             |
 | ----------------------- | -------------------------- | ------------------------------ |
@@ -104,7 +123,7 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
 
 **OpenCode 的模型 id 不能带斜杠。** 它用 `provider/model` 寻址，斜杠会被当层级分隔符。正确做法是：provider 名填 `keyless`，model 填**不带来源前缀**的名字（如 `beam-free`），拼出来正好是 `keyless/beam-free`。不要在 model 里再写 `kilo/xxx`。
 
-**reasoning 模型会先吃掉 token。** `beam-free`、`nemotron` 系列会输出思考内容，`max_tokens` 给小了会拿不到正文（表现为 `stop_reason: max_tokens` 但内容为空）。这类模型给到 1024 以上。
+**reasoning 模型会先吃掉 token。** `beam-free`、`nemotron` 系列会输出思考内容，`max_tokens` 给小了会拿不到正文（表现为 `stop_reason: max_tokens` 但内容为空）。这类模型给到 1024 以上——OVHcloud 的 reasoning 模型尤其如此。
 
 **模型名尽量写全。** 网关支持裸名匹配（`beam-free` → `kilo/reflection/beam-free`），但同名模型出现在多个来源时会有歧义，此时用完整的 `<来源>/<模型>`。
 
@@ -117,9 +136,77 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
 | `kilo`         | `api.kilo.ai/api/gateway`     | id 以 `:free` 结尾       | 200 次/小时/IP，模型最多        |
 | `pollinations` | `text.pollinations.ai/openai` | `tier == "anonymous"` | 4 次/分钟，匿名 tier 只剩 1 个模型 |
 | `blockrun`     | `blockrun.ai/api/v1`          | id 以 `nvidia/` 开头     | 免费容量经常打满，返回 503         |
-| `opencode`     | `opencode.ai/inference/v1`    | id 含 `-free`          | 已停用，匿名额度整体 429          |
+| `ovh`          | `oai.endpoints.kepler.ai.cloud.ovh.net/v1` | `staticModels` 手工收录 | 2 req/min/IP/模型，匿名层，欧盟节点。只收对话模型——embedding/TTS/内容安全分类器一律不收 |
+| `pollinations-gen` | `gen.pollinations.ai/v1`  | 全部                    | **已停用**：匿名额度极小，耗尽后 401，恢复前不启用 |
+| `opencode`     | `opencode.ai/inference/v1`    | id 含 `-free`          | **已停用**，匿名额度整体 429      |
 
 各来源的免费模型 id 规则完全不同（`:free` 后缀 / `tier` 字段 / 自由价），所以用 `freeRule` 区分，不要硬编码模型名。
+
+## auto 模型：自动调度，失败自动换模型
+
+免鉴权来源最大的问题是**可用性是动态的**：客户端写死 `beam-free`，那个模型一旦被限流，整条链路就断了，只能干等冷却。
+
+所以网关提供了一个伪模型 `auto`——把「选模型」这件事交给网关，调用方只关心「能不能通」：
+
+```bash
+curl http://127.0.0.1:8788/v1/chat/completions \
+  -H "Authorization: Bearer sk-keyless-local" -H "Content-Type: application/json" \
+  -d '{"model":"auto","messages":[{"role":"user","content":"hi"}],"max_tokens":50,"stream":false}'
+```
+
+响应体里的 `model` 字段会被替换成**实际选中的模型**（如 `kilo/reflection/beam-free`），响应头 `x-keyless-model` 也会带上，方便排查。
+
+### 谁能进 auto 池
+
+不是所有免费模型都配得上 `auto` 这个名字——64k 上下文的小模型、没有工具调用能力的模型，接进 Agent 里只会坏事。所以 auto 有**质量准入**：上下文 ≥ 256000（`KEYLESS_AUTO_MIN_CTX`，默认 256k）且未确认缺工具能力（`KEYLESS_AUTO_REQUIRE_TOOLS`，默认开启）。
+
+判定规则刻意留了余地：
+
+- 上下文**已知**小于 256k → 排除（如 `liquid/lfm-2.5-2.6b:free`，64k）
+- **确认**没有工具调用 → 排除（如 `nemotron-3.5-content-safety:free`，内容安全分类器）
+- 上下文 200k 的 `openrouter/free` 同样进不了池子
+- ctx / tools **未知**的不误杀，靠评分降权
+- 合格池为空时**降级放行全量**——宁可调度到弱模型，也不让 auto 直接失败
+
+被排除的模型通过显式模型名仍然可以访问，auto 只是不再自动选它们。
+
+### 怎么选
+
+`auto` 对每个可用模型打分，取最高分：
+
+| 维度 | 权重 | 说明 |
+| --- | --- | --- |
+| 健康状态 | 最高 | `healthy` ≫ `unknown`（未探测）≫ `limited`/`blocked` |
+| 实测 TPS / TTFT | 高 | 跑过 TPS 测速的模型优先，越快分越高 |
+| 上下文长度 | 中 | 长上下文更通用 |
+| 工具调用 | 加分 | 确认支持 tools 的模型加分 |
+| 冷却剩余 | 负分 | 冷却中的模型降权，但不为 0 |
+| 空闲时长 | 轻微正分 | 久未使用的优先，避免单个模型被反复消耗 |
+
+### 怎么重试
+
+失败时**换一个模型继续试**，最多 `KEYLESS_AUTO_ATTEMPTS`（默认 6）次：
+
+- `429` / `403` / `5xx` / 网络错误 → 换模型重试
+- **HTTP 200 但内容为空** → 也算失败，换模型重试
+- auto 模式单请求超时 `KEYLESS_AUTO_TIMEOUT`（默认 45s），宁可快速失败换下一个，也不卡死在不响应的上游上
+
+「200 但空内容」这条是实测踩出来的：推理型模型（gpt-oss、step-3.7 等）会把 `max_tokens` 全烧在 reasoning 上，`finish_reason=length` 而正文一个字都没有。对调用方来说这是「成功但没结果」，比报错更难排查。
+
+实测 8 次连续请求 `auto`，**8/8 成功**，其中多次自动绕开被限流的模型切到可用模型。
+
+### 相关配置
+
+| 环境变量 | 默认 | 说明 |
+| --- | --- | --- |
+| `KEYLESS_AUTO_NAMES` | `auto,auto-fast,auto-thinking` | 识别为 auto 的模型名（多个等价于同一个策略） |
+| `KEYLESS_AUTO_ATTEMPTS` | `6` | 最多试几个模型 |
+| `KEYLESS_AUTO_TIMEOUT` | `45000` | auto 单模型超时（毫秒） |
+| `KEYLESS_AUTO_MIN_CTX` | `256000` | auto 准入的最低上下文 |
+| `KEYLESS_AUTO_REQUIRE_TOOLS` | `1` | 要求工具调用能力，`0` 关闭准入 |
+| `KEYLESS_AUTO_STICKY` | `1` | 记住上次成功的模型并优先复用（减少切换开销） |
+| `KEYLESS_TIMEOUT` | `120000` | 普通（非 auto）请求的上游超时 |
+| `KEYLESS_ATTEMPTS` | `2` | 指定具体模型时的最大转移次数 |
 
 ## 自动化：agent 搜索，脚本验证
 
@@ -131,8 +218,6 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
 | **验证**    | 候选来源到底能不能免鉴权                       | **脚本**（确定性实测）      | 不带任何鉴权头发请求，看是否真能拿到 200 和真实文本。可复现、不烧额度、能当 PR 硬门禁。 |
 
 这条分界线是整个自动化的设计核心：**agent 只负责提候选，判定权交给实测**。
-
-### 三条自动化链路
 
 ```
 发现（agent）                    验证（脚本）                    巡检（脚本）
@@ -148,9 +233,50 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
                                  └─────────────┘            └────────────────┘
 ```
 
-### 维护全部在 GitHub Actions 上跑
+维护全部在 GitHub Actions 上跑，本仓库**没有本地定时任务**：
 
-本仓库**没有本地定时任务**，来源列表的维护完全由 GitHub Actions 承担（`probe.yml` / `discover.yml` / `validate-source.yml`）。你不需要在本地跑任何东西来保持清单新鲜。
+| workflow            | 触发                                | 作用                                     |
+| ------------------ | --------------------------------- | -------------------------------------- |
+| `probe.yml`        | 每日 UTC 3:17 + 改 `providers.json` 时        | 探测全部来源，自动提交 `snapshots/status.json` |
+| `discover.yml`     | 每日 UTC 4:23（**零配置**，`GITHUB_TOKEN` 即可）   | agent 搜索新来源 → 候选清单 → 实测        |
+| `validate-source.yml` | 改动 `providers.json` 的 PR        | **硬门禁**：新增来源必须通过免鉴权实测，不通过就 fail |
+
+### 用法
+
+**手动探测**（本地随时跑）：
+
+```bash
+node scripts/probe-sources.mjs          # 探测所有来源，写 snapshots/status.json
+node scripts/validate-source.mjs --base https://example.com/api/v1 --model xxx
+```
+
+`validate-source.mjs` 的三态判定：
+
+| 判定            | 含义                                | 是否收录         |
+| ------------- | --------------------------------- | ------------ |
+| `keyless`     | 匿名拿到真实生成，确实不要 key                | 收录           |
+| `limited`     | 返回 429 —— 仍是免鉴权来源，只是当下配额/频率受限   | 收录，标注受限   |
+| `not-keyless` | 401 / 403 / 返回 200 但内容不是模型生成         | 拒绝           |
+
+429 判成 `limited` 而不是 `not-keyless` 是个刻意的区分：前者说明「不需要 key」这件事成立，只是此刻没额度；后者说明它根本不是免鉴权来源。
+
+`discover.yml` 没配 agent 环境时会自动跳过，不影响日常 CI。CI 里的 agent 用标准 OpenAI 兼容接口，配 `AGENT_API_KEY` / `AGENT_BASE_URL` / `AGENT_MODEL` 三个变量即可。
+
+**加一个新来源的完整流程**：
+
+```bash
+# 1. agent 搜索，或手工找到候选，产出候选清单
+node scripts/discover-with-agent.mjs        # 或直接编辑 candidates.json
+
+# 2. 实测候选是不是真免鉴权
+node scripts/validate-source.mjs --file candidates.json
+
+# 3. 通过的才写进 providers.json，然后用 PR 提交
+#    → validate-source.yml 会自动实测校验，不通过就卡住
+```
+
+<details>
+<summary>为什么 CI 上网关不一定可用（以及 discover 的 LLM 后端降级链）</summary>
 
 `discover.yml` 里的 agent 按以下优先级选 LLM 后端，**前一档不通就自动降级**：
 
@@ -175,7 +301,10 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
 
 跑几次就能看出实际比例，不用猜。
 
-### 防误报：CI 失败不等于来源已死
+</details>
+
+<details>
+<summary>防误报：CI 失败不等于来源已死</summary>
 
 `probe-sources.mjs` 对每个来源累计 `failStreak`（连续多少轮没有可用模型）：
 
@@ -189,96 +318,7 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
 KEYLESS_PROBE_ENV=ci node scripts/probe-sources.mjs   # 手动模拟 CI 环境探测
 ```
 
-### 用法
-
-**手动探测**（本地随时跑）：
-
-```bash
-node scripts/probe-sources.mjs          # 探测所有来源，写 snapshots/status.json
-node scripts/validate-source.mjs --base https://example.com/api/v1 --model xxx
-```
-
-`validate-source.mjs` 的三态判定：
-
-| 判定            | 含义                                | 是否收录         |
-| ------------- | --------------------------------- | ------------ |
-| `keyless`     | 匿名拿到真实生成，确实不要 key                | ✅ 收录           |
-| `limited`     | 返回 429 —— 仍是免鉴权来源，只是当下配额/频率受限   | △ 收录，标注受限   |
-| `not-keyless` | 401 / 403 / 返回 200 但内容不是模型生成         | ❌ 拒绝           |
-
-429 判成 `limited` 而不是 `not-keyless` 是个刻意的区分：前者说明「不需要 key」这件事成立，只是此刻没额度；后者说明它根本不是免鉴权来源。
-
-**CI 工作流**：
-
-| workflow            | 触发                                | 作用                                     |
-| ------------------ | --------------------------------- | -------------------------------------- |
-| `probe.yml`        | 每日定时 + 改 `providers.json` 时        | 探测全部来源，自动提交 `snapshots/status.json` |
-| `validate-source.yml` | 改动 `providers.json` 的 PR        | **硬门禁**：新增来源必须通过免鉴权实测，不通过就 fail |
-| `discover.yml`     | 每日定时（**零配置**，`GITHUB_TOKEN` 即可）   | agent 搜索新来源 → 候选清单 → 实测        |
-
-`discover.yml` 没配 `AGENT_API_KEY` 时会自动跳过，不影响日常 CI。CI 里的 agent 用的是标准 OpenAI 兼容接口，配 `AGENT_API_KEY` / `AGENT_BASE_URL` / `AGENT_MODEL` 三个变量即可。
-
-### 加一个新来源的完整流程
-
-```bash
-# 1. agent 搜索，或手工找到候选，产出候选清单
-node scripts/discover-with-agent.mjs        # 或直接编辑 candidates.json
-
-# 2. 实测候选是不是真免鉴权
-node scripts/validate-source.mjs --file candidates.json
-
-# 3. 通过的才写进 providers.json，然后用 PR 提交
-#    → validate-source.yml 会自动实测校验，不通过就卡住
-```
-
-## auto 模型：自动调度，失败自动换模型
-
-免鉴权来源最大的问题是**可用性是动态的**：客户端写死 `beam-free`，那个模型一旦被限流，整条链路就断了，只能干等冷却。
-
-所以网关提供了一个伪模型 `auto`——把「选模型」这件事交给网关，调用方只关心「能不能通」：
-
-```bash
-curl http://127.0.0.1:8788/v1/chat/completions \
-  -H "Authorization: Bearer sk-keyless-local" -H "Content-Type: application/json" \
-  -d '{"model":"auto","messages":[{"role":"user","content":"hi"}],"max_tokens":50,"stream":false}'
-```
-
-响应体里的 `model` 字段会被替换成**实际选中的模型**（如 `kilo/reflection/beam-free`），响应头 `x-keyless-model` 也会带上，方便排查。
-
-### 怎么选
-
-`auto` 对每个可用模型打分，取最高分：
-
-| 维度 | 权重 | 说明 |
-| --- | --- | --- |
-| 健康状态 | 最高 | `healthy` ≫ `unknown`（未探测）≫ `limited`/`blocked` |
-| 实测 TPS / TTFT | 高 | 跑过 TPS 测速的模型优先，越快分越高 |
-| 上下文长度 | 中 | 长上下文更通用 |
-| 冷却剩余 | 负分 | 冷却中的模型降权，但不为 0 |
-| 空闲时长 | 轻微正分 | 久未使用的优先，避免单个模型被反复消耗 |
-
-### 怎么重试
-
-失败时**换一个模型继续试**，最多 `KEYLESS_AUTO_ATTEMPTS`（默认 6）次：
-
-- `429` / `403` / `5xx` / 网络错误 → 换模型重试
-- **HTTP 200 但内容为空** → 也算失败，换模型重试
-- auto 模式单请求超时 `KEYLESS_AUTO_TIMEOUT`（默认 45s），宁可快速失败换下一个，也不卡死在不响应的上游上
-
-「200 但空内容」这条是实测踩出来的：推理型模型（gpt-oss、step-3.7 等）会把 `max_tokens` 全烧在 reasoning 上，`finish_reason=length` 而正文一个字都没有。对调用方来说这是「成功但没结果」，比报错更难排查。
-
-实测 8 次连续请求 `auto`，**8/8 成功**，其中多次自动绕开被限流的模型切到可用模型。
-
-### 相关配置
-
-| 环境变量 | 默认 | 说明 |
-| --- | --- | --- |
-| `KEYLESS_AUTO_NAMES` | `auto,auto-fast,auto-thinking` | 识别为 auto 的模型名（多个等价于同一个策略） |
-| `KEYLESS_AUTO_ATTEMPTS` | `6` | 最多试几个模型 |
-| `KEYLESS_AUTO_TIMEOUT` | `45000` | auto 单模型超时（毫秒） |
-| `KEYLESS_AUTO_STICKY` | `1` | 记住上次成功的模型并优先复用（减少切换开销） |
-| `KEYLESS_TIMEOUT` | `120000` | 普通（非 auto）请求的上游超时 |
-| `KEYLESS_ATTEMPTS` | `2` | 指定具体模型时的最大转移次数 |
+</details>
 
 ## 模型命名
 
@@ -288,6 +328,7 @@ kilo/reflection/beam-free
 kilo/nvidia/nemotron-3-ultra-550b-a55b:free
 pollinations/openai-fast
 blockrun/nvidia/gpt-oss-120b
+ovh/Qwen3.5-397B-A17B
 ```
 
 也接受裸模型名，自动匹配到唯一来源：
@@ -322,11 +363,21 @@ nemotron-3.5-lightning:free  → kilo/nvidia/nemotron-3.5-lightning:free
 
 **探测与测速是两条独立路径**：可用性判断永远走便宜的轻探测，**测速不自动执行**——TPS 栏启动时是 `-`，按 `T` 才测。
 
-**探测自己也会节流**：「待验证」的模型 30 分钟内不重复探测，限流/封禁中的模型等冷却到期才探。实测稳态下每轮只探 4 个，而不是全部 22 个。
+**探测自己也会节流**：「待验证」的模型 30 分钟内不重复探测，限流/封禁中的模型等冷却到期才探。实测稳态下每轮只探 4 个，而不是全部 29 个。
 
 ## 实现
 
-单进程、单端口，三套协议共用一套路由。协议层自研，无第三方依赖。
+单进程、单端口，三套协议共用一套路由。协议层自研，无第三方依赖。模型注册表以 `<来源>/<模型>` 为 key，状态机按 key 隔离：429 退避 10 分钟、403 拉黑 60 分钟、5xx 退避 1 分钟，其余错误码视为「无定论」，不误伤模型。探测与请求都只读状态码；轻探测成功时直接丢弃响应体（`max_tokens=1` 且不消费内容）。
+
+离线验证用本地 mock 上游，不需要凭据、不消耗额度、秒级完成：
+
+```bash
+node scripts/mock-upstream.mjs      # 单独启动 mock 上游
+node scripts/test_protocols.mjs     # 跑协议自检
+```
+
+<details>
+<summary>目录结构与实现细节</summary>
 
 ```
 keyless-llm/
@@ -336,24 +387,18 @@ keyless-llm/
 ├── measure-speed.mjs     # TPS 测速（经本地网关）
 ├── egress.json           # 出口扫描结果
 ├── scripts/
-│   ├── egress-scan.mjs   # 多出口扫描（切 Clash 节点 → 测 IP → 测模型 → 恢复）
-│   ├── mock-upstream.mjs # 离线测试用的假上游
+│   ├── probe-sources.mjs      # 来源巡检，写 snapshots/status.json
+│   ├── validate-source.mjs    # 免鉴权三态实测（keyless / limited / 拒绝）
+│   ├── discover-with-agent.mjs # agent 搜索新来源，产出候选清单
+│   ├── egress-scan.mjs        # 多出口扫描（切 Clash 节点 → 测 IP → 测模型 → 恢复）
+│   ├── mock-upstream.mjs      # 离线测试用的假上游
 │   └── test_protocols.mjs
 └── docs/
     ├── 免鉴权大模型服务清单.md
     └── OpenCode本体逆向报告.md
 ```
 
-模型注册表以 `<来源>/<模型>` 为 key，状态机按 key 隔离：429 退避 10 分钟、403 拉黑 60 分钟、5xx 退避 1 分钟，其余错误码视为「无定论」，不误伤模型。
-
-探测与请求都只读状态码；轻探测成功时直接丢弃响应体（`max_tokens=1` 且不消费内容）。
-
-离线验证用本地 mock 上游，不需要凭据、不消耗额度、秒级完成：
-
-```bash
-node scripts/mock-upstream.mjs      # 单独启动 mock 上游
-node scripts/test_protocols.mjs      # 跑协议自检
-```
+</details>
 
 ## 配置
 
@@ -384,6 +429,8 @@ node scripts/test_protocols.mjs      # 跑协议自检
 | `KEYLESS_CD429` / `KEYLESS_CD403` | 600 / 3600       | 限流/封禁冷却秒数         |
 | `KEYLESS_ATTEMPTS`                | 2                | 单请求最大尝试次数（含首次）    |
 | `KEYLESS_UA`                      | keyless-llm/1.0  | 向上游发送的 User-Agent |
+
+auto 相关的 `KEYLESS_AUTO_*` 见 [auto 模型](#auto-模型自动调度失败自动换模型)一节。
 
 ## 安全
 
