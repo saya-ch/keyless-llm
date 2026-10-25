@@ -27,3 +27,10 @@ scripts/ctx.py
 scripts/probe_live.js
 scripts/probe_quota.js
 scripts/_mk_test_panel.py
+
+# 测试残留
+.autotest.mjs
+.degrade*.mjs
+*.err
+*.out
+.hdr
