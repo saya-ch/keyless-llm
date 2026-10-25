@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-25T16:30:49.775Z",
+  "generatedAt": "2026-10-25T17:22:58.888Z",
   "env": "ci",
   "summary": {
-    "providers": 3,
-    "freeModels": 22,
+    "providers": 4,
+    "freeModels": 29,
     "healthy": 17,
     "limited": 3,
     "blocked": 0,
-    "failed": 2
+    "failed": 9
   },
   "providers": [
     {
@@ -32,9 +32,9 @@
         },
         {
           "model": "nvidia/nemotron-3.5-super-vl:free",
-          "status": 502,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "reflection/beam-free",
@@ -62,9 +62,9 @@
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -194,6 +194,102 @@
         }
       ],
       "failStreak": 0,
+      "suggestDead": false
+    },
+    {
+      "id": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "enabled": true,
+      "base": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+      "rate": "2 req/min/IP/模型（匿名层，欧盟节点）",
+      "modelsError": "",
+      "modelsFound": 7,
+      "freeModels": 7,
+      "ok": 0,
+      "limited": 0,
+      "blocked": 0,
+      "failed": 7,
+      "models": [
+        {
+          "model": {
+            "id": "Qwen3.8-27B",
+            "context_length": 262144,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": {
+            "id": "Qwen3.6-27B",
+            "context_length": 262144,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": {
+            "id": "Qwen3.5-397B-A17B",
+            "context_length": 262144,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": {
+            "id": "Qwen3.5-9B",
+            "context_length": 262144,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": {
+            "id": "gpt-oss-120b",
+            "context_length": 131072,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": {
+            "id": "Meta-Llama-3_3-70B-Instruct",
+            "context_length": 131072
+          },
+          "status": 422,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": {
+            "id": "Mistral-Small-3.2-24B-Instruct-2506",
+            "context_length": 131072
+          },
+          "status": 422,
+          "state": "unknown",
+          "error": ""
+        }
+      ],
+      "failStreak": 1,
       "suggestDead": false
     }
   ]
