@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-10-25T18:27:39.288Z",
+  "generatedAt": "2026-10-25T18:36:22.352Z",
   "env": "ci",
   "summary": {
-    "providers": 4,
-    "freeModels": 29,
-    "healthy": 22,
-    "limited": 5,
+    "providers": 6,
+    "freeModels": 31,
+    "healthy": 25,
+    "limited": 4,
     "blocked": 0,
     "failed": 2
   },
@@ -19,8 +19,8 @@
       "modelsError": "",
       "modelsFound": 401,
       "freeModels": 16,
-      "ok": 14,
-      "limited": 1,
+      "ok": 13,
+      "limited": 2,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -50,9 +50,9 @@
         },
         {
           "model": "xingchen-agi/xing4.0-29b-a4b:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "dots-studio/dots-3-note-preview:free",
@@ -157,16 +157,16 @@
       "modelsError": "",
       "modelsFound": 5,
       "freeModels": 5,
-      "ok": 1,
-      "limited": 3,
+      "ok": 3,
+      "limited": 1,
       "blocked": 0,
       "failed": 1,
       "models": [
         {
           "model": "nvidia/gpt-oss-120b",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/deepseek-v4-flash",
@@ -176,9 +176,9 @@
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/step-3.7-flash",
@@ -188,9 +188,9 @@
         },
         {
           "model": "nvidia/mistral-nemotron",
-          "status": -1,
+          "status": 429,
           "state": "limited",
-          "error": "TIMEOUT"
+          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Message @bc1max on Telegram for help."
         }
       ],
       "failStreak": 0,
@@ -205,16 +205,16 @@
       "modelsError": "",
       "modelsFound": 7,
       "freeModels": 7,
-      "ok": 6,
-      "limited": 1,
+      "ok": 7,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "Qwen3.8-27B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Qwen3.6-27B",
@@ -248,6 +248,54 @@
         },
         {
           "model": "Mistral-Small-3.2-24B-Instruct-2506",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        }
+      ],
+      "failStreak": 0,
+      "suggestDead": false
+    },
+    {
+      "id": "vireonix",
+      "label": "Vireonix",
+      "enabled": true,
+      "base": "https://vireonix.ai/v1",
+      "rate": "20M 输入/200K 输出 tokens 每小时每 IP，429 带 Retry-After",
+      "modelsError": "",
+      "modelsFound": 1,
+      "freeModels": 1,
+      "ok": 0,
+      "limited": 1,
+      "blocked": 0,
+      "failed": 0,
+      "models": [
+        {
+          "model": "auto",
+          "status": 502,
+          "state": "limited",
+          "error": "Vireonix is temporarily unavailable. Please try again shortly."
+        }
+      ],
+      "failStreak": 1,
+      "suggestDead": false
+    },
+    {
+      "id": "chat",
+      "label": "ch.at",
+      "enabled": true,
+      "base": "https://ch.at/v1",
+      "rate": "公平使用，未公开限额",
+      "modelsError": "",
+      "modelsFound": 1,
+      "freeModels": 1,
+      "ok": 1,
+      "limited": 0,
+      "blocked": 0,
+      "failed": 0,
+      "models": [
+        {
+          "model": "gpt-4o-mini",
           "status": 200,
           "state": "healthy",
           "error": ""
