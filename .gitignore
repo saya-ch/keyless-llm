@@ -34,3 +34,6 @@ scripts/_mk_test_panel.py
 *.err
 *.out
 .hdr
+
+gateway.log
+gateway.pid

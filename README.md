@@ -148,22 +148,32 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
                                  └─────────────┘            └────────────────┘
 ```
 
-### agent 跑在哪里：本地和 CI 用不同的 LLM 后端
+### 维护全部在 GitHub Actions 上跑
 
-这是本仓库最反直觉的一点，**也是最容易踩的坑**：
+本仓库**没有本地定时任务**，来源列表的维护完全由 GitHub Actions 承担（`probe.yml` / `discover.yml` / `validate-source.yml`）。你不需要在本地跑任何东西来保持清单新鲜。
 
-| 场景 | agent 的 LLM 后端 | 原因 |
+`discover.yml` 里的 agent 按以下优先级选 LLM 后端，**前一档不通就自动降级**：
+
+| 档位 | 后端 | 特点 |
 | --- | --- | --- |
-| **本地**（WorkBuddy 定时任务） | 本项目自己的网关 `model=auto` | 家用/办公 IP 信誉好、有代理多出口、配额充足。自举：用聚合来的免费模型维护聚合清单。 |
-| **CI**（GitHub Actions） | ① 网关（可能限流）→ ② **GitHub Models**（`GITHUB_TOKEN`） | GitHub Actions 是**共享出口 IP**，免费来源普遍按 IP 限流，网关在 CI 上很可能一到就全部 429。 |
+| ① | **本项目自己的网关** `model=auto` | **自举**：先起网关，用聚合来的免费模型维护聚合清单，零成本 |
+| ② | **GitHub Models**（`GITHUB_TOKEN`） | `permissions: models: read` + 内置 token，**零配置、无 secret、免费** |
+| ③ | 纯规则提取 | 完全不用 LLM，从搜索结果里按特征挑 URL |
 
-为什么 CI 不能只靠我们自己的网关：
+为什么需要第 ② 档——GitHub Actions 是**共享出口 IP**：
 
-- **共享 IP 被限流**：Runner 的 IP 段被无数项目共用，Kilo 的 200 次/小时/IP 这类配额早被别人吃光
-- **数据中心 IP 被反爬**：DuckDuckGo / Bing 对数据中心 IP 的容忍度远低于住宅 IP
-- **误报最致命**：CI 上探测失败 ≠ 来源真死了。若据此判断，每日快照会**大量误报"来源已死"**
+- 免费来源普遍按 IP 限流（Kilo 200 次/小时/IP），Runner 的 IP 段被无数项目共用，网关不一定通
+- 数据中心 IP 更容易被 DuckDuckGo / Bing 反爬拦截
+- 所以网关是首选，但不能是唯一
 
-GitHub Models 是 CI 的最优解：`permissions: models: read` + 内置 `GITHUB_TOKEN` 即可调用，**零配置、无 secret、免费**（[官方文档](https://github.blog/ai-and-ml/llms/solving-the-inference-problem-for-open-source-ai-projects-with-github-models/)）。
+**CI 上网关到底能不能用？** 这个问题没有理论答案，取决于 Runner 抽到哪个 IP。`discover.yml` 内置了一个自检步骤，会把结论写进 job summary：
+
+```
+### 网关自检：可用（实际模型 `kilo/...`）    ← 走自举，零成本
+### 网关自检：不可用（HTTP 429）            ← 降级到 GitHub Models
+```
+
+跑几次就能看出实际比例，不用猜。
 
 ### 防误报：CI 失败不等于来源已死
 

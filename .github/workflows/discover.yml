@@ -41,9 +41,17 @@ jobs:
   discover:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # 不再依赖任何外部密钥：GITHUB_TOKEN 走 GitHub Models，零配置即可运行。
-    # 脚本内部仍有完整降级链，任何一档后端失败都不会让 job 失败。
+    # 本仓库的维护全在 GitHub Actions 上跑，没有本地定时任务。
+    #
+    # agent 的 LLM 后端优先级：
+    #   ① 本项目自己的网关（自举，零成本）—— CI 共享出口 IP 可能被限流，不一定通
+    #   ② GitHub Models（GITHUB_TOKEN，零配置）—— 走官方通道，最可靠
+    #   ③ 纯规则提取（完全不用 LLM）
+    # 降级链在脚本内部，任何一档失败都不会让 job 失败。
     env:
+      KEYLESS_GATEWAY: http://127.0.0.1:8788
+      KEYLESS_KEY: sk-keyless-local
+      KEYLESS_MODEL: auto
       AGENT_BASE_URL: ${{ secrets.AGENT_BASE_URL }}
       AGENT_API_KEY: ${{ secrets.AGENT_API_KEY }}
       AGENT_MODEL: ${{ secrets.AGENT_MODEL }}
@@ -55,6 +63,51 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      # ── 启动本项目网关作为 agent 的 LLM 后端（自举）──────────────
+      # 关掉启动探测（PROBE_ON_START=0）：CI 上探测会白烧请求配额，
+      # 且我们要的就是「先别浪费额度，直接试能不能用」。
+      - name: 启动 keyless-llm 网关
+        env:
+          KEYLESS_PROBE_ON_START: "0"
+          KEYLESS_PROBE: "0"
+        run: |
+          node server.mjs > gateway.log 2>&1 &
+          echo $! > gateway.pid
+          for i in $(seq 1 30); do
+            if curl -sf -m 3 http://127.0.0.1:8788/health > /dev/null 2>&1; then
+              echo "网关已就绪（${i}s）"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::warning::网关启动超时，将降级到 GitHub Models"
+          cat gateway.log || true
+
+      # ── 自检：回答「CI 上我们的网关到底能不能用」──────────────────
+      # 这是本 workflow 的诊断步骤，结果写进 job summary，
+      # 跑几次就能看出 CI 共享 IP 是否真被免费来源限流。
+      - name: 网关可用性自检
+        id: gwcheck
+        continue-on-error: true
+        run: |
+          code=$(curl -s -o /tmp/gw.json -w "%{http_code}" -m 60 \
+            http://127.0.0.1:8788/v1/chat/completions \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer sk-keyless-local" \
+            -d '{"model":"auto","max_tokens":20,"stream":false,"messages":[{"role":"user","content":"say ok"}]}')
+          echo "code=$code"
+          if [ "$code" = "200" ]; then
+            used=$(node -e 'const j=require("/tmp/gw.json");console.log(j.model||"?")' 2>/dev/null || echo "?")
+            echo "usable=true" >> "$GITHUB_OUTPUT"
+            echo "### 网关自检：可用（实际模型 \`$used\`）" >> "$GITHUB_STEP_SUMMARY"
+            echo "CI 共享出口 IP 未被限流，agent 走自举网关。" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "usable=false" >> "$GITHUB_OUTPUT"
+            echo "### 网关自检：不可用（HTTP $code）" >> "$GITHUB_STEP_SUMMARY"
+            echo "CI 共享出口 IP 大概率被免费来源限流，agent 降级到 GitHub Models。" >> "$GITHUB_STEP_SUMMARY"
+            head -c 300 /tmp/gw.json >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          fi
 
       - name: Agent 搜索并产出候选来源
         env:
@@ -71,15 +124,36 @@ jobs:
 
       - name: 汇总结果
         run: |
+          echo "### 本轮结果" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f candidates.json ]; then
+            node -e '
+              const c = require("./candidates.json");
+              console.log(`实际使用的 LLM 后端：\`${c.llmBackend || "无"}\``);
+              console.log(`搜索后端：\`${c.searchBackend || "无"}\``);
+              console.log(`候选数：${(c.candidates || []).length}`);
+            ' | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
           if [ -f /tmp/candidates-report.json ]; then
             node -e '
               const r = require("/tmp/candidates-report.json");
               const k = r.filter(x => x.verdict === "keyless");
               const l = r.filter(x => x.verdict === "limited");
-              console.log(`新增免鉴权来源 ${k.length} 个，受限 ${l.length} 个`);
+              console.log(`免鉴权 ${k.length} 个，受限 ${l.length} 个`);
               for (const x of k) console.log(`  ✓ ${x.label} ${x.base}`);
               for (const x of l) console.log(`  △ ${x.label} ${x.base}（当前限流）`);
             '
+          fi
+
+      - name: 停止网关
+        if: always()
+        run: |
+          if [ -f gateway.pid ]; then
+            kill "$(cat gateway.pid)" 2>/dev/null || true
+            echo "网关已停止"
+          fi
+          if [ -f gateway.log ]; then
+            echo "--- 网关日志（最后 25 行）---"
+            tail -25 gateway.log || true
           fi
 
       - name: 提交候选清单（供人工评审）
