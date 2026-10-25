@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-25T17:28:05.161Z",
+  "generatedAt": "2026-10-25T17:22:58.888Z",
   "env": "ci",
   "summary": {
     "providers": 4,
     "freeModels": 29,
-    "healthy": 22,
-    "limited": 5,
+    "healthy": 17,
+    "limited": 3,
     "blocked": 0,
-    "failed": 2
+    "failed": 9
   },
   "providers": [
     {
@@ -19,8 +19,8 @@
       "modelsError": "",
       "modelsFound": 401,
       "freeModels": 16,
-      "ok": 13,
-      "limited": 2,
+      "ok": 12,
+      "limited": 3,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -62,9 +62,9 @@
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -157,16 +157,16 @@
       "modelsError": "",
       "modelsFound": 5,
       "freeModels": 5,
-      "ok": 2,
-      "limited": 2,
+      "ok": 4,
+      "limited": 0,
       "blocked": 0,
       "failed": 1,
       "models": [
         {
           "model": "nvidia/gpt-oss-120b",
-          "status": 429,
-          "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Message @bc1max on Telegram for help."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/deepseek-v4-flash",
@@ -188,9 +188,9 @@
         },
         {
           "model": "nvidia/mistral-nemotron",
-          "status": 429,
-          "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Message @bc1max on Telegram for help."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         }
       ],
       "failStreak": 0,
@@ -205,55 +205,91 @@
       "modelsError": "",
       "modelsFound": 7,
       "freeModels": 7,
-      "ok": 6,
-      "limited": 1,
+      "ok": 0,
+      "limited": 0,
       "blocked": 0,
-      "failed": 0,
+      "failed": 7,
       "models": [
         {
-          "model": "Qwen3.8-27B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
-        },
-        {
-          "model": "Qwen3.6-27B",
-          "status": 200,
-          "state": "healthy",
+          "model": {
+            "id": "Qwen3.8-27B",
+            "context_length": 262144,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
           "error": ""
         },
         {
-          "model": "Qwen3.5-397B-A17B",
-          "status": 200,
-          "state": "healthy",
+          "model": {
+            "id": "Qwen3.6-27B",
+            "context_length": 262144,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
           "error": ""
         },
         {
-          "model": "Qwen3.5-9B",
-          "status": 200,
-          "state": "healthy",
+          "model": {
+            "id": "Qwen3.5-397B-A17B",
+            "context_length": 262144,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
           "error": ""
         },
         {
-          "model": "gpt-oss-120b",
-          "status": 200,
-          "state": "healthy",
+          "model": {
+            "id": "Qwen3.5-9B",
+            "context_length": 262144,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
           "error": ""
         },
         {
-          "model": "Meta-Llama-3_3-70B-Instruct",
-          "status": 200,
-          "state": "healthy",
+          "model": {
+            "id": "gpt-oss-120b",
+            "context_length": 131072,
+            "supported_parameters": [
+              "tools"
+            ]
+          },
+          "status": 422,
+          "state": "unknown",
           "error": ""
         },
         {
-          "model": "Mistral-Small-3.2-24B-Instruct-2506",
-          "status": 200,
-          "state": "healthy",
+          "model": {
+            "id": "Meta-Llama-3_3-70B-Instruct",
+            "context_length": 131072
+          },
+          "status": 422,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": {
+            "id": "Mistral-Small-3.2-24B-Instruct-2506",
+            "context_length": 131072
+          },
+          "status": 422,
+          "state": "unknown",
           "error": ""
         }
       ],
-      "failStreak": 0,
+      "failStreak": 1,
       "suggestDead": false
     }
   ]

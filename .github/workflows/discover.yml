@@ -169,11 +169,16 @@ jobs:
             echo "候选清单无变化"
           else
             git commit -m "chore(discover): agent 搜索到的新候选来源"
-            # probe 可能同时在跑并把快照提交推了上去，直接 push 会被拒。
-            # 先 rebase 到远端最新，失败重试，最多 4 次。
+            # probe 可能同时在跑。candidates.json 是幂等归档（新一轮覆盖旧一轮），
+            # 并发竞争时软重置到远端最新、把当前清单重放上去，不做 rebase 合并。
             ok=0
             for i in 1 2 3 4; do
-              git pull --rebase --autostash origin "$GITHUB_REF_NAME" && git push && ok=1 && break
+              git fetch origin "$GITHUB_REF_NAME" || { sleep 10; continue; }
+              if git reset --soft "origin/$GITHUB_REF_NAME"; then
+                git add -f candidates.json
+                git commit -m "chore(discover): agent 搜索到的新候选来源"
+                if git push; then ok=1; break; fi
+              fi
               echo "push 第${i}次被拒（并发提交竞争），10s 后重试"
               sleep 10
             done

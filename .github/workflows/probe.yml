@@ -65,10 +65,16 @@ jobs:
             echo "快照无变化"
           else
             git commit -m "chore(snapshot): 更新来源可用性快照"
-            # discover 可能同时在跑并推了候选清单，直接 push 会被拒。
+            # discover 可能同时在跑。快照是幂等的（新一轮覆盖旧一轮），
+            # 遇并发提交竞争时软重置到远端最新、把当前快照重放上去，不做 rebase 合并。
             ok=0
             for i in 1 2 3 4; do
-              git pull --rebase --autostash origin "$GITHUB_REF_NAME" && git push && ok=1 && break
+              git fetch origin "$GITHUB_REF_NAME" || { sleep 10; continue; }
+              if git reset --soft "origin/$GITHUB_REF_NAME"; then
+                git add snapshots/status.json
+                git commit -m "chore(snapshot): 更新来源可用性快照"
+                if git push; then ok=1; break; fi
+              fi
               echo "push 第${i}次被拒（并发提交竞争），10s 后重试"
               sleep 10
             done
