@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-10-25T15:48:01.637Z",
+  "generatedAt": "2026-10-25T16:24:33.818Z",
   "env": "ci",
   "summary": {
     "providers": 3,
     "freeModels": 22,
-    "healthy": 18,
-    "limited": 2,
+    "healthy": 17,
+    "limited": 3,
     "blocked": 0,
     "failed": 2
   },
@@ -19,8 +19,8 @@
       "modelsError": "",
       "modelsFound": 401,
       "freeModels": 16,
-      "ok": 14,
-      "limited": 1,
+      "ok": 13,
+      "limited": 2,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -80,9 +80,9 @@
         },
         {
           "model": "poolside/laguna-xs-2.1:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "cohere/north-mini-code:free",
@@ -176,15 +176,15 @@
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
-        },
-        {
-          "model": "nvidia/step-3.7-flash",
           "status": 200,
           "state": "healthy",
           "error": ""
+        },
+        {
+          "model": "nvidia/step-3.7-flash",
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "nvidia/mistral-nemotron",
