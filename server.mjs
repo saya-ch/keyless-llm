@@ -1063,11 +1063,22 @@ async function handleResponses(req, res, body) {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || "local"}`);
   try {
-    // Web 控制台：静态单文件，本机自用，不占 API 路径
+    // Web 控制台：静态单文件 + 本地 vendor 资源，本机自用，不占 API 路径
     if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/ui")) {
       const html = fs.readFileSync(path.join(__dirname, "web", "index.html"));
-      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" });
       return res.end(html);
+    }
+    // 前端动效库（GSAP）随仓库分发，离线可用；只放行 vendor 目录下的 js/css/woff2
+    if (req.method === "GET" && /^\/vendor\/[\w.-]+\.(js|css|woff2)$/.test(url.pathname)) {
+      const file = path.join(__dirname, "web", "vendor", path.basename(url.pathname));
+      try {
+        const buf = fs.readFileSync(file);
+        const type = file.endsWith(".js") ? "application/javascript; charset=utf-8"
+          : file.endsWith(".css") ? "text/css; charset=utf-8" : "font/woff2";
+        res.writeHead(200, { "Content-Type": type, "Cache-Control": "public, max-age=604800" });
+        return res.end(buf);
+      } catch { /* 找不到就当普通 404 处理 */ }
     }
     if (req.method === "GET" && url.pathname === "/health") {
       return sendJson(res, 200, { status: "ok", version: VERSION, uptime: Math.floor((Date.now() - stats.startedAt) / 1000) });

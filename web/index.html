@@ -2,291 +2,1134 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>keyless-llm</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>keyless-llm · 控制台</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
+/* ══════════════════════════════════════════════════════════
+   Tokens — primitive → semantic → component
+   ══════════════════════════════════════════════════════════ */
 :root{
-  --bg:#0A0A0B; --card:#111113; --card-h:#16161A;
-  --line:rgba(255,255,255,.07); --line-h:rgba(255,255,255,.13);
-  --fg:#EDEDEF; --fg2:#9B9BA3; --fg3:#57575F;
-  --ok:#4CB782; --warn:#D9A050; --bad:#F87171; --info:#7AA2F7;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
-  --sans:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;
+  /* primitive */
+  --ink-950:#07080A; --ink-900:#0A0C0E; --ink-850:#0D1013;
+  --ink-800:#111519; --ink-750:#161B20; --ink-700:#1C2228;
+  --lime-400:#D8FF7A; --lime-500:#C6F25C; --lime-600:#9FCC3D;
+  --amber-500:#E3B25C; --red-500:#EE6A72; --blue-500:#8AA9FF;
+  --paper:#F2F3ED;
+
+  /* semantic */
+  --bg:var(--ink-950);
+  --surface:var(--ink-900);
+  --surface-2:var(--ink-850);
+  --raise:var(--ink-800);
+  --hover:var(--ink-750);
+  --fg:var(--paper);
+  --fg-2:#9DA4A4;
+  --fg-3:#626B6E;
+  --fg-4:#3C4448;
+  --line:rgba(255,255,255,.07);
+  --line-2:rgba(255,255,255,.12);
+  --line-3:rgba(255,255,255,.2);
+  --acc:var(--lime-500);
+  --acc-soft:rgba(198,242,92,.12);
+  --acc-line:rgba(198,242,92,.34);
+  --ok:var(--lime-500); --warn:var(--amber-500); --bad:var(--red-500); --info:var(--blue-500);
+
+  /* component */
+  --r-s:8px; --r-m:12px; --r-l:18px; --r-pill:999px;
+  --font-sans:"Inter Tight",Inter,-apple-system,BlinkMacSystemFont,"Segoe UI Variable Display","Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --maxw:1180px;
+  --ease:cubic-bezier(.22,.88,.28,1);
+  --z-nav:50; --z-toast:200; --z-boot:900;
 }
+
 *{margin:0;padding:0;box-sizing:border-box}
-::selection{background:rgba(76,183,130,.25)}
+::selection{background:rgba(198,242,92,.22);color:#fff}
+html{scroll-behavior:smooth}
 body{
-  background:var(--bg);color:var(--fg);font-family:var(--sans);
-  font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;
-  background-image:radial-gradient(ellipse 60% 40% at 50% -10%,rgba(255,255,255,.045),transparent);
+  background:var(--bg);color:var(--fg);font-family:var(--font-sans);
+  font-size:14.5px;line-height:1.6;letter-spacing:-.005em;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-x:hidden;
 }
-.wrap{max-width:880px;margin:0 auto;padding:0 28px 80px}
+/* 环境光 */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(920px 480px at 14% -12%,rgba(198,242,92,.075),transparent 62%),
+    radial-gradient(760px 420px at 88% -6%,rgba(138,169,255,.055),transparent 60%),
+    radial-gradient(1200px 700px at 50% 108%,rgba(255,255,255,.022),transparent 70%);
+}
+/* 胶片颗粒 */
+body::after{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.wrap{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 32px}
 
-/* ── 顶栏 ── */
-header{
-  display:flex;align-items:center;gap:10px;
-  padding:26px 0 0;
+/* ══════════════════════════════════════════════════════════
+   Chrome — 顶栏 / 品牌
+   ══════════════════════════════════════════════════════════ */
+.top{
+  position:sticky;top:0;z-index:var(--z-nav);
+  display:flex;align-items:center;gap:12px;height:62px;
+  transition:background .3s var(--ease),border-color .3s var(--ease);
+  border-bottom:1px solid transparent;
 }
-.brand{display:flex;align-items:center;gap:9px;font-weight:600;letter-spacing:-.2px}
-.brand .mark{
-  width:22px;height:22px;border-radius:6px;
-  background:linear-gradient(135deg,#4CB782,#2E6B50);
-  box-shadow:0 0 14px rgba(76,183,130,.35);
+.top.stuck{
+  background:rgba(7,8,10,.72);border-bottom-color:var(--line);
+  backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);
 }
-.brand span{font-size:15px}
-.ver{font-family:var(--mono);font-size:11px;color:var(--fg3);margin-top:2px}
-header .sp{flex:1}
-.hdr-stat{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;color:var(--fg2)}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px rgba(76,183,130,.6)}
-.dot.off{background:var(--bad);box-shadow:0 0 8px rgba(248,113,113,.5);animation:pulse 1.6s infinite}
-@keyframes pulse{50%{opacity:.3}}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg)}
+.brand .mark{width:26px;height:26px;flex:none;display:block}
+.brand b{font-weight:500;font-size:14.5px;letter-spacing:-.02em}
+.brand em{font-style:normal;color:var(--fg-3)}
+.ver{
+  font-family:var(--font-mono);font-size:10.5px;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:var(--r-pill);padding:1px 8px;
+  letter-spacing:.02em;
+}
+.nav{display:flex;gap:2px;margin-left:26px}
+.nav a{
+  color:var(--fg-3);text-decoration:none;font-size:12.5px;padding:5px 10px;border-radius:var(--r-s);
+  transition:color .2s var(--ease),background .2s var(--ease);
+}
+.nav a:hover{color:var(--fg);background:rgba(255,255,255,.045)}
+.sp{flex:1}
 
-/* ── Hero：纯排印，无卡片 ── */
-.hero{padding:72px 0 56px}
-.hero h1{
-  font-size:40px;font-weight:600;letter-spacing:-1.4px;line-height:1.12;
-  font-variant-numeric:tabular-nums;
-}
-.hero h1 .n{color:var(--ok)}
-.hero h1 .t{color:var(--fg3);font-weight:400}
-.hero p{margin-top:14px;color:var(--fg2);font-size:14.5px;max-width:560px}
-.hero p code{font-family:var(--mono);font-size:12.5px;color:var(--fg);background:var(--card);border:1px solid var(--line);padding:2px 7px;border-radius:5px}
-.hero p.note{margin-top:10px;font-size:12.5px;color:var(--fg3)}
-.hero p.note b{color:var(--fg2);font-weight:500}
+.live{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11.5px;color:var(--fg-2)}
+.live-tx{min-width:96px;text-align:right}
 
-/* ── 指标行 ── */
-.metrics{
-  display:flex;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  margin-bottom:52px;
+.pulse{position:relative;width:6px;height:6px;flex:none;border-radius:50%;background:var(--ok)}
+.pulse::after{
+  content:'';position:absolute;inset:0;border-radius:50%;background:var(--ok);
+  animation:ring 2.4s var(--ease) infinite;
 }
-.metric{flex:1;padding:18px 4px 18px 0}
-.metric+.metric{padding-left:26px;border-left:1px solid var(--line)}
-.metric .k{font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:4px}
-.metric .v{font-family:var(--mono);font-size:19px;font-weight:500;font-variant-numeric:tabular-nums}
-.metric .v i{font-style:normal;color:var(--fg3);font-size:13px}
+@keyframes ring{0%{transform:scale(1);opacity:.55}70%,100%{transform:scale(3.4);opacity:0}}
+.pulse.dead{background:var(--bad)}
+.pulse.dead::after{background:var(--bad);animation-duration:1.2s}
 
-/* ── 区块标题 ── */
-.sec{font-size:11px;color:var(--fg3);text-transform:uppercase;letter-spacing:1.4px;margin:0 0 14px}
-
-/* ── 模型列表 ── */
-.list{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
-.grp{
-  display:flex;align-items:baseline;gap:8px;
-  padding:13px 18px 11px;border-bottom:1px solid var(--line);
-  background:rgba(255,255,255,.015);
-}
-.grp .g-name{font-weight:600;font-size:13px;letter-spacing:-.1px}
-.grp .g-id{font-family:var(--mono);font-size:11px;color:var(--fg3)}
-.grp .g-n{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--fg3);font-variant-numeric:tabular-nums}
-.row{
-  display:grid;grid-template-columns:minmax(0,1fr) 64px 52px 96px 66px;
-  gap:14px;align-items:center;
-  padding:8px 18px;border-bottom:1px solid rgba(255,255,255,.04);
-  font-family:var(--mono);font-size:12.5px;
-  transition:background .15s ease;
-}
-.row:last-child{border-bottom:0}
-.row:hover{background:var(--card-h)}
-.row .id{color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:9px}
-.row .id .d{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.row .num{color:var(--fg2);text-align:right;font-variant-numeric:tabular-nums}
-.row .st{font-size:11px;text-align:right;white-space:nowrap}
-.st.ok{color:var(--ok)} .st.unknown{color:var(--fg3)} .st.limited{color:var(--warn)} .st.blocked{color:var(--bad)}
-.row .auto{color:var(--fg3);font-size:10.5px;text-align:right}
-.row .auto.on{color:var(--info)}
-.d.ok{background:var(--ok)} .d.unknown{background:var(--fg3)} .d.limited{background:var(--warn)} .d.blocked{background:var(--bad)}
-
-/* ── 接入 ── */
-.conn{border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}
-.crow{display:flex;align-items:center;gap:14px;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,.04)}
-.crow:last-child{border-bottom:0}
-.crow .l{font-size:12px;color:var(--fg2);width:110px;flex-shrink:0}
-.crow code{font-family:var(--mono);font-size:12.5px;color:var(--fg);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cbtn{
-  background:none;border:none;color:var(--fg3);cursor:pointer;
-  padding:5px;border-radius:6px;display:grid;place-items:center;
-  transition:color .15s ease,background .15s ease;
-}
-.cbtn:hover{color:var(--fg);background:rgba(255,255,255,.06)}
-.cbtn svg{width:14px;height:14px}
-
-/* ── 按钮 ── */
+/* 按钮 */
 .btn{
-  display:inline-flex;align-items:center;gap:7px;
-  padding:6px 13px;border-radius:8px;
-  background:transparent;border:1px solid var(--line-h);
-  color:var(--fg);font-family:var(--sans);font-size:12.5px;font-weight:500;
-  cursor:pointer;transition:all .16s ease;
+  display:inline-flex;align-items:center;gap:7px;height:31px;padding:0 13px;
+  border-radius:var(--r-s);border:1px solid var(--line-2);background:transparent;
+  color:var(--fg);font-family:inherit;font-size:12.5px;font-weight:500;letter-spacing:-.01em;
+  cursor:pointer;white-space:nowrap;
+  transition:background .2s var(--ease),border-color .2s var(--ease),color .2s var(--ease),transform .12s var(--ease);
 }
-.btn:hover{background:var(--card-h);border-color:rgba(255,255,255,.2)}
-.btn:disabled{opacity:.4;cursor:default}
-.btn svg{width:13px;height:13px}
+.btn:hover{background:rgba(255,255,255,.055);border-color:var(--line-3)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.42;cursor:default;transform:none}
+.btn svg{width:13px;height:13px;flex:none}
+.btn.ghost{border-color:transparent;color:var(--fg-2)}
+.btn.ghost:hover{color:var(--fg);border-color:var(--line)}
+.btn.acc{border-color:var(--acc-line);color:var(--acc);background:var(--acc-soft)}
+.btn.acc:hover{background:rgba(198,242,92,.18);border-color:rgba(198,242,92,.5)}
 
-footer{margin-top:64px;font-family:var(--mono);font-size:11px;color:var(--fg3);display:flex;gap:16px}
-footer span+span::before{content:'·';margin-right:16px;color:var(--fg3)}
+/* ══════════════════════════════════════════════════════════
+   Hero
+   ══════════════════════════════════════════════════════════ */
+.hero{position:relative;padding:70px 0 54px}
+.hero::before{
+  content:'';position:absolute;left:-32px;right:-32px;top:-64px;height:540px;z-index:-1;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:74px 74px;opacity:.5;
+  -webkit-mask-image:radial-gradient(78% 62% at 50% 0%,#000 0%,transparent 76%);
+  mask-image:radial-gradient(78% 62% at 50% 0%,#000 0%,transparent 76%);
+}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:56px;align-items:center}
+
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--fg-3);margin-bottom:26px;
+}
+.eyebrow .hair{width:26px;height:1px;background:var(--fg-4)}
+.eyebrow .k{color:var(--fg-2)}
+
+.figure{display:flex;align-items:baseline;gap:12px;line-height:.84}
+.figure .n{
+  font-size:clamp(78px,10.5vw,148px);font-weight:500;letter-spacing:-.055em;
+  font-variant-numeric:tabular-nums;color:var(--fg);
+  font-feature-settings:"ss01","cv01";
+}
+.figure .of{
+  font-family:var(--font-mono);font-size:clamp(15px,1.6vw,20px);color:var(--fg-4);
+  letter-spacing:-.01em;transform:translateY(-.55em);
+}
+.figcap{display:flex;align-items:center;gap:9px;margin-top:20px;font-size:13px;color:var(--fg-2)}
+.figcap b{font-weight:500;color:var(--fg)}
+.lede{margin-top:18px;font-size:15px;line-height:1.62;color:var(--fg-2);max-width:46ch}
+.lede code{
+  font-family:var(--font-mono);font-size:12.5px;color:var(--fg);
+  background:rgba(255,255,255,.055);border:1px solid var(--line);border-radius:5px;padding:1px 6px;
+  white-space:nowrap;
+}
+
+.basebar{
+  display:flex;align-items:center;gap:12px;margin-top:26px;
+  border:1px solid var(--line);border-radius:var(--r-m);
+  background:linear-gradient(180deg,rgba(255,255,255,.028),transparent),var(--surface);
+  padding:10px 10px 10px 14px;max-width:520px;
+  transition:border-color .25s var(--ease),background .25s var(--ease);
+}
+.basebar:hover{border-color:var(--line-2)}
+.basebar .bk{
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--fg-4);flex:none;
+}
+.basebar code{
+  font-family:var(--font-mono);font-size:12.5px;color:var(--fg);
+  flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.basebar.flash{border-color:var(--acc-line);background-color:rgba(198,242,92,.06)}
+
+.icon-btn{
+  display:grid;place-items:center;width:28px;height:28px;flex:none;
+  border:1px solid transparent;border-radius:7px;background:transparent;
+  color:var(--fg-3);cursor:pointer;
+  transition:color .18s var(--ease),background .18s var(--ease),border-color .18s var(--ease);
+}
+.icon-btn:hover{color:var(--fg);background:rgba(255,255,255,.07);border-color:var(--line)}
+.icon-btn svg{width:14px;height:14px}
+.icon-btn.done{color:var(--acc)}
+
+/* 速率卡 */
+.rate{
+  border:1px solid var(--line);border-radius:var(--r-l);
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0) 62%),var(--surface);
+  padding:16px 18px 12px;position:relative;overflow:hidden;
+}
+.rate::after{
+  content:'';position:absolute;left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(198,242,92,.55),transparent);
+  opacity:.7;
+}
+.rate-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.rate-top .rk{font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg-3)}
+.rate-top .rv{font-family:var(--font-mono);font-size:19px;font-variant-numeric:tabular-nums;color:var(--fg)}
+.rate-top .rv i{font-style:normal;font-size:10.5px;color:var(--fg-4);margin-left:3px}
+.spark{display:block;width:100%;height:104px;margin-top:10px;overflow:visible}
+.rate-bot{
+  display:flex;justify-content:space-between;
+  font-family:var(--font-mono);font-size:10.5px;color:var(--fg-4);margin-top:2px;
+}
+.rate-kv{display:flex;margin-top:13px;padding-top:13px;border-top:1px solid var(--line)}
+.rate-kv>div{flex:1;min-width:0}
+.rate-kv>div+div{padding-left:14px;border-left:1px solid var(--line)}
+.rate-kv span{
+  display:block;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--fg-4);white-space:nowrap;
+}
+.rate-kv b{
+  display:block;font-family:var(--font-mono);font-weight:500;font-size:13.5px;
+  color:var(--fg);margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+}
+
+/* ══════════════════════════════════════════════════════════
+   指标条
+   ══════════════════════════════════════════════════════════ */
+.stats{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.stat{padding:19px 22px 21px;border-left:1px solid var(--line);min-width:0}
+.stat:first-child{border-left:0;padding-left:0}
+.stat .k{
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--fg-4);margin-bottom:7px;white-space:nowrap;
+}
+.stat .v{font-family:var(--font-mono);font-size:22px;font-variant-numeric:tabular-nums;letter-spacing:-.02em;color:var(--fg)}
+.stat .v.dim{color:var(--fg-2)}
+.stat .s{font-size:11.5px;color:var(--fg-3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ══════════════════════════════════════════════════════════
+   区块头
+   ══════════════════════════════════════════════════════════ */
+.sec{padding-top:76px;scroll-margin-top:78px}
+.sec-head{display:flex;align-items:flex-end;gap:20px;margin-bottom:22px;flex-wrap:wrap}
+.sec-head h2{font-size:20px;font-weight:500;letter-spacing:-.025em;line-height:1.2}
+.sec-head p{font-size:12.5px;color:var(--fg-3);margin-top:5px}
+.sec-head .tools{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+.search{position:relative;display:flex;align-items:center}
+.search input{
+  width:216px;height:31px;padding:0 30px 0 12px;
+  border:1px solid var(--line);border-radius:var(--r-pill);background:transparent;
+  color:var(--fg);font-family:var(--font-mono);font-size:12px;outline:none;
+  transition:border-color .2s var(--ease),background .2s var(--ease),width .25s var(--ease);
+}
+.search input::placeholder{color:var(--fg-4)}
+.search input:focus{border-color:var(--acc-line);background:rgba(255,255,255,.03);width:248px}
+.search kbd{
+  position:absolute;right:9px;font-family:var(--font-mono);font-size:10px;color:var(--fg-4);
+  border:1px solid var(--line);border-radius:4px;padding:0 4px;pointer-events:none;line-height:15px;
+}
+.chips{display:flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:var(--r-pill)}
+.chip{
+  height:25px;padding:0 11px;border:0;border-radius:var(--r-pill);background:transparent;
+  color:var(--fg-3);font-family:inherit;font-size:12px;cursor:pointer;white-space:nowrap;
+  transition:color .18s var(--ease),background .18s var(--ease);
+}
+.chip:hover{color:var(--fg)}
+.chip[aria-selected="true"]{background:rgba(255,255,255,.075);color:var(--fg)}
+.chip .c{font-family:var(--font-mono);font-size:10.5px;color:var(--fg-4);margin-left:5px}
+
+/* ══════════════════════════════════════════════════════════
+   模型目录
+   ══════════════════════════════════════════════════════════ */
+.catalog{
+  border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.02),transparent 260px),var(--surface);
+}
+.chead{
+  display:grid;grid-template-columns:var(--cols);gap:16px;align-items:center;
+  padding:10px 20px;border-bottom:1px solid var(--line);
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-4);
+  background:rgba(8,10,12,.55);
+}
+.catalog{--cols:minmax(0,1fr) 78px 52px 92px 104px}
+.chead>span:nth-child(n+2){text-align:right}
+
+.pblock+.pblock{border-top:1px solid var(--line)}
+.phead{display:flex;align-items:center;gap:11px;padding:17px 20px 11px}
+.phead .pname{font-size:13px;font-weight:500;letter-spacing:-.01em}
+.phead .pid{font-family:var(--font-mono);font-size:10.5px;color:var(--fg-4)}
+.phead .pline{flex:1;height:1px;background:var(--line);margin:0 4px}
+.phead .prate{font-family:var(--font-mono);font-size:10.5px;color:var(--fg-3);white-space:nowrap}
+.phead .pcount{font-family:var(--font-mono);font-size:11px;color:var(--fg-4);white-space:nowrap}
+.phead .pcount b{color:var(--acc);font-weight:500}
+
+.row{
+  display:grid;grid-template-columns:var(--cols);gap:16px;align-items:center;
+  padding:8px 20px;position:relative;
+  border-top:1px solid rgba(255,255,255,.032);
+  transition:background .18s var(--ease);
+}
+.row::after{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(198,242,92,.055),transparent 68%);
+  transition:opacity .25s var(--ease);
+}
+.row:hover{background:rgba(255,255,255,.022)}
+.row:hover::after{opacity:1}
+
+.mname{
+  display:flex;align-items:center;gap:9px;min-width:0;
+  font-family:var(--font-mono);font-size:12.5px;color:var(--fg);letter-spacing:-.01em;
+}
+.mname span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mctx{font-family:var(--font-mono);font-size:11.5px;color:var(--fg-3);text-align:right;font-variant-numeric:tabular-nums}
+.mtools{text-align:right;font-family:var(--font-mono);font-size:11.5px;color:var(--fg-4)}
+.mtools.y{color:var(--fg-2)}
+.mused{font-family:var(--font-mono);font-size:11px;color:var(--fg-4);text-align:right;white-space:nowrap}
+.mstate{display:flex;align-items:center;justify-content:flex-end;gap:7px;font-size:11.5px;white-space:nowrap}
+.mstate.ok{color:var(--fg-2)}
+.mstate.unknown{color:var(--fg-4)}
+.mstate.limited{color:var(--warn)}
+.mstate.blocked{color:var(--bad)}
+.cd{font-family:var(--font-mono);font-size:10px;color:var(--fg-4)}
+
+.dot{width:5px;height:5px;border-radius:50%;flex:none;background:var(--fg-4)}
+.dot.ok{background:var(--ok);box-shadow:0 0 0 3px rgba(198,242,92,.1)}
+.dot.limited{background:var(--warn);box-shadow:0 0 0 3px rgba(227,178,92,.1)}
+.dot.blocked{background:var(--bad);box-shadow:0 0 0 3px rgba(238,106,114,.1)}
+
+.empty{padding:44px 20px;text-align:center;color:var(--fg-3);font-size:13px}
+.empty b{display:block;color:var(--fg-2);font-weight:500;margin-bottom:4px}
+
+/* ══════════════════════════════════════════════════════════
+   接入
+   ══════════════════════════════════════════════════════════ */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{
+  border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);
+  padding:18px;display:flex;flex-direction:column;gap:0;position:relative;overflow:hidden;
+  transition:border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease);
+}
+.card:hover{border-color:var(--line-2);background:var(--surface-2);transform:translateY(-2px)}
+.card-h{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.card-h .t{font-size:13px;font-weight:500;letter-spacing:-.01em}
+.card-h .m{margin-left:auto}
+.method{
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;
+  color:var(--acc);background:var(--acc-soft);border:1px solid var(--acc-line);
+  border-radius:4px;padding:1px 6px;
+}
+.card .path{
+  font-family:var(--font-mono);font-size:11.5px;color:var(--fg-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--r-s);
+  padding:7px 9px;display:flex;align-items:center;gap:8px;
+}
+.card .path code{flex:1;overflow:hidden;text-overflow:ellipsis}
+.card .desc{font-size:12px;color:var(--fg-3);margin-top:11px;line-height:1.55}
+.card .desc b{color:var(--fg-2);font-weight:500}
+.snippet{
+  margin-top:12px;font-family:var(--font-mono);font-size:11px;line-height:1.7;color:var(--fg-3);
+  white-space:pre;overflow-x:auto;padding-top:11px;border-top:1px solid var(--line);
+}
+.snippet .c1{color:var(--acc);opacity:.85}
+
+/* ══════════════════════════════════════════════════════════
+   运行
+   ══════════════════════════════════════════════════════════ */
+.runtime{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:14px}
+.panel{
+  border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);
+  padding:18px 20px;
+}
+.panel h3{
+  font-size:12px;font-weight:500;color:var(--fg-2);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.panel h3 .hint{font-family:var(--font-mono);font-size:10px;color:var(--fg-4);margin-left:auto;font-weight:400}
+.panel p{font-size:12.5px;color:var(--fg-3);line-height:1.7}
+.panel p+p{margin-top:8px}
+.panel p b{color:var(--fg-2);font-weight:500}
+.panel code{font-family:var(--font-mono);font-size:11.5px;color:var(--fg-2);background:rgba(255,255,255,.04);border-radius:4px;padding:1px 5px}
+.policy{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.tag{
+  font-family:var(--font-mono);font-size:10.5px;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:var(--r-pill);padding:3px 9px;
+}
+.tag.on{color:var(--acc);border-color:var(--acc-line);background:var(--acc-soft)}
+
+.kv{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border-radius:var(--r-m);overflow:hidden;margin-top:2px}
+.kv div{background:var(--surface);padding:13px 14px}
+.kv .k{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--fg-4)}
+.kv .v{font-family:var(--font-mono);font-size:15px;color:var(--fg);margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+
+.cdlist{margin-top:12px;display:flex;flex-direction:column;gap:7px;max-height:190px;overflow:auto}
+.cdrow{display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11.5px;color:var(--fg-3)}
+.cdrow .n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--fg-2)}
+.cdbar{width:56px;height:2px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden;flex:none}
+.cdbar i{display:block;height:100%;background:var(--warn);border-radius:2px;transform-origin:left}
+.cdrow .t{color:var(--warn);font-size:10.5px;min-width:44px;text-align:right}
+
+/* ══════════════════════════════════════════════════════════
+   页脚 / toast / 启动动画
+   ══════════════════════════════════════════════════════════ */
+footer{
+  margin-top:80px;padding:26px 0 44px;border-top:1px solid var(--line);
+  display:flex;gap:18px;flex-wrap:wrap;align-items:center;
+  font-family:var(--font-mono);font-size:10.5px;color:var(--fg-4);
+}
+footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
 
 .toast{
-  position:fixed;bottom:28px;left:50%;transform:translate(-50%,70px);
-  background:#1A1A1E;border:1px solid var(--line-h);border-radius:10px;
-  padding:9px 16px;font-size:12.5px;box-shadow:0 16px 40px rgba(0,0,0,.5);
-  transition:transform .35s cubic-bezier(.32,1.3,.55,1);z-index:9;
+  position:fixed;left:50%;bottom:34px;z-index:var(--z-toast);
+  transform:translate(-50%,80px);opacity:0;
+  background:rgba(18,22,26,.94);border:1px solid var(--line-2);border-radius:10px;
+  padding:9px 16px;font-size:12.5px;color:var(--fg);
+  box-shadow:0 18px 50px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.4);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:transform .45s var(--ease),opacity .35s var(--ease);
+  pointer-events:none;white-space:nowrap;
 }
-.toast.show{transform:translate(-50%,0)}
+.toast.show{transform:translate(-50%,0);opacity:1}
 
-.reveal{opacity:0;transform:translateY(10px);animation:up .55s cubic-bezier(.2,.8,.3,1) forwards}
-@keyframes up{to{opacity:1;transform:none}}
-.a1{animation-delay:.04s}.a2{animation-delay:.1s}.a3{animation-delay:.16s}.a4{animation-delay:.22s}
-@media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1;transform:none}*{transition:none!important}}
+#boot{
+  position:fixed;inset:0;z-index:var(--z-boot);background:var(--bg);
+  display:grid;place-items:center;gap:0;
+}
+#boot .bin{display:flex;flex-direction:column;align-items:center;gap:16px}
+#boot .bmark{width:34px;height:34px}
+#boot .btx{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--fg-4)}
+#boot .bline{width:130px;height:1px;background:linear-gradient(90deg,transparent,var(--acc),transparent);transform:scaleX(0)}
 
-@media (max-width:680px){
-  .hero{padding:52px 0 40px}.hero h1{font-size:30px}
-  .metrics{flex-wrap:wrap}.metric{flex:1 1 40%;padding:14px 0}
-  .metric+.metric{padding-left:18px}
-  .row{grid-template-columns:minmax(0,1fr) 52px 88px}
-  .row .num.ctx,.row .auto{display:none}
-  .wrap{padding:0 18px 60px}
+/* 动效只在 GSAP 存在时启用，避免无脚本时白屏 */
+.anim [data-fx]{opacity:0}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}
+  .anim [data-fx]{opacity:1}
+}
+
+/* ══════════════════════════════════════════════════════════
+   响应式
+   ══════════════════════════════════════════════════════════ */
+@media (max-width:1000px){
+  .hero-grid{grid-template-columns:1fr;gap:36px;align-items:start}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .stat:nth-child(4){border-left:0;padding-left:0}
+  .stat:nth-child(n+4){border-top:1px solid var(--line)}
+  .cards{grid-template-columns:1fr}
+  .runtime{grid-template-columns:1fr}
+  .nav{display:none}
+}
+@media (max-width:720px){
+  .wrap{padding:0 18px}
+  .hero{padding:44px 0 36px}
+  .hero::before{left:-18px;right:-18px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat{padding:15px 16px}
+  .stat:nth-child(odd){border-left:0;padding-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .catalog{--cols:minmax(0,1fr) auto}
+  .chead{display:none}
+  .row{grid-template-columns:minmax(0,1fr) auto;padding:9px 16px}
+  .row .mctx,.row .mtools,.row .mused{display:none}
+  .sec{padding-top:56px}
+  .sec-head .tools{margin-left:0;width:100%;flex-direction:column;align-items:stretch;gap:9px}
+  .search{width:100%}
+  .search input,.search input:focus{width:100%}
+  .chips{justify-content:space-between}
+  .chip{padding:0 8px}
+  .basebar{max-width:none}
+  .ver{display:none}
+  .live-tx{display:none}
 }
 </style>
 </head>
 <body>
+
+<div id="boot">
+  <div class="bin">
+    <svg class="bmark" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+      <rect x="5.5" y="6" width="1.6" height="14" rx=".8" fill="#C6F25C"/>
+      <rect x="18.9" y="6" width="1.6" height="14" rx=".8" fill="#C6F25C"/>
+      <circle cx="13" cy="13" r="2.1" fill="#C6F25C"/>
+    </svg>
+    <div class="bline"></div>
+    <div class="btx">keyless-llm</div>
+  </div>
+</div>
+
 <div class="wrap">
 
-  <header>
-    <div class="brand"><span class="mark"></span><span>keyless-llm</span></div>
-    <span class="ver" id="hd-ver"></span>
+  <header class="top" id="top">
+    <a class="brand" href="#top" aria-label="keyless-llm">
+      <svg class="mark" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="5.5" y="6" width="1.6" height="14" rx=".8" fill="#C6F25C"/>
+        <rect x="18.9" y="6" width="1.6" height="14" rx=".8" fill="#C6F25C"/>
+        <circle cx="13" cy="13" r="2.1" fill="#C6F25C"/>
+      </svg>
+      <b>keyless<span style="color:var(--fg-4)">·</span>llm</b>
+    </a>
+    <span class="ver" id="hd-ver">v–</span>
+    <nav class="nav">
+      <a href="#models">模型</a>
+      <a href="#connect">接入</a>
+      <a href="#runtime">运行</a>
+    </nav>
     <span class="sp"></span>
-    <span class="hdr-stat"><span class="dot" id="hd-dot"></span><span id="hd-live">连接中</span></span>
-    <button class="btn" id="btn-probe" title="手动探测：每个待验证模型消耗 1 次请求额度，默认只探 8 个">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    <span class="live">
+      <i class="pulse" id="hd-dot"></i>
+      <span class="live-tx" id="hd-live">连接中</span>
+    </span>
+    <button class="btn ghost" id="btn-refresh" title="立即刷新状态">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
+      刷新
+    </button>
+    <button class="btn acc" id="btn-probe" title="每轮最多验证 8 个模型，会消耗对应来源的请求额度">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5Z"/></svg>
       探测
     </button>
   </header>
 
-  <section class="hero reveal a1">
-    <h1><span class="n" id="h-ok">–</span><span class="t"> / </span><span id="h-all">–</span><span class="t"> 个模型可用</span></h1>
-    <p>免鉴权聚合网关。客户端把 base_url 指到 <code id="h-base">…</code>、模型填 <code>auto</code> 就行——限流、封禁、宕机都由网关自动换模型兜底。</p>
-    <p class="note" id="h-note"></p>
-  </section>
+  <main>
 
-  <section class="metrics reveal a2" id="metrics"></section>
+    <!-- ── Hero ─────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow" data-fx>
+            <span class="hair"></span>
+            <span class="k">keyless gateway</span>
+            <span>/ 免鉴权聚合</span>
+          </div>
+          <div class="figure" data-fx>
+            <span class="n" id="h-pool">–</span>
+            <span class="of">/ <span id="h-total">–</span></span>
+          </div>
+          <div class="figcap" data-fx>
+            <i class="dot ok"></i>
+            <span><b>个模型进入 auto 池</b>，自动调度 · 失败换模型</span>
+          </div>
+          <p class="lede" data-fx>
+            客户端只认一个 <code>base_url</code>，模型填 <code>auto</code> 即可。
+            限流、封禁、上游宕机由网关在内部转移，调用方不需要知道换过几次。
+          </p>
+          <div class="basebar" id="basebar" data-fx>
+            <span class="bk">base url</span>
+            <code id="base-url">http://127.0.0.1:8788/v1</code>
+            <button class="icon-btn" data-copy="" id="copy-base" title="复制">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></svg>
+            </button>
+          </div>
+        </div>
 
-  <div class="sec reveal a3">模型 · 按来源</div>
-  <div class="list reveal a3" id="models"></div>
+        <div class="rate" data-fx>
+          <div class="rate-top">
+            <span class="rk">请求速率</span>
+            <span class="rv" id="rate-now">0.0<i>/min</i></span>
+          </div>
+          <svg class="spark" id="spark" viewBox="0 0 320 96" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#C6F25C" stop-opacity=".22"/>
+                <stop offset="100%" stop-color="#C6F25C" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <line x1="0" y1="95" x2="320" y2="95" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+            <line x1="0" y1="60" x2="320" y2="60" stroke="rgba(255,255,255,.035)" stroke-width="1" stroke-dasharray="2 4"/>
+            <line x1="0" y1="26" x2="320" y2="26" stroke="rgba(255,255,255,.035)" stroke-width="1" stroke-dasharray="2 4"/>
+            <path id="sp-fill" d="" fill="url(#sparkFill)"/>
+            <path id="sp-line" d="" fill="none" stroke="#C6F25C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle id="sp-dot" cx="320" cy="95" r="2.5" fill="#C6F25C"/>
+          </svg>
+          <div class="rate-bot">
+            <span id="rate-peak">峰值 0.0/min</span>
+            <span>近 10 分钟</span>
+          </div>
+          <div class="rate-kv">
+            <div><span>累计请求</span><b id="r-req">0</b></div>
+            <div><span>失败转移</span><b id="r-fo">0</b></div>
+            <div><span>token</span><b id="r-tk">0</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div style="height:44px"></div>
-  <div class="sec reveal a4">接入</div>
-  <div class="conn reveal a4" id="conn"></div>
+    <!-- ── 指标 ─────────────────────────────────────────── -->
+    <section class="stats" id="stats" data-fx></section>
 
-  <footer class="reveal a4">
-    <span id="ft-up">–</span>
-    <span id="ft-req">–</span>
-    <span id="ft-tok">–</span>
-    <span>10s 自动刷新</span>
+    <!-- ── 模型 ─────────────────────────────────────────── -->
+    <section class="sec" id="models">
+      <div class="sec-head" data-fx>
+        <div>
+          <h2>模型目录</h2>
+          <p id="catalog-sub">按来源分组 · 状态由真实请求被动学习</p>
+        </div>
+        <div class="tools">
+          <div class="search">
+            <input id="q" type="search" placeholder="搜索模型 / 来源" autocomplete="off" spellcheck="false">
+            <kbd>/</kbd>
+          </div>
+          <div class="chips" id="chips" role="tablist">
+            <button class="chip" data-f="all" aria-selected="true">全部<span class="c" id="c-all"></span></button>
+            <button class="chip" data-f="ok" aria-selected="false">可用<span class="c" id="c-ok"></span></button>
+            <button class="chip" data-f="auto" aria-selected="false">auto 池<span class="c" id="c-auto"></span></button>
+            <button class="chip" data-f="bad" aria-selected="false">异常<span class="c" id="c-bad"></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="catalog" id="catalog" data-fx></div>
+    </section>
+
+    <!-- ── 接入 ─────────────────────────────────────────── -->
+    <section class="sec" id="connect">
+      <div class="sec-head" data-fx>
+        <div>
+          <h2>接入</h2>
+          <p>三种协议对等，同一份模型池；<code style="font-family:var(--font-mono);font-size:11.5px;color:var(--fg-2)">model</code> 一律填 auto</p>
+        </div>
+      </div>
+      <div class="cards" id="cards" data-fx></div>
+    </section>
+
+    <!-- ── 运行 ─────────────────────────────────────────── -->
+    <section class="sec" id="runtime">
+      <div class="sec-head" data-fx>
+        <div>
+          <h2>运行</h2>
+          <p>探测策略、冷却队列与累计用量</p>
+        </div>
+      </div>
+      <div class="runtime">
+        <div class="panel" data-fx>
+          <h3>探测策略<span class="hint" id="probe-hint">被动学习</span></h3>
+          <p id="policy-text">–</p>
+          <div class="policy" id="policy-tags"></div>
+          <h3 style="margin-top:20px">冷却队列<span class="hint" id="cd-hint">0 个</span></h3>
+          <div class="cdlist" id="cdlist"></div>
+        </div>
+        <div class="panel" data-fx>
+          <h3>累计用量<span class="hint" id="stat-hint">自进程启动</span></h3>
+          <div class="kv" id="kv"></div>
+          <p style="margin-top:14px">
+            上游报 429 即进入冷却，冷却期内的模型不再参与 auto 打分；
+            请求失败自动换下一个候选，调用方无感。
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span id="ft-up">运行 –</span>
+    <span id="ft-req">请求 –</span>
+    <span id="ft-tok">token –</span>
+    <span class="r">
+      <span id="ft-mode">被动学习</span>
+      <span>10s 轮询</span>
+      <span>按 / 搜索</span>
+    </span>
   </footer>
 </div>
-<div class="toast" id="toast"></div>
 
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/vendor/gsap.min.js"></script>
+<script src="/vendor/ScrollTrigger.min.js"></script>
 <script>
-const $ = (s)=>document.querySelector(s);
-const esc=(s)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ST={healthy:['可用','ok'],unknown:['待验证','unknown'],limited:['限流','limited'],blocked:['封禁','blocked']};
-const ORD={healthy:0,unknown:1,limited:2,blocked:3};
-const fmtCtx=c=>!c?'–':c>=1e6?(c/1e6).toFixed(c%1e6?1:0)+'M':Math.round(c/1e3)+'K';
-const fmtInt=n=>new Intl.NumberFormat('zh-CN').format(n||0);
-function fmtUp(s){const h=Math.floor(s/3600),m=Math.floor(s%3600/60);return h?`${h}h ${m}m`:m?`${m}m`:`${Math.floor(s||0)}s`}
-function fmtCd(ms){if(!ms)return'';const r=Math.max(0,Math.round((ms-Date.now())/1000));if(r<=0)return'';const m=Math.floor(r/60);return m?` ${m}m`:` ${r}s`}
-
-async function refresh(){
-  try{
-    const st = await (await fetch('/v1/status')).json();
-    $('#hd-live').textContent='运行中 · '+fmtUp(st.uptime);
-    $('#hd-ver').textContent='v'+st.version;
-    $('#hd-dot').className='dot';
-    render(st);
-  }catch{
-    $('#hd-live').textContent='连接失败';
-    $('#hd-dot').className='dot off';
+(function(){
+  'use strict';
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const g = window.gsap;
+  const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const HAS = !!g && !REDUCE;
+  if (HAS) {
+    document.documentElement.classList.add('anim');
+    if (window.ScrollTrigger) g.registerPlugin(window.ScrollTrigger);
   }
-}
 
-function render(st){
-  const sum=st.summary;
-  $('#h-ok').textContent=sum.healthy;
-  $('#h-all').textContent=sum.total;
-  $('#h-base').textContent=location.origin+'/v1';
-
-  // 探测策略提示：默认被动学习，不主动烧额度
-  const tested=st.models.filter(m=>m.state!=='unknown').length;
-  const notes={
-    passive:`已测 <b>${tested}/${st.total||st.models.length}</b> · 状态由真实请求被动学习（429 即标限流），默认不主动探测，省额度`,
-    interval:`定时探测开启（每 ${Math.round(st.probeSeconds/60)} 分钟）· 已测 <b>${tested}/${st.models.length}</b>`,
-    startup:`启动时探测过一轮 · 已测 <b>${tested}/${st.models.length}</b>`,
+  /* ── 常量 ───────────────────────────────────────────── */
+  const STATE = {
+    healthy: { label: '可用', cls: 'ok' },
+    unknown: { label: '待验证', cls: 'unknown' },
+    limited: { label: '限流', cls: 'limited' },
+    blocked: { label: '封禁', cls: 'blocked' },
   };
-  $('#h-note').innerHTML=notes[st.probeMode]||notes.passive;
+  const ORD = { healthy: 0, unknown: 1, limited: 2, blocked: 3 };
+  const MAXPTS = 60;
 
-  $('#metrics').innerHTML=[
-    ['auto 池',st.models.filter(m=>m.auto).length,'≥256K · 工具调用'],
-    ['限流中',sum.limited,sum.blocked?`另有封禁 ${sum.blocked}`:'含冷却倒计时'],
-    ['来源',st.providers.filter(p=>p.enabled).length,`共 ${st.providers.length} 个`],
-    ['累计请求',fmtInt(st.stats.requests),`转移 ${fmtInt(st.stats.failovers)} 次`],
-  ].map(([k,v,s])=>`<div class="metric"><div class="k">${k}</div><div class="v">${esc(v)} <i>${esc(s)}</i></div></div>`).join('');
+  const S = { data: null, filter: 'all', q: '', sig: '', lastOk: null, samples: [], rates: [] };
 
-  const order={healthy:0,unknown:1,limited:2,blocked:3};
-  $('#models').innerHTML=st.providers.filter(p=>p.enabled).map(p=>{
-    const mine=st.models.filter(m=>m.provider===p.id)
-      .sort((a,b)=>(ORD[a.state]??9)-(ORD[b.state]??9)||(b.tps||0)-(a.tps||0));
-    if(!mine.length)return'';
-    const h=mine.filter(m=>m.state==='healthy').length;
-    return `<div class="grp"><span class="g-name">${esc(p.label)}</span><span class="g-id">${esc(p.id)}</span><span class="g-n">${h}/${mine.length}</span></div>`
-      +mine.map(m=>{
-        const[t,c]=ST[m.state]||ST.unknown;
-        const cd=m.state==='limited'?fmtCd(m.cooldownUntil):'';
-        const tps=m.tps?Math.round(m.tps)+'k t/s':'–';
-        return `<div class="row">
-          <span class="id" title="${esc(m.id)}"><span class="d ${c}"></span>${esc(m.id)}</span>
-          <span class="num ctx">${fmtCtx(m.ctx)}</span>
-          <span class="auto ${m.auto?'on':''}">${m.auto?'auto':''}</span>
-          <span class="st ${c}">${t}${cd}</span>
-          <span class="num">${tps}</span>
-        </div>`;
-      }).join('');
-  }).join('');
+  /* ── 格式化 ─────────────────────────────────────────── */
+  const fmtCtx = (c) => (!c ? '–' : c >= 1e6 ? (c / 1e6).toFixed(c % 1e6 ? 1 : 0) + 'M' : Math.round(c / 1e3) + 'K');
+  const fmtInt = (n) => new Intl.NumberFormat('zh-CN').format(n || 0);
+  function fmtUp(s) {
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60);
+    return h ? h + 'h ' + m + 'm' : m ? m + 'm' : Math.floor(s || 0) + 's';
+  }
+  function fmtAgo(ts) {
+    if (!ts) return '–';
+    const d = Math.floor((Date.now() - ts) / 1000);
+    if (d < 15) return '刚刚';
+    if (d < 60) return d + 's 前';
+    if (d < 3600) return Math.floor(d / 60) + 'm 前';
+    if (d < 86400) return Math.floor(d / 3600) + 'h 前';
+    return Math.floor(d / 86400) + 'd 前';
+  }
+  function fmtCd(ms) {
+    const r = Math.max(0, Math.round((ms - Date.now()) / 1000));
+    if (r <= 0) return '即将恢复';
+    const m = Math.floor(r / 60);
+    return m ? m + 'm' + String(r % 60).padStart(2, '0') + 's' : r + 's';
+  }
 
-  const b=location.origin;
-  $('#conn').innerHTML=[
-    ['OpenAI 兼容',b+'/v1','auto 或 <来源>/<模型>'],
-    ['Anthropic 兼容',b,'model 填 auto'],
-  ].map((c,i)=>`<div class="crow"><span class="l">${c[0]}</span><code id="cv${i}">${esc(c[1])}</code>
-    <button class="cbtn" data-v="${esc(c[1])}" title="复制">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-    </button></div>`).join('');
+  /* ── 启动动画 ───────────────────────────────────────── */
+  function intro() {
+    const boot = $('#boot');
+    const root = document.documentElement;
+    if (!HAS) { root.classList.remove('anim'); if (boot) boot.remove(); return; }
+    const tl = g.timeline({ defaults: { ease: 'power3.out' } });
+    // 注意：这些元素被 CSS 预置为 opacity:0，所以必须用 fromTo 显式给终值
+    tl.from('#boot .bmark', { scale: .82, autoAlpha: 0, duration: .5 })
+      .fromTo('#boot .bline', { scaleX: 0 }, { scaleX: 1, duration: .62, ease: 'power2.inOut' }, '-=.24')
+      .to('#boot', {
+        yPercent: -100, duration: .72, ease: 'expo.inOut',
+        onComplete: () => { boot.remove(); root.classList.remove('anim'); },
+      }, '-=.32')
+      .fromTo('[data-fx]', { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .85, stagger: .055, clearProps: 'all' }, '-=.62')
+      .fromTo('.top', { y: -10, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7, clearProps: 'all' }, '<');
+  }
 
-  $('#ft-up').textContent='运行 '+fmtUp(st.uptime);
-  $('#ft-req').textContent='请求 '+fmtInt(st.stats.requests);
-  $('#ft-tok').textContent='token '+fmtInt(st.stats.tokensIn)+'/'+fmtInt(st.stats.tokensOut);
-}
+  /* ── 数字滚动 ───────────────────────────────────────── */
+  function setFigure(n, total) {
+    const el = $('#h-pool');
+    const to = Number(n) || 0;
+    if (HAS && S.lastOk !== null && S.lastOk !== to) {
+      const o = { v: S.lastOk };
+      g.to(o, {
+        v: to, duration: .85, ease: 'power2.out',
+        onUpdate: () => { el.textContent = Math.round(o.v); },
+        onComplete: () => { el.textContent = to; },
+      });
+    } else {
+      el.textContent = to;
+    }
+    S.lastOk = to;
+    $('#h-total').textContent = total == null ? '–' : total;
+  }
 
-document.addEventListener('click',e=>{
-  const b=e.target.closest('.cbtn');if(!b)return;
-  navigator.clipboard.writeText(b.dataset.v).then(()=>toast('已复制'));
-});
-let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1600)}
+  /* ── 迷你折线 ───────────────────────────────────────── */
+  function smoothPath(pts) {
+    if (!pts.length) return '';
+    let d = 'M' + pts[0][0].toFixed(2) + ',' + pts[0][1].toFixed(2);
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      const c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += 'C' + c1x.toFixed(2) + ',' + c1y.toFixed(2) + ' ' + c2x.toFixed(2) + ',' + c2y.toFixed(2) + ' ' + p2[0].toFixed(2) + ',' + p2[1].toFixed(2);
+    }
+    return d;
+  }
+  function drawSpark() {
+    const W = 320, H = 96, PAD_T = 10, PAD_B = 14;
+    const arr = S.rates.slice(-MAXPTS);
+    while (arr.length < MAXPTS) arr.unshift(0);
+    const max = Math.max(1, ...arr);
+    const pts = arr.map((v, i) => [
+      (i / (MAXPTS - 1)) * W,
+      H - PAD_B - (v / max) * (H - PAD_T - PAD_B),
+    ]);
+    const line = $('#sp-line'), fill = $('#sp-fill'), dot = $('#sp-dot');
+    const d = smoothPath(pts);
+    line.setAttribute('d', d);
+    fill.setAttribute('d', d + ' L' + W + ',' + H + ' L0,' + H + ' Z');
+    const last = pts[pts.length - 1];
+    dot.setAttribute('cx', last[0]); dot.setAttribute('cy', last[1]);
+    const quiet = !S.rates.length || Math.max(0, ...S.rates) <= 0;
+    line.style.opacity = quiet ? .25 : 1;
+    fill.style.opacity = quiet ? 0 : 1;
+    dot.style.opacity = quiet ? 0 : 1;
+    const now = S.rates.length ? S.rates[S.rates.length - 1] : 0;
+    $('#rate-now').innerHTML = quiet ? '—' : now.toFixed(1) + '<i>/min</i>';
+    $('#rate-peak').textContent = quiet ? '等待首个请求' : '峰值 ' + Math.max(0, ...S.rates).toFixed(1) + '/min';
+  }
+  function sample(req) {
+    const t = Date.now();
+    const last = S.samples[S.samples.length - 1];
+    if (last && t - last.t < 2500) { last.req = req; return; }
+    S.samples.push({ t: t, req: req });
+    if (S.samples.length > MAXPTS + 1) S.samples.shift();
+    const n = S.samples.length;
+    if (n >= 2) {
+      const dt = (S.samples[n - 1].t - S.samples[n - 2].t) / 60000;
+      const dv = Math.max(0, S.samples[n - 1].req - S.samples[n - 2].req);
+      S.rates.push(dt > 0 ? dv / dt : 0);
+      if (S.rates.length > MAXPTS) S.rates.shift();
+    }
+    drawSpark();
+  }
 
-$('#btn-probe').addEventListener('click',async e=>{
-  const b=e.currentTarget;b.disabled=true;
-  try{
-    // limit=8：一轮最多探 8 个，避免一次烧掉几十分钟配额
-    await fetch('/v1/probe?force=1&limit=8',{method:'POST'});
-    toast('探测 8 个模型 · 消耗 8 次请求额度');
-    setTimeout(refresh,14000);
-  }catch{toast('探测失败')}
-  setTimeout(()=>b.disabled=false,15000);
-});
+  /* ── 指标条 ─────────────────────────────────────────── */
+  function renderStats(st) {
+    const sum = st.summary;
+    const autoN = st.models.filter((m) => m.auto).length;
+    const provN = st.providers.filter((p) => p.enabled).length;
+    const cells = [
+      ['实测可用', sum.healthy, sum.healthy ? '由真实请求验证通过' : '还没有模型被真实请求验证', 'acc'],
+      ['待验证', sum.unknown, '未被真实请求击中过', ''],
+      ['限流中', sum.limited, sum.limited ? '冷却期内不参与调度' : '当前无冷却', 'warn'],
+      ['来源', provN, '共 ' + st.providers.length + ' 个已配置', ''],
+      ['失败转移', st.stats.failovers, '累计换模型重试 ' + fmtInt(st.stats.failovers) + ' 次', ''],
+    ];
+    $('#stats').innerHTML = cells.map(([k, v, s]) =>
+      '<div class="stat"><div class="k">' + esc(k) + '</div>' +
+      '<div class="v' + (v ? '' : ' dim') + '">' + esc(v) + '</div>' +
+      '<div class="s">' + esc(s) + '</div></div>'
+    ).join('');
+  }
 
-setInterval(()=>{if(!document.hidden)refresh()},10000);
-refresh();
+  /* ── 模型目录 ───────────────────────────────────────── */
+  function pass(m) {
+    if (S.q) {
+      const q = S.q.toLowerCase();
+      const hay = (m.id + ' ' + m.provider + ' ' + (m.name || '')).toLowerCase();
+      if (hay.indexOf(q) < 0) return false;
+    }
+    if (S.filter === 'ok') return m.state === 'healthy';
+    if (S.filter === 'auto') return !!m.auto;
+    if (S.filter === 'bad') return m.state === 'limited' || m.state === 'blocked';
+    return true;
+  }
+  function rowHtml(m) {
+    const s = STATE[m.state] || STATE.unknown;
+    const tools = m.tools === true ? '✓' : m.tools === false ? '—' : '?';
+    const cd = m.state === 'limited' && m.cooldownUntil
+      ? '<span class="cd" data-cd="' + m.cooldownUntil + '">' + fmtCd(m.cooldownUntil) + '</span>'
+      : '';
+    return '<div class="row" data-key="' + esc(m.id) + '">' +
+      '<span class="mname"><i class="dot ' + s.cls + '"></i><span title="' + esc(m.id) + '">' + esc(m.id) + '</span></span>' +
+      '<span class="mctx">' + fmtCtx(m.ctx) + '</span>' +
+      '<span class="mtools' + (m.tools === true ? ' y' : '') + '" title="' + (m.tools === true ? '支持工具调用' : m.tools === false ? '不支持' : '未声明') + '">' + tools + '</span>' +
+      '<span class="mused">' + fmtAgo(m.lastUsedAt) + '</span>' +
+      '<span class="mstate ' + s.cls + '"><i class="dot ' + s.cls + '"></i>' + s.label + cd + '</span>' +
+      '</div>';
+  }
+  function renderCatalog(st, animate) {
+    const provs = st.providers.filter((p) => p.enabled);
+    const blocks = [];
+    provs.forEach((p) => {
+      const mine = (p.models || []).filter(pass)
+        .sort((a, b) => (ORD[a.state] ?? 9) - (ORD[b.state] ?? 9) || (b.ctx || 0) - (a.ctx || 0) || a.id.localeCompare(b.id));
+      if (!mine.length) return;
+      const healthy = mine.filter((m) => m.state === 'healthy').length;
+      blocks.push(
+        '<div class="pblock">' +
+        '<div class="phead"><span class="pname">' + esc(p.label) + '</span>' +
+        '<span class="pid">' + esc(p.id) + '</span>' +
+        '<span class="pline"></span>' +
+        (p.rate ? '<span class="prate">' + esc(p.rate) + '</span>' : '') +
+        '<span class="pcount"><b>' + healthy + '</b>/' + mine.length + '</span></div>' +
+        mine.map(rowHtml).join('') +
+        '</div>'
+      );
+    });
+    const el = $('#catalog');
+    el.innerHTML = blocks.length ? '<div class="chead"><span>模型</span><span>上下文</span><span>工具</span><span>最近使用</span><span>状态</span></div>' + blocks.join('')
+      : '<div class="empty"><b>没有匹配的模型</b>换个关键词，或把筛选切回「全部」</div>';
+
+    if (animate && HAS) {
+      g.fromTo(el.querySelectorAll('.phead'), { autoAlpha: 0 }, { autoAlpha: 1, duration: .3, stagger: .05, clearProps: 'all' });
+      g.fromTo(el.querySelectorAll('.row'), { autoAlpha: 0, y: 7 }, { autoAlpha: 1, y: 0, duration: .42, stagger: .008, ease: 'power2.out', clearProps: 'all' });
+    }
+    const vis = blocks.length ? '当前展示 ' + $$('.row', el).length + ' 个' : '';
+    $('#catalog-sub').textContent = '按来源分组 · 状态由真实请求被动学习' + (vis ? ' · ' + vis : '');
+  }
+
+  /* ── 计数与筛选 ─────────────────────────────────────── */
+  function renderCounts(st) {
+    $('#c-all').textContent = st.summary.total;
+    $('#c-ok').textContent = st.summary.healthy;
+    $('#c-auto').textContent = st.models.filter((m) => m.auto).length;
+    $('#c-bad').textContent = st.summary.limited + st.summary.blocked;
+  }
+
+  /* ── 接入卡片 ───────────────────────────────────────── */
+  function renderCards(st) {
+    const o = location.origin;
+    const cards = [
+      {
+        t: 'OpenAI 兼容', m: 'POST', ep: o + '/v1/chat/completions', copy: o + '/v1',
+        d: 'SDK 直接把 <b>base_url</b> 指过来，模型填 <b>auto</b>，流式与非流式都支持。',
+        s: 'OPENAI_BASE_URL=' + o + '/v1\nOPENAI_MODEL=auto',
+      },
+      {
+        t: 'OpenAI Responses', m: 'POST', ep: o + '/v1/responses', copy: o + '/v1',
+        d: '新版 Responses 协议，输入输出结构与 Chat 不同，<b>auto</b> 规则一致。',
+        s: 'curl ' + o + '/v1/responses \\\n  -d \'{"model":"auto","input":"hi"}\'',
+      },
+      {
+        t: 'Anthropic Messages', m: 'POST', ep: o + '/v1/messages', copy: o,
+        d: '给 Claude Code 这类客户端用。<b>端点只填 origin</b>，路径由客户端自己拼。',
+        s: 'ANTHROPIC_BASE_URL=' + o + '\nANTHROPIC_MODEL=auto',
+      },
+    ];
+    $('#cards').innerHTML = cards.map((c) =>
+      '<div class="card"><div class="card-h"><span class="t">' + c.t + '</span>' +
+      '<span class="m"><span class="method">' + c.m + '</span></span></div>' +
+      '<div class="path"><code title="' + esc(c.ep) + '">' + esc(c.ep) + '</code>' +
+      '<button class="icon-btn" data-copy="' + esc(c.copy) + '" title="复制接入地址 ' + esc(c.copy) + '">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></svg></button></div>' +
+      '<div class="desc">' + c.d + '</div>' +
+      '<div class="snippet">' + esc(c.s).replace(/^(curl|OPENAI_BASE_URL|ANTHROPIC_BASE_URL)/gm, '<span class="c1">$1</span>') + '</div>' +
+      '</div>'
+    ).join('');
+  }
+
+  /* ── 运行面板 ───────────────────────────────────────── */
+  function renderRuntime(st) {
+    const tested = st.models.filter((m) => m.state !== 'unknown').length;
+    const total = st.models.length;
+    const modeText = {
+      passive: '被动学习：不主动发请求，模型状态完全由真实调用得出——调通即标为可用，429 即进冷却。零额外额度消耗，代价是没被调用过的模型会一直显示「待验证」。',
+      interval: '定时探测：每 ' + Math.round((st.probeSeconds || 0) / 60) + ' 分钟主动验证一轮，要花掉每个来源的请求额度。',
+      startup: '启动探测：进程启动时验证过一轮，之后转为被动学习。',
+    };
+    $('#policy-text').innerHTML = (modeText[st.probeMode] || modeText.passive) +
+      '<br><br>已探明 <b>' + tested + ' / ' + total + '</b>。需要立刻验证就点右上角「探测」，每轮最多 8 个。';
+    $('#probe-hint').textContent = st.probeMode === 'interval' ? '定时' : st.probeMode === 'startup' ? '启动时' : '被动学习';
+    $('#policy-tags').innerHTML = [
+      ['auto 准入 ≥256K', 1],
+      ['需支持工具调用', 1],
+      ['429 自动冷却', 1],
+      ['失败换模型重试', 1],
+    ].map(([t, on]) => '<span class="tag ' + (on ? 'on' : '') + '">' + esc(t) + '</span>').join('');
+
+    // 冷却队列
+    const cooling = st.models.filter((m) => m.state === 'limited' && m.cooldownUntil)
+      .sort((a, b) => a.cooldownUntil - b.cooldownUntil);
+    $('#cd-hint').textContent = cooling.length + ' 个';
+    $('#cdlist').innerHTML = cooling.length
+      ? cooling.map((m) => {
+          const left = Math.max(0, m.cooldownUntil - Date.now());
+          const span = Math.max(60000, (m.cooldownUntil - (m.stateAt || m.cooldownUntil - 600000)));
+          const pct = Math.max(2, Math.min(100, (left / span) * 100));
+          return '<div class="cdrow"><i class="dot limited"></i><span class="n">' + esc(m.id) + '</span>' +
+            '<span class="cdbar"><i style="width:' + pct.toFixed(1) + '%" data-bar="' + m.cooldownUntil + '" data-span="' + span + '"></i></span>' +
+            '<span class="t" data-cd="' + m.cooldownUntil + '">' + fmtCd(m.cooldownUntil) + '</span></div>';
+        }).join('')
+      : '<div class="cdrow" style="color:var(--fg-4)">队列为空，没有模型处于冷却</div>';
+
+    $('#stat-hint').textContent = '启动于 ' + fmtUp(st.uptime) + ' 前';
+    $('#kv').innerHTML = [
+      ['运行时长', fmtUp(st.uptime)],
+      ['累计请求', fmtInt(st.stats.requests)],
+      ['转移次数', fmtInt(st.stats.failovers)],
+      ['来源数', st.providers.filter((p) => p.enabled).length + ' / ' + st.providers.length],
+      ['输入 token', fmtInt(st.stats.tokensIn)],
+      ['输出 token', fmtInt(st.stats.tokensOut)],
+    ].map(([k, v]) => '<div><div class="k">' + esc(k) + '</div><div class="v">' + esc(v) + '</div></div>').join('');
+  }
+
+  /* ── 主渲染 ─────────────────────────────────────────── */
+  function render(st) {
+    setFigure(st.models.filter((m) => m.auto).length, st.summary.total);
+    renderStats(st);
+    renderCounts(st);
+
+    const sig = [
+      S.filter, S.q,
+      st.models.map((m) => m.id + ':' + m.state + ':' + (m.auto ? 1 : 0) + ':' + Math.round((m.cooldownUntil || 0) / 30000) + ':' + Math.round((m.lastUsedAt || 0) / 60000)).join('|'),
+    ].join('#');
+    if (sig !== S.sig) {
+      S.sig = sig;
+      renderCatalog(st, !!S.data);
+      renderRuntime(st);
+    }
+
+    $('#hd-ver').textContent = 'v' + st.version;
+    $('#hd-live').textContent = '运行 ' + fmtUp(st.uptime);
+    $('#hd-dot').className = 'pulse';
+    const base = location.origin;
+    $('#base-url').textContent = base + '/v1';
+    $('#copy-base').dataset.copy = base + '/v1';
+    $('#ft-up').textContent = '运行 ' + fmtUp(st.uptime);
+    $('#ft-req').textContent = '请求 ' + fmtInt(st.stats.requests);
+    $('#ft-tok').textContent = 'token ' + fmtInt(st.stats.tokensIn) + ' / ' + fmtInt(st.stats.tokensOut);
+    $('#ft-mode').textContent = st.probeMode === 'interval' ? '定时探测' : '被动学习';
+    $('#r-req').textContent = fmtInt(st.stats.requests);
+    $('#r-fo').textContent = fmtInt(st.stats.failovers);
+    $('#r-tk').textContent = fmtInt(st.stats.tokensIn + st.stats.tokensOut);
+    sample(st.stats.requests);
+  }
+
+  async function refresh() {
+    try {
+      const r = await fetch('/v1/status', { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const st = await r.json();
+      if (!S.data) renderCards(st);
+      S.data = st;
+      render(st);
+    } catch (e) {
+      $('#hd-live').textContent = '连接失败';
+      $('#hd-dot').className = 'pulse dead';
+    }
+  }
+
+  /* ── 交互 ───────────────────────────────────────────── */
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove('show'), 1800);
+  }
+  function copy(text) {
+    const done = () => toast('已复制到剪贴板');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fallback());
+    } else fallback();
+    function fallback() {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) { toast('复制失败'); }
+      ta.remove();
+    }
+  }
+
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-copy]');
+    if (!b) return;
+    copy(b.dataset.copy || '');
+    b.classList.add('done');
+    setTimeout(() => b.classList.remove('done'), 1400);
+    const bar = b.closest('.basebar');
+    if (bar) { bar.classList.add('flash'); setTimeout(() => bar.classList.remove('flash'), 900); }
+  });
+
+  $('#chips').addEventListener('click', (e) => {
+    const c = e.target.closest('.chip');
+    if (!c) return;
+    $$('.chip').forEach((x) => x.setAttribute('aria-selected', String(x === c)));
+    S.filter = c.dataset.f;
+    S.sig = '';
+    if (S.data) render(S.data);
+  });
+
+  let qt;
+  $('#q').addEventListener('input', (e) => {
+    clearTimeout(qt);
+    qt = setTimeout(() => {
+      S.q = e.target.value.trim();
+      S.sig = '';
+      if (S.data) render(S.data);
+    }, 120);
+  });
+
+  $('#btn-refresh').addEventListener('click', () => { refresh(); toast('已刷新'); });
+
+  $('#btn-probe').addEventListener('click', async (e) => {
+    const b = e.currentTarget;
+    b.disabled = true;
+    try {
+      await fetch('/v1/probe?force=1&limit=8', { method: 'POST' });
+      toast('正在验证 8 个模型 · 消耗 8 次请求额度');
+      setTimeout(refresh, 15000);
+    } catch (err) { toast('探测请求失败'); }
+    setTimeout(() => { b.disabled = false; }, 16000);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+    if (e.key === '/' && !typing) { e.preventDefault(); $('#q').focus(); }
+    if (e.key === 'Escape' && typing) { document.activeElement.blur(); }
+  });
+
+  // 行内跟随光斑
+  $('#catalog').addEventListener('mousemove', (e) => {
+    const row = e.target.closest('.row');
+    if (!row) return;
+    const r = row.getBoundingClientRect();
+    row.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    row.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  });
+
+  // 顶栏滚动态
+  const onScroll = () => { $('#top').classList.toggle('stuck', window.scrollY > 8); };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // 冷却倒计时
+  setInterval(() => {
+    $$('[data-cd]').forEach((el) => {
+      const t = Number(el.dataset.cd);
+      if (!t) return;
+      el.textContent = fmtCd(t);
+      if (t - Date.now() <= 0) { el.textContent = '恢复中'; }
+    });
+    $$('[data-bar]').forEach((el) => {
+      const t = Number(el.dataset.bar), span = Number(el.dataset.span) || 600000;
+      const pct = Math.max(0, Math.min(100, ((t - Date.now()) / span) * 100));
+      el.style.width = pct.toFixed(1) + '%';
+    });
+  }, 1000);
+
+  // ScrollTrigger：滚动时首屏轻微后退，进入内容区的视觉节奏
+  if (HAS && window.ScrollTrigger) {
+    g.to('.hero-grid', {
+      yPercent: -5, autoAlpha: .28, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .5 },
+    });
+  }
+
+  intro();
+  refresh();
+  setInterval(() => { if (!document.hidden) refresh(); }, 10000);
+})();
 </script>
 </body>
 </html>
