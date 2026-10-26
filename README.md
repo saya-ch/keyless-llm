@@ -39,12 +39,12 @@ cd C:\workspace\keyless-llm
 .\launch.ps1               # 启动；窗口开着就在跑，关窗即停
 ```
 
-启动后面板会列出本地地址与各来源状态。可选：
+启动后面板会列出本地地址与各来源状态。浏览器打开 <http://127.0.0.1:8788> 有 Web 控制台（来源/模型/出口/统计，10 秒自动刷新）。可选：
 
 ```powershell
 .\launch.ps1 -AutoSpeed    # 启动时顺便测速（默认不测，省额度）
 .\launch.ps1 -Port 8799    # 换端口
-node server.mjs            # 不带面板，只跑网关
+node server.mjs            # 不带终端面板，只跑网关（Web 控制台仍可用）
 ```
 
 桌面快捷方式：

@@ -1054,6 +1054,12 @@ async function handleResponses(req, res, body) {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || "local"}`);
   try {
+    // Web 控制台：静态单文件，本机自用，不占 API 路径
+    if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/ui")) {
+      const html = fs.readFileSync(path.join(__dirname, "web", "index.html"));
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      return res.end(html);
+    }
     if (req.method === "GET" && url.pathname === "/health") {
       return sendJson(res, 200, { status: "ok", version: VERSION, uptime: Math.floor((Date.now() - stats.startedAt) / 1000) });
     }
