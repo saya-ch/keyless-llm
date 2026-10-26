@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T18:38:52.665Z",
+  "generatedAt": "2026-10-26T09:08:09.748Z",
   "env": "ci",
   "summary": {
     "providers": 6,
@@ -19,8 +19,8 @@
       "modelsError": "",
       "modelsFound": 401,
       "freeModels": 16,
-      "ok": 13,
-      "limited": 2,
+      "ok": 12,
+      "limited": 3,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -32,9 +32,9 @@
         },
         {
           "model": "nvidia/nemotron-3.5-super-vl:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "reflection/beam-free",
@@ -62,9 +62,9 @@
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -80,9 +80,9 @@
         },
         {
           "model": "poolside/laguna-xs-2.1:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "cohere/north-mini-code:free",
@@ -205,16 +205,16 @@
       "modelsError": "",
       "modelsFound": 7,
       "freeModels": 7,
-      "ok": 6,
-      "limited": 1,
+      "ok": 7,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "Qwen3.8-27B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Qwen3.6-27B",
@@ -277,7 +277,7 @@
           "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 2,
+      "failStreak": 3,
       "suggestDead": false
     },
     {
