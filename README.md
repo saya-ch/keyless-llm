@@ -1,12 +1,11 @@
-# Keyless LLM Gateway
+<h1 align="center">Keyless LLM Gateway</h1>
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-
-![Node](https://img.shields.io/badge/node-%3E%3D22-green.svg)
-
-![平台](https://img.shields.io/badge/platform-Windows%20%2F%20Linux%20%2F%20macOS-lightgrey.svg)
-
-![协议](https://img.shields.io/badge/API-OpenAI%20%2F%20Anthropic%20%2F%20Responses-blue.svg)
+<p align="center">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+  <img src="https://img.shields.io/badge/node-%3E%3D22-green.svg" alt="Node 22+">
+  <img src="https://img.shields.io/badge/platform-Windows%20%2F%20Linux%20%2F%20macOS-lightgrey.svg" alt="平台">
+  <img src="https://img.shields.io/badge/API-OpenAI%20%2F%20Anthropic%20%2F%20Responses-blue.svg" alt="协议">
+</p>
 
 <p align="center">
   <a href="#快速开始">快速开始</a> ·
