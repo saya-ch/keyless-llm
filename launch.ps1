@@ -145,10 +145,39 @@ $node = $nodeCmd.Source
 $proxy = $null
 $foreground = $false
 
+# ── 清理重复的环境变量键 ──────────────────────────────────────
+# 从 bash / IDE 继承的会话里可能同时存在 https_proxy 与 HTTPS_PROXY、
+# Path 与 PATH/path 这类仅大小写不同的键。PowerShell 5.1 的 Start-Process
+# 在构造子进程环境字典时会因此抛 "Item has already been added"，导致
+# 后台启动失败并降级到前台模式 —— 而前台模式下没有面板。
+# 这里在启动前把仅小写变体从当前进程环境里删掉（保留规范的大写名）。
+function Remove-DuplicateEnvKeys {
+  $seen = @{}
+  $dups = @()
+  foreach ($entry in [System.Environment]::GetEnvironmentVariables("Process").GetEnumerator()) {
+    $k = [string]$entry.Key
+    $lk = $k.ToLowerInvariant()
+    if ($seen.ContainsKey($lk)) {
+      # 已存在同名（小写）键：保留字典里第一个，其余视为重复
+      $dups += $k
+    } else {
+      $seen[$lk] = $k
+    }
+  }
+  foreach ($k in $dups) {
+    try { [System.Environment]::SetEnvironmentVariable($k, $null, "Process") } catch { }
+  }
+  return $dups
+}
+$removedEnv = Remove-DuplicateEnvKeys
+if ($removedEnv.Count -gt 0) {
+  Write-Host ("  清理重复环境变量键: " + ($removedEnv -join ", ")) -ForegroundColor DarkGray
+}
+
 try {
   # 首选：后台子进程 + 输出重定向到日志（与 ccgo2dsapi 同款）
   # 注：某些从 bash 继承的会话环境里存在 Path/PATH/path 大小写重复键，
-  # 会导致 Start-Process 抛 "Key in dictionary" —— 此时降级到前台运行
+  # 会导致 Start-Process 抛 "Key in dictionary" —— 已在上方清理，此处保留兜底
   $proxy = Start-Process $node -ArgumentList @("`"$Entry`"") `
     -WorkingDirectory $ApiDir -NoNewWindow -PassThru `
     -RedirectStandardOutput $LogFile -RedirectStandardError $errFile
@@ -359,6 +388,7 @@ function Render {
 
   # ── 来源汇总 ──
   $okN = 0
+  $all = @()
   if ($script:status -and $script:status.providers) {
     $all = @($script:status.models)
     $okN = @($all | Where-Object { $_.state -eq "healthy" }).Count
@@ -379,34 +409,40 @@ function Render {
     AddRow "来源     （状态获取失败，按 R 重试）" "DarkRed"
   }
 
-  # ── 模型 · 按来源分组（只列可调度的）──
+  # ── 模型 · 按来源分组 ──
+  # 只列 healthy 会误伤刚启动的场景：首次探测要 ~2 分钟，期间全是 unknown，
+  # 面板就会显示「暂无可调度」，看起来像没有模型。这里列出全部模型并标注状态，
+  # 让「哪些能用 / 哪些在冷却 / 哪些还没验」一目了然。
   AddSep
-  if ($okN -gt 0) {
-    AddRow "模型 · 按来源     auto = 准入 auto 池（ctx≥256K 且支持工具调用）" "Cyan"
+  if ($all.Count -gt 0) {
+    AddRow ("模型     共 $($all.Count) 个   auto = 准入 auto 池（ctx≥256K 且支持工具调用）") "Cyan"
+    AddRow ((PadR "  模型" 44) + (PadL "上下文" 7) + (PadL "auto" 5) + (PadL "状态" 11) + (PadL "TPS" 8)) "DarkGray"
     AddDiv
     foreach ($p in @($script:status.providers | Where-Object { $_.enabled })) {
-      $mine = @($script:status.models | Where-Object { $_.provider -eq $p.id })
+      $mine = @($all | Where-Object { $_.provider -eq $p.id })
+      if ($mine.Count -eq 0) { continue }
       $h = @($mine | Where-Object { $_.state -eq "healthy" })
-      if ($h.Count -eq 0) { continue }
-      AddRow ("▸ " + (PadR (Clip ("$($p.id) · $($p.label)") 42) 42) + (PadL ("$($h.Count)/$($mine.Count)") 8) + (PadL "可调度" 8)) "Cyan"
-      foreach ($m in ($h | Sort-Object { if ($_.tps) { -[double]$_.tps } else { -999 } } | Select-Object -First 8)) {
+      AddRow ("▸ " + (PadR (Clip "$($p.id) · $($p.label)" 44) 44) + (PadL "$($h.Count)/$($mine.Count)" 12) + (PadL "可调度" 9)) "Cyan"
+      # 可用优先，其次待验证，最后限流/封禁
+      $sorted = $mine | Sort-Object @{ e = { switch ($_.state) { "healthy" { 0 } "unknown" { 1 } "limited" { 2 } default { 3 } } } }, @{ e = { if ($_.tps) { -[double]$_.tps } else { -999 } } }
+      foreach ($m in ($sorted | Select-Object -First 10)) {
         $tps = "-"
-        $col = "White"
         if ($script:speed.ContainsKey($m.id)) {
           $e = $script:speed[$m.id]
-          if ($e.kind -eq "error") { $tps = [string]$e.code; $col = "Red" }
-          else {
-            $tps = ("{0:0}" -f $e.tps) + " t/s"
-            if ($e.tps -ge 250) { $col = "Green" } elseif ($e.tps -lt 120) { $col = "DarkYellow" }
-          }
+          if ($e.kind -eq "error") { $tps = [string]$e.code }
+          else { $tps = ("{0:0}" -f $e.tps) + " t/s" }
         }
-        $autoT = if ($m.auto) { "auto" } else { "-" }
-        AddRow ((PadR ("      " + (Clip ([string]$m.model) 36)) 42) + (PadL (FmtCtx $m.ctx) 7) + (PadL $autoT 5) + (PadL $tps 9)) $col
+        $autoT = if ($m.auto) { "auto" } else { "" }
+        $stText = Get-StateText $m.state
+        if ($m.state -eq "limited" -and $m.cooldownUntil) { $stText = $stText + " " + (FmtCdUntil $m.cooldownUntil) }
+        # 整行单色：可用=白，待验证=灰，限流=黄，封禁=红
+        $rowCol = switch ($m.state) { "healthy" { "White" } "limited" { "Yellow" } "blocked" { "Red" } default { "DarkGray" } }
+        AddRow ((PadR ("      " + (Clip ([string]$m.model) 38)) 44) + (PadL (FmtCtx $m.ctx) 7) + (PadL $autoT 5) + (PadL $stText 11) + (PadL $tps 8)) $rowCol
       }
-      if ($h.Count -gt 8) { AddRow ("      … 另有 $($h.Count - 8) 个") "DarkGray" }
+      if ($mine.Count -gt 10) { AddRow ("      … 另有 $($mine.Count - 10) 个") "DarkGray" }
     }
   } else {
-    AddRow "模型 · 按来源     暂无可调度（按 R 轻探测，每模型仅 1 token）" "Yellow"
+    AddRow "模型     （状态获取失败，按 R 重试）" "DarkRed"
   }
   AddRow "TPS 仅 T 键实测（真生成）；auto 调度失败自动换模型/跨来源" "DarkGray"
   if ($script:speedSummary) {
@@ -482,6 +518,22 @@ function DrawPanel([string]$prefix) {
       [System.IO.File]::AppendAllLines($LogPanel, $plain.ToArray(), [System.Text.Encoding]::UTF8)
     } catch { }
   }
+  # 记录本次输出的行数，供自动刷新时原地重绘（清屏 + 上移）
+  $script:LastFrameLines = $plain.Count
+}
+
+# 原地重绘：把光标移回面板顶部，清掉旧内容再画新的一帧
+function RedrawPanel([string]$prefix) {
+  if (-not $script:CanReadKeys) { return }
+  try {
+    $lines = [int]($script:LastFrameLines)
+    if ($lines -gt 0) {
+      # 先清整个屏幕（2J）+ 光标归位（H），再重绘 —— 避免旧帧残留在光标上方留下空行
+      $seq = "$ESC[2J" + "$ESC[H"
+      Write-Host $seq -NoNewline
+    }
+    DrawPanel $prefix
+  } catch { }
 }
 
 # ── 5. 主循环：只响应按键，不自动刷新 ─────────────────────────────
@@ -501,6 +553,16 @@ if ($foreground) {
 
 DrawPanel ""
 $frames = 1
+
+# 启动即触发一次轻探测：否则首次探测要等代理侧的自然周期，
+# 面板会长时间停留在「全部待验证」，用户以为没有模型。
+try {
+  $null = Invoke-RestMethod "http://${HostAddress}:${Port}/v1/probe?force=1" -Method POST -TimeoutSec 5
+  Write-Host "  正在探测免费模型（每模型 1 token，约 10-60 秒）..." -ForegroundColor DarkGray
+  Start-Sleep -Seconds 3
+  Update-Status
+  DrawPanel ("已探测 · " + (Get-Date).ToString("HH:mm:ss"))
+} catch { }
 
 # 判断能否接收按键：没有真实控制台时退化为「只守候代理进程」
 $script:CanReadKeys = $true
@@ -526,6 +588,8 @@ try {
     }
 
     $action = $null
+    $lastAuto = Get-Date
+    $lastSig = ""
     while ($null -eq $action) {
       if ($proxy.HasExited) { break }
       try {
@@ -541,6 +605,20 @@ try {
       } catch {
         $script:CanReadKeys = $false
         break
+      }
+      # 自动刷新：轻探测在代理侧每 30 分钟跑一次，面板跟着同步，
+      # 否则用户看到的永远是启动那一刻的快照（当时多半还没探测，全是 unknown）。
+      if (((Get-Date) - $lastAuto).TotalSeconds -ge 20) {
+        $lastAuto = Get-Date
+        Update-Status
+        if ($script:status -and $script:status.models) {
+          $sig = (@($script:status.models | Where-Object { $_.state -eq "healthy" }).Count).ToString() + "/" +
+                 (@($script:status.models | Where-Object { $_.auto }).Count).ToString()
+          if ($lastSig -and $sig -ne $lastSig) {
+            RedrawPanel ("自动更新 · " + (Get-Date).ToString("HH:mm:ss"))
+          }
+          $lastSig = $sig
+        }
       }
       if ($null -eq $action) { Start-Sleep -Milliseconds 150 }
     }
