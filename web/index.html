@@ -102,6 +102,7 @@ body::after{
   transition:color .2s var(--ease),background .2s var(--ease);
 }
 .nav a:hover{color:var(--fg);background:rgba(18,20,15,.05)}
+.nav a.active{color:var(--fg);background:rgba(18,20,15,.06)}
 .sp{flex:1}
 
 .live{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11.5px;color:var(--fg-2)}
@@ -193,6 +194,17 @@ body::after{
   flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .basebar.flash{border-color:var(--acc-line);box-shadow:0 0 0 3px var(--acc-soft)}
+.auth-badge{
+  display:inline-flex;align-items:center;gap:6px;height:23px;padding:0 9px;flex:none;
+  border:1px solid var(--line-2);border-radius:var(--r-pill);
+  font-family:var(--font-mono);font-size:10.5px;color:var(--fg-2);
+  text-decoration:none;white-space:nowrap;
+  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
+}
+.auth-badge:hover{color:var(--fg);border-color:var(--line-3);background:rgba(18,20,15,.03)}
+.auth-badge i{width:5px;height:5px;border-radius:50%;background:var(--warn);flex:none}
+.auth-badge.secure i{background:var(--acc)}
+.auth-badge.open{border-color:rgba(154,95,18,.35);color:var(--warn)}
 
 .icon-btn{
   display:grid;place-items:center;width:28px;height:28px;flex:none;
@@ -256,6 +268,7 @@ body::after{
    区块头
    ══════════════════════════════════════════════════════════ */
 .sec{padding-top:76px;scroll-margin-top:78px}
+#overview{scroll-margin-top:78px}
 .sec-head{display:flex;align-items:flex-end;gap:20px;margin-bottom:22px;flex-wrap:wrap}
 .sec-head h2{font-size:20px;font-weight:500;letter-spacing:-.025em;line-height:1.2}
 .sec-head p{font-size:12.5px;color:var(--fg-3);margin-top:5px}
@@ -287,15 +300,31 @@ body::after{
 /* ══════════════════════════════════════════════════════════
    模型目录
    ══════════════════════════════════════════════════════════ */
+/* 目录自带滚动区：31 行不把整页拉成一堵墙，表头钉住便于长列表对齐 */
+.catalog-wrap{position:relative}
 .catalog{
-  border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden;
+  border:1px solid var(--line);border-radius:var(--r-l);
   background:var(--surface);box-shadow:var(--shadow-1);
+  max-height:min(72vh,680px);overflow:auto;overscroll-behavior:contain;
+  scrollbar-width:thin;
+}
+.catalog::-webkit-scrollbar{width:10px}
+.catalog::-webkit-scrollbar-thumb{
+  background:rgba(18,20,15,.16);border-radius:10px;border:3px solid var(--surface);
+}
+.catalog::-webkit-scrollbar-thumb:hover{background:rgba(18,20,15,.28)}
+.catalog-fade{
+  position:absolute;left:1px;right:1px;bottom:1px;height:64px;pointer-events:none;
+  border-radius:0 0 var(--r-l) var(--r-l);
+  background:linear-gradient(180deg,rgba(255,255,255,0),var(--surface) 82%);
+  transition:opacity .25s var(--ease);
 }
 .chead{
   display:grid;grid-template-columns:var(--cols);gap:16px;align-items:center;
   padding:10px 20px;border-bottom:1px solid var(--line);
   font-family:var(--font-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-3);
-  background:rgba(250,249,246,.9);
+  background:rgba(250,249,246,.94);backdrop-filter:blur(8px);
+  position:sticky;top:0;z-index:2;
 }
 .catalog{--cols:minmax(0,1fr) 78px 52px 92px 104px}
 .chead>span:nth-child(n+2){text-align:right}
@@ -350,6 +379,45 @@ body::after{
 /* ══════════════════════════════════════════════════════════
    接入
    ══════════════════════════════════════════════════════════ */
+.authbox{
+  display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px 14px;align-items:center;
+  border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);
+  box-shadow:var(--shadow-1);padding:14px 16px;margin-bottom:14px;
+}
+.authbox .ai{
+  grid-column:1;grid-row:1;
+  width:28px;height:28px;flex:none;display:grid;place-items:center;border-radius:8px;
+  background:var(--acc-soft);color:var(--acc);
+}
+.authbox .ai.warn{background:rgba(154,95,18,.1);color:var(--warn)}
+.authbox .ai svg{width:15px;height:15px}
+.authbox .atitle{
+  grid-column:2;grid-row:1;
+  font-size:12.5px;font-weight:500;color:var(--fg);
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0;
+}
+.authbox .anote{grid-column:2 / -1;grid-row:2;font-size:11.5px;color:var(--fg-3);line-height:1.55}
+.authbox .anote code{
+  font-family:var(--font-mono);font-size:11px;color:var(--fg-2);
+  background:rgba(18,20,15,.05);border-radius:4px;padding:1px 5px;
+}
+.authbox .akey{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-mono);font-size:12px;color:var(--fg);
+  background:rgba(18,20,15,.04);border:1px solid var(--line);border-radius:7px;
+  padding:3px 4px 3px 9px;
+}
+.authbox .akey .icon-btn{width:22px;height:22px}
+.authbox .aside{
+  grid-column:3;grid-row:1;justify-self:end;
+  display:flex;align-items:center;gap:7px;
+  font-family:var(--font-mono);font-size:10.5px;color:var(--fg-3);white-space:nowrap;
+}
+.authbox .aside.bad{color:var(--bad)}
+.authbox .aside i{width:5px;height:5px;border-radius:50%;background:var(--fg-4)}
+.authbox .aside.ok i{background:var(--acc)}
+.authbox .aside.bad i{background:var(--bad)}
+
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .card{
   border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);box-shadow:var(--shadow-1);
@@ -473,11 +541,15 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
   .stat{padding:15px 16px}
   .stat:nth-child(odd){border-left:0;padding-left:0}
   .stat:nth-child(n+3){border-top:1px solid var(--line)}
-  .catalog{--cols:minmax(0,1fr) auto}
+  .catalog{--cols:minmax(0,1fr) auto;max-height:58vh}
   .chead{display:none}
   .row{grid-template-columns:minmax(0,1fr) auto;padding:9px 16px}
   .row .mctx,.row .mtools,.row .mused{display:none}
   .sec{padding-top:56px}
+  .authbox{padding:12px 14px;grid-template-columns:26px minmax(0,1fr);gap:6px 11px}
+  .authbox .ai{width:26px;height:26px}
+  .authbox .anote{grid-column:2;grid-row:2}
+  .authbox .aside{grid-column:2;grid-row:3;justify-self:start}
   .sec-head .tools{margin-left:0;width:100%;flex-direction:column;align-items:stretch;gap:9px}
   .search{width:100%}
   .search input,.search input:focus{width:100%}
@@ -515,10 +587,11 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
       <b>keyless<span style="color:var(--fg-4)">·</span>llm</b>
     </a>
     <span class="ver" id="hd-ver">v–</span>
-    <nav class="nav">
-      <a href="#models">模型</a>
-      <a href="#connect">接入</a>
-      <a href="#runtime">运行</a>
+    <nav class="nav" id="nav">
+      <a href="#overview" data-nav="overview">总览</a>
+      <a href="#connect" data-nav="connect">接入</a>
+      <a href="#models" data-nav="models">模型</a>
+      <a href="#runtime" data-nav="runtime">运行</a>
     </nav>
     <span class="sp"></span>
     <span class="live">
@@ -538,7 +611,7 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
   <main>
 
     <!-- ── Hero ─────────────────────────────────────────── -->
-    <section class="hero">
+    <section class="hero" id="overview">
       <div class="hero-grid">
         <div>
           <div class="eyebrow" data-fx>
@@ -564,6 +637,9 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
             <button class="icon-btn" data-copy="" id="copy-base" title="复制">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></svg>
             </button>
+            <a class="auth-badge" id="base-auth" href="#connect" title="客户端要不要带密钥，点开看接入说明">
+              <i></i><span id="base-auth-tx">校验中</span>
+            </a>
           </div>
         </div>
 
@@ -602,6 +678,18 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
     <!-- ── 指标 ─────────────────────────────────────────── -->
     <section class="stats" id="stats" data-fx></section>
 
+    <!-- ── 接入 ─────────────────────────────────────────── -->
+    <section class="sec" id="connect">
+      <div class="sec-head" data-fx>
+        <div>
+          <h2>接入</h2>
+          <p>三种协议对等，同一份模型池；<code style="font-family:var(--font-mono);font-size:11.5px;color:var(--fg-2)">model</code> 一律填 auto</p>
+        </div>
+      </div>
+      <div class="authbox" id="authbox" data-fx></div>
+      <div class="cards" id="cards" data-fx></div>
+    </section>
+
     <!-- ── 模型 ─────────────────────────────────────────── -->
     <section class="sec" id="models">
       <div class="sec-head" data-fx>
@@ -622,18 +710,10 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
           </div>
         </div>
       </div>
-      <div class="catalog" id="catalog" data-fx></div>
-    </section>
-
-    <!-- ── 接入 ─────────────────────────────────────────── -->
-    <section class="sec" id="connect">
-      <div class="sec-head" data-fx>
-        <div>
-          <h2>接入</h2>
-          <p>三种协议对等，同一份模型池；<code style="font-family:var(--font-mono);font-size:11.5px;color:var(--fg-2)">model</code> 一律填 auto</p>
-        </div>
+      <div class="catalog-wrap" data-fx>
+        <div class="catalog" id="catalog"></div>
+        <div class="catalog-fade" id="cat-fade"></div>
       </div>
-      <div class="cards" id="cards" data-fx></div>
     </section>
 
     <!-- ── 运行 ─────────────────────────────────────────── -->
@@ -901,6 +981,7 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
     }
     const vis = blocks.length ? '当前展示 ' + $$('.row', el).length + ' 个' : '';
     $('#catalog-sub').textContent = '按来源分组 · 状态由真实请求被动学习' + (vis ? ' · ' + vis : '');
+    updateFade();
   }
 
   /* ── 计数与筛选 ─────────────────────────────────────── */
@@ -911,24 +992,85 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
     $('#c-bad').textContent = st.summary.limited + st.summary.blocked;
   }
 
+  /* ── 鉴权面板 ───────────────────────────────────────── */
+  const BUILTIN_KEY = 'sk-keyless-local';
+  function keyFor(st) {
+    const a = st.auth || {};
+    if (!a.required) return '';
+    return a.builtin ? BUILTIN_KEY : '';
+  }
+  function renderAuth(st) {
+    const a = st.auth || { required: false };
+    const b = st.bind || {};
+    const key = keyFor(st);
+    const lock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>';
+    const open = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 7.6-1.7"/></svg>';
+
+    let icon = '', title = '', note = '', keyHtml = '';
+    if (!a.required) {
+      icon = '<div class="ai warn">' + open + '</div>';
+      title = '未设置访问密钥';
+      note = '本机任何程序都能直接调用。只在 <code>127.0.0.1</code> 上问题不大，但要隔离别的程序就设一个：<code>$env:KEYLESS_KEY="你的key"</code>';
+    } else if (a.builtin) {
+      icon = '<div class="ai">' + lock + '</div>';
+      title = '已启用访问密钥 <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--fg-3);font-weight:400">出厂默认</span>';
+      note = '客户端 API Key 填这个值即可；改 <code>$env:KEYLESS_KEY</code> 可以换一把。默认值是源码里的公开常量，只用来挡本机其它程序，不是秘密。';
+      keyHtml = '<span class="akey"><span>' + BUILTIN_KEY + '</span>' +
+        '<button class="icon-btn" data-copy="' + BUILTIN_KEY + '" title="复制密钥">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></svg></button></span>';
+    } else {
+      icon = '<div class="ai">' + lock + '</div>';
+      title = '已启用自定义密钥';
+      note = '密钥是你自己通过 <code>KEYLESS_KEY</code> 设的，控制台不回显。客户端带 <code>Authorization: Bearer &lt;你设的值&gt;</code>。';
+    }
+
+    const bindTx = b.localOnly
+      ? ['ok', '仅本机 ' + (b.host || '127.0.0.1') + ':' + (b.port || '')]
+      : ['bad', '监听 ' + (b.host || '?') + '，同网段可访问'];
+
+    $('#authbox').innerHTML =
+      icon +
+      '<div class="atitle">' + title + keyHtml + '</div>' +
+      '<div class="anote">' + note + '</div>' +
+      '<span class="aside ' + bindTx[0] + '"><i></i>' + esc(bindTx[1]) + '</span>';
+
+    // 首屏徽章
+    const badge = $('#base-auth');
+    badge.className = 'auth-badge ' + (a.required ? 'secure' : 'open');
+    $('#base-auth-tx').textContent = a.required ? '需 Key' : '无 Key';
+    badge.title = a.required
+      ? '已启用访问密钥，客户端需带 Authorization —— 点开看接入说明'
+      : '未设置访问密钥 —— 点开看怎么加一把';
+  }
+
   /* ── 接入卡片 ───────────────────────────────────────── */
   function renderCards(st) {
     const o = location.origin;
+    const a = st.auth || { required: false };
+    const key = keyFor(st);
+    // 自定义密钥不回显，给一个能直接粘贴、不用改语法的占位符（尖括号会被 shell 当重定向）
+    const keyVar = a.required ? (key || 'sk-your-key') : '';
+    const authHeader = a.required ? ' \\\n  -H "Authorization: Bearer ' + keyVar + '"' : '';
+
     const cards = [
       {
         t: 'OpenAI 兼容', m: 'POST', ep: o + '/v1/chat/completions', copy: o + '/v1',
         d: 'SDK 直接把 <b>base_url</b> 指过来，模型填 <b>auto</b>，流式与非流式都支持。',
-        s: 'OPENAI_BASE_URL=' + o + '/v1\nOPENAI_MODEL=auto',
+        s: 'OPENAI_BASE_URL=' + o + '/v1\n' +
+           (a.required ? 'OPENAI_API_KEY=' + keyVar + '\n' : '') +
+           'OPENAI_MODEL=auto',
       },
       {
         t: 'OpenAI Responses', m: 'POST', ep: o + '/v1/responses', copy: o + '/v1',
         d: '新版 Responses 协议，输入输出结构与 Chat 不同，<b>auto</b> 规则一致。',
-        s: 'curl ' + o + '/v1/responses \\\n  -d \'{"model":"auto","input":"hi"}\'',
+        s: 'curl ' + o + '/v1/responses' + authHeader + ' \\\n  -d \'{"model":"auto","input":"hi"}\'',
       },
       {
         t: 'Anthropic Messages', m: 'POST', ep: o + '/v1/messages', copy: o,
         d: '给 Claude Code 这类客户端用。<b>端点只填 origin</b>，路径由客户端自己拼。',
-        s: 'ANTHROPIC_BASE_URL=' + o + '\nANTHROPIC_MODEL=auto',
+        s: 'ANTHROPIC_BASE_URL=' + o + '\n' +
+           (a.required ? 'ANTHROPIC_AUTH_TOKEN=' + keyVar + '\n' : '') +
+           'ANTHROPIC_MODEL=auto',
       },
     ];
     $('#cards').innerHTML = cards.map((c) =>
@@ -938,7 +1080,7 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
       '<button class="icon-btn" data-copy="' + esc(c.copy) + '" title="复制接入地址 ' + esc(c.copy) + '">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></svg></button></div>' +
       '<div class="desc">' + c.d + '</div>' +
-      '<div class="snippet">' + esc(c.s).replace(/^(curl|OPENAI_BASE_URL|ANTHROPIC_BASE_URL)/gm, '<span class="c1">$1</span>') + '</div>' +
+      '<div class="snippet">' + esc(c.s).replace(/^(curl|OPENAI_BASE_URL|OPENAI_API_KEY|ANTHROPIC_BASE_URL|ANTHROPIC_AUTH_TOKEN)/gm, '<span class="c1">$1</span>') + '</div>' +
       '</div>'
     ).join('');
   }
@@ -1025,7 +1167,7 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
       const r = await fetch('/v1/status', { cache: 'no-store' });
       if (!r.ok) throw new Error('HTTP ' + r.status);
       const st = await r.json();
-      if (!S.data) renderCards(st);
+      if (!S.data) { renderAuth(st); renderCards(st); }
       S.data = st;
       render(st);
     } catch (e) {
@@ -1112,6 +1254,30 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
     row.style.setProperty('--mx', (e.clientX - r.left) + 'px');
     row.style.setProperty('--my', (e.clientY - r.top) + 'px');
   });
+
+  // 目录滚动：到底就撤掉底部渐变，否则一直压着一条白雾
+  function updateFade() {
+    const el = $('#catalog'), fade = $('#cat-fade');
+    if (!el || !fade) return;
+    const overflow = el.scrollHeight > el.clientHeight + 8;
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 8;
+    fade.style.opacity = !overflow || atBottom ? 0 : 1;
+  }
+  $('#catalog').addEventListener('scroll', updateFade, { passive: true });
+  window.addEventListener('resize', updateFade);
+
+  // 顶栏导航：滚动到哪个区块就高亮哪个，点一下直接跳
+  const NAV_IDS = ['overview', 'connect', 'models', 'runtime'];
+  function setActive(id) {
+    $$('#nav a').forEach((a) => a.classList.toggle('active', a.dataset.nav === id));
+  }
+  if ('IntersectionObserver' in window) {
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) setActive(en.target.id); });
+    }, { rootMargin: '-46% 0px -50% 0px', threshold: 0 });
+    NAV_IDS.forEach((id) => { const el = document.getElementById(id); if (el) spy.observe(el); });
+  }
+  setActive('overview');
 
   // 顶栏滚动态
   const onScroll = () => { $('#top').classList.toggle('stuck', window.scrollY > 8); };

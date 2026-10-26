@@ -19,10 +19,13 @@ const VERSION = "2.0.0";
 // 环境变量：KEYLESS_* 优先，兼容旧的 OC2FREE_*（改名前的历史配置不必改）
 const env = (k, d) => process.env[`KEYLESS_${k}`] ?? process.env[`OC2FREE_${k}`] ?? d;
 
+// 出厂默认密钥：只是个挡本机其它程序的公开常量，源码里能看到，不必当秘密
+const BUILTIN_KEY = "sk-keyless-local";
+
 const CFG = {
   port: int(process.env.PORT, 8788),
   host: process.env.HOST || "127.0.0.1",
-  serverKey: env("KEY", "sk-keyless-local"),
+  serverKey: env("KEY", BUILTIN_KEY),
   ua: env("UA", "keyless-llm/1.0"),
   cooldown429: int(env("CD429", 600), 600),      // 秒；限流冷却
   cooldown403: int(env("CD403", 3600), 3600),    // 秒；封禁冷却
@@ -1166,6 +1169,14 @@ function statusPayload() {
   return {
     version: VERSION, ua: CFG.ua,
     uptime: Math.floor((Date.now() - stats.startedAt) / 1000),
+    // 鉴权元信息：只说明「要不要 key」「是不是出厂默认值」，不返回密钥本身。
+    // 控制台据此告诉用户客户端该怎么带 Authorization。
+    auth: {
+      required: !!CFG.serverKey,
+      builtin: CFG.serverKey === BUILTIN_KEY,
+      header: "Authorization: Bearer <key>",
+    },
+    bind: { host: CFG.host, port: CFG.port, localOnly: /^(127\.|localhost$|::1$)/.test(CFG.host) },
     providers: provs,
     summary: { healthy: cnt("healthy"), limited: cnt("limited"), blocked: cnt("blocked"), unknown: cnt("unknown"), total: models.length },
     models, stats,
