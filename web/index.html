@@ -177,34 +177,30 @@ body::after{
   white-space:nowrap;
 }
 
-.basebar{
-  display:flex;align-items:center;gap:12px;margin-top:26px;
+/* 首屏「怎么连」：base url 与 api key 两行并排，拿到就能用 */
+.basecard{
+  margin-top:26px;max-width:560px;
   border:1px solid var(--line);border-radius:var(--r-m);
-  background:var(--surface);box-shadow:var(--shadow-1);
-  padding:10px 10px 10px 14px;max-width:520px;
+  background:var(--surface);box-shadow:var(--shadow-1);overflow:hidden;
   transition:border-color .25s var(--ease),box-shadow .25s var(--ease);
 }
-.basebar:hover{border-color:var(--line-2)}
-.basebar .bk{
+.basecard:hover{border-color:var(--line-2)}
+.basecard .row2{
+  display:flex;align-items:center;gap:12px;padding:9px 9px 9px 14px;
+}
+.basecard .row2+.row2{border-top:1px solid var(--line)}
+.basecard .bk{
   font-family:var(--font-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--fg-4);flex:none;
+  color:var(--fg-4);flex:none;width:56px;
 }
-.basebar code{
+.basecard code{
   font-family:var(--font-mono);font-size:12.5px;color:var(--fg);
-  flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
-.basebar.flash{border-color:var(--acc-line);box-shadow:0 0 0 3px var(--acc-soft)}
-.auth-badge{
-  display:inline-flex;align-items:center;gap:6px;height:23px;padding:0 9px;flex:none;
-  border:1px solid var(--line-2);border-radius:var(--r-pill);
-  font-family:var(--font-mono);font-size:10.5px;color:var(--fg-2);
-  text-decoration:none;white-space:nowrap;
-  transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease);
-}
-.auth-badge:hover{color:var(--fg);border-color:var(--line-3);background:rgba(18,20,15,.03)}
-.auth-badge i{width:5px;height:5px;border-radius:50%;background:var(--warn);flex:none}
-.auth-badge.secure i{background:var(--acc)}
-.auth-badge.open{border-color:rgba(154,95,18,.35);color:var(--warn)}
+.basecard code.muted{color:var(--fg-3);font-family:var(--font-sans);font-size:12px}
+.basecard code.warn{color:var(--warn);font-family:var(--font-sans);font-size:12px}
+.basecard.flash{border-color:var(--acc-line);box-shadow:0 0 0 3px var(--acc-soft)}
+.icon-btn[hidden]{display:none}
 
 .icon-btn{
   display:grid;place-items:center;width:28px;height:28px;flex:none;
@@ -555,7 +551,7 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
   .search input,.search input:focus{width:100%}
   .chips{justify-content:space-between}
   .chip{padding:0 8px}
-  .basebar{max-width:none}
+  .basecard{max-width:none}
   .ver{display:none}
   .live-tx{display:none}
 }
@@ -631,15 +627,24 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
             客户端只认一个 <code>base_url</code>，模型填 <code>auto</code> 即可。
             限流、封禁、上游宕机由网关在内部转移，调用方不需要知道换过几次。
           </p>
-          <div class="basebar" id="basebar" data-fx>
-            <span class="bk">base url</span>
-            <code id="base-url">http://127.0.0.1:8788/v1</code>
-            <button class="icon-btn" data-copy="" id="copy-base" title="复制">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></svg>
-            </button>
-            <a class="auth-badge" id="base-auth" href="#connect" title="客户端要不要带密钥，点开看接入说明">
-              <i></i><span id="base-auth-tx">校验中</span>
-            </a>
+          <div class="basecard" id="basecard" data-fx>
+            <div class="row2">
+              <span class="bk">base url</span>
+              <code id="base-url">http://127.0.0.1:8788/v1</code>
+              <button class="icon-btn" data-copy="" id="copy-base" title="复制 base url">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></svg>
+              </button>
+            </div>
+            <div class="row2">
+              <span class="bk">api key</span>
+              <code id="api-key">sk-keyless-local</code>
+              <button class="icon-btn" data-copy="" id="copy-key" title="复制 api key">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5.5 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v.5"/></svg>
+              </button>
+              <a class="icon-btn" id="key-help" href="#connect" title="怎么换一把" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -1034,13 +1039,27 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
       '<div class="anote">' + note + '</div>' +
       '<span class="aside ' + bindTx[0] + '"><i></i>' + esc(bindTx[1]) + '</span>';
 
-    // 首屏徽章
-    const badge = $('#base-auth');
-    badge.className = 'auth-badge ' + (a.required ? 'secure' : 'open');
-    $('#base-auth-tx').textContent = a.required ? '需 Key' : '无 Key';
-    badge.title = a.required
-      ? '已启用访问密钥，客户端需带 Authorization —— 点开看接入说明'
-      : '未设置访问密钥 —— 点开看怎么加一把';
+    // 首屏 key 行：默认值直接摆出来，能复制；自定义/未设置则给跳转
+    const kEl = $('#api-key'), kBtn = $('#copy-key'), kHelp = $('#key-help');
+    if (!a.required) {
+      kEl.textContent = '未设置 · 本机任何程序都能调用';
+      kEl.className = 'warn';
+      kBtn.hidden = true;
+      kHelp.hidden = false;
+      kHelp.title = '怎么加一把';
+    } else if (a.builtin) {
+      kEl.textContent = BUILTIN_KEY;
+      kEl.className = '';
+      kBtn.hidden = false;
+      kBtn.dataset.copy = BUILTIN_KEY;
+      kHelp.hidden = true;
+    } else {
+      kEl.textContent = '已自定义 · 不回显';
+      kEl.className = 'muted';
+      kBtn.hidden = true;
+      kHelp.hidden = false;
+      kHelp.title = '这个密钥在哪';
+    }
   }
 
   /* ── 接入卡片 ───────────────────────────────────────── */
@@ -1204,7 +1223,7 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
     copy(b.dataset.copy || '');
     b.classList.add('done');
     setTimeout(() => b.classList.remove('done'), 1400);
-    const bar = b.closest('.basebar');
+    const bar = b.closest('.basecard');
     if (bar) { bar.classList.add('flash'); setTimeout(() => bar.classList.remove('flash'), 900); }
   });
 
