@@ -26,8 +26,13 @@ const CFG = {
   ua: env("UA", "keyless-llm/1.0"),
   cooldown429: int(env("CD429", 600), 600),      // 秒；限流冷却
   cooldown403: int(env("CD403", 3600), 3600),    // 秒；封禁冷却
-  probeSeconds: int(env("PROBE", 1800), 1800),   // 秒；自动轻探测间隔（0=关）
-  probeOnStart: int(env("PROBE_ON_START", 1), 1), // 启动时做一次轻探测（每模型 1 token）
+  // 探测默认关闭：免费来源的配额按请求数计，主动探测本身就在烧额度
+  // （31 个模型 × 每 30 分钟 = 62 次/小时，Kilo 的 200/h 配额三分之一没了）。
+  // 更优雅的做法是被动学习：真请求成功即标可用、429 即标限流，
+  // 未用过的模型显示「待验证」，auto 会按评分顺序试，撞到限流就换下一个。
+  // 需要全景时再手动探测（Web 控制台按钮 / POST /v1/probe）。
+  probeSeconds: int(env("PROBE", 0), 0),        // 秒；0=关闭定时探测
+  probeOnStart: int(env("PROBE_ON_START", 0), 0), // 1=启动时探一轮（会消耗额度）
   modelsRefresh: int(env("MODELS_TTL", 1800), 1800),
   logDir: env("LOGDIR", path.join(__dirname, "logs")),
   catalogPath: env("CATALOG", path.join(__dirname, "models.catalog.json")),
@@ -61,7 +66,6 @@ const registry = new Map();             // key `${pid}/${model}` -> {pid, model,
 const state = new Map();                // key -> {state, stateAt, cooldownUntil, lastError, tps, ttft, lastUsedAt}
 const stats = { requests: 0, failovers: 0, tokensIn: 0, tokensOut: 0, startedAt: Date.now() };
 let lastProbeAt = 0, lastModelsAt = 0, probing = false;
-let egressScanning = false;             // 出口扫描进行中（避免并发切换 Clash 节点）
 
 // ── 来源配置 ──────────────────────────────────────────────────────
 function loadProviders() {
@@ -375,20 +379,25 @@ async function probeModel(key) {
 // （Kilo 200 次/小时），无脑重探会把自己的额度吃光。
 const PROBE_SKIP_UNKNOWN_MS = 30 * 60 * 1000;
 
-async function probeAll(force = false) {
-  if (probing) return;
+// 轻探测：每个模型发一次 max_tokens=1 的请求，只读状态码不读内容。
+// 注意这仍然消耗上游配额（一次请求就是一次），所以默认不开启，
+// 只在用户手动触发时执行；且支持 limit 上限，避免一次烧掉几十分钟配额。
+async function probeAll(force = false, limit = 0) {
+  if (probing) return { probed: 0, reason: "busy" };
   probing = true;
   try {
-    const keys = freeKeys().filter((k) => {
+    let keys = freeKeys().filter((k) => {
       if (force) return true;
       if (!available(k)) return false;
       const st = ensureState(k);
       if (st.state === "unknown" && Date.now() - (st.stateAt || 0) < PROBE_SKIP_UNKNOWN_MS) return false;
       return true;
     });
-    log("info", `probe ${keys.length} free models${force ? " (force)" : ""}`);
+    if (limit > 0) keys = keys.slice(0, limit);
+    log("info", `probe ${keys.length} free models${force ? " (force)" : ""}${limit ? ` limit=${limit}` : ""}`);
     for (const k of keys) { await probeModel(k); await sleep(500); }
     lastProbeAt = Date.now();
+    return { probed: keys.length };
   } finally { probing = false; }
 }
 
@@ -1065,38 +1074,12 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "GET" && url.pathname === "/v1/status") return sendJson(res, 200, statusPayload());
     if (req.method === "POST" && url.pathname === "/v1/probe") {
+      // 手动探测：会消耗每个模型 1 次请求额度，所以默认关闭、只在用户
+      // 明确要求时执行。limit 用于限制本轮最多探几个，避免一次烧光配额。
       const force = url.searchParams.get("force") === "1";
-      probeAll(force).catch(() => {});
-      return sendJson(res, 202, { accepted: true, force });
-    }
-    // 出口探测结果（多 IP 逐个实测，见 scripts/egress-scan.mjs）
-    // 与 /v1/status 同级：供本地面板读取，不做 key 校验
-    if (req.method === "GET" && url.pathname === "/v1/egress") {
-      let data = { results: [], scannedAt: 0 };
-      try {
-        data = JSON.parse(fs.readFileSync(path.join(__dirname, "egress.json"), "utf8"));
-      } catch {}
-      const age = data.scannedAt ? Math.floor((Date.now() - data.scannedAt) / 1000) : -1;
-      return sendJson(res, 200, { ...data, age, scanning: egressScanning });
-    }
-    if (req.method === "POST" && url.pathname === "/v1/egress/scan") {
-      if (egressScanning) return sendJson(res, 202, { accepted: false, reason: "scan already running" });
-      const models = url.searchParams.get("models") || "3";
-      egressScanning = true;
-      log("info", "egress scan: start");
-      const child = spawn(process.execPath, [path.join(__dirname, "scripts", "egress-scan.mjs"), "--models", models], {
-        cwd: __dirname,
-        stdio: "ignore",
-      });
-      child.on("exit", (code) => {
-        egressScanning = false;
-        log("info", `egress scan: done code=${code}`);
-      });
-      child.on("error", (e) => {
-        egressScanning = false;
-        log("error", `egress scan: ${e.message}`);
-      });
-      return sendJson(res, 202, { accepted: true, models });
+      const limit = int(url.searchParams.get("limit"), 0);
+      probeAll(force, limit).catch(() => {});
+      return sendJson(res, 202, { accepted: true, force, limit });
     }
 
     if (!authorize(req, url)) return sendJson(res, 401, { error: { message: "invalid api key", type: "authentication_error" } });
@@ -1177,6 +1160,8 @@ function statusPayload() {
     models, stats,
     lastProbeAt, nextProbeAt: lastProbeAt ? lastProbeAt + CFG.probeSeconds * 1000 : 0,
     probeSeconds: CFG.probeSeconds, probing,
+    // 探测策略：默认被动学习（0=不主动探测，状态由真实请求得出）
+    probeMode: CFG.probeSeconds > 0 ? "interval" : (CFG.probeOnStart ? "startup" : "passive"),
   };
 }
 
@@ -1252,3 +1237,25 @@ server.listen(CFG.port, CFG.host, () => {
     if (CFG.probeOnStart) probeAll(false).catch(() => {});
   });
 });
+
+// ── 父进程看门狗（launch.ps1 专用）───────────────────────────────
+// 启动器把自己的 PID 放进 KEYLESS_PARENT_PID。宿主窗口关闭/Ctrl+C/
+// 被强杀时，附着在同一控制台的网关通常会被一并终止；但个别终端
+// （Windows Terminal 某些路径、宿主被直接 kill）不会传播信号，
+// 网关会变成孤儿继续占端口。这里每 5 秒确认宿主还活着，死了就退出，
+// 保证「关窗即停」在所有路径下成立。直接 node server.mjs 无此变量，不受影响。
+if (process.env.KEYLESS_PARENT_PID) {
+  const parentPid = parseInt(process.env.KEYLESS_PARENT_PID, 10);
+  if (parentPid > 0) {
+    const watchdog = setInterval(() => {
+      try {
+        process.kill(parentPid, 0);   // 只探测存活，不发信号
+      } catch {
+        log("info", `父进程 ${parentPid} 已退出，网关随之停止`);
+        clearInterval(watchdog);
+        process.exit(0);
+      }
+    }, 5000);
+    watchdog.unref();                 // 不阻止进程自然退出
+  }
+}
