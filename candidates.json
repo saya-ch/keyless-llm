@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T10:16:58.498Z",
+  "generatedAt": "2026-10-27T09:53:42.398Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,13 +15,13 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 2
+      "found": 4
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 20
+      "found": 0
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
@@ -33,211 +33,97 @@
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 4
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 1
+      "found": 2
     },
     {
       "query": "public inference API free without key openai format",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 5
+      "found": 7
     }
   ],
   "candidates": [
     {
-      "label": "Puter.js",
-      "base": "https://developer.puter.com",
+      "label": "Puter AI",
+      "base": "https://api.puter.com",
       "testModel": null,
       "note": ""
     },
     {
       "label": "FreeLLMPool",
-      "base": "https://0xzr.github.io/freellmpool",
+      "base": "https://freellmpool.0xzr.workers.dev",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "SiliconFlow",
-      "base": "https://api.siliconflow.cn/v1",
+      "label": "FreeLLMPool Alt",
+      "base": "https://free-llm-api.0xzr.workers.dev",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "DeepInfra",
-      "base": "https://api.deepinfra.com/v1/openai",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Groq",
-      "base": "https://api.groq.com/openai/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Together AI",
-      "base": "https://api.together.xyz/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Hugging Face Inference API",
-      "base": "https://api-inference.huggingface.co/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Cloudflare Workers AI",
-      "base": "https://api.cloudflare.com/client/v4/accounts",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "OpenRouter",
-      "base": "https://openrouter.ai/api/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Moonshot AI",
-      "base": "https://api.moonshot.cn/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Alibaba Qwen",
-      "base": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Z.ai",
-      "base": "https://api.z.ai/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "302.AI",
-      "base": "https://api.302.ai/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Free-GPT",
-      "base": "https://api.free-gpt.xyz/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "OpenAI-SB",
-      "base": "https://api.openai-sb.com/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "LittleWheat",
-      "base": "https://chatapi.littlewheat.com/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "AIProxy",
-      "base": "https://api.aiproxy.io/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "GPTs.Vin",
-      "base": "https://api.gpts.vin/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "ChatAnywhere",
-      "base": "https://api.chatanywhere.tech/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "ProxyAPI",
-      "base": "https://api.proxyapi.com/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "AGiCTO",
-      "base": "https://api.agicto.cn/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "OhMyGPT",
-      "base": "https://api.ohmygpt.com/v1",
+      "label": "FreeLLMPool Domain",
+      "base": "https://api.freellmpool.com",
       "testModel": null,
       "note": ""
     },
     {
       "label": "TokenMix AI",
-      "base": "https://api.tokenmix.ai/v1",
+      "base": "https://tokenmix.ai",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "LaoZhang AI",
-      "base": "https://api.laozhang.ai/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "FreeRouter",
-      "base": "https://api.freerouter.ai/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Eden AI",
-      "base": "https://api.edenai.run/v2",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "AnyAPI",
-      "base": "https://api.anyapi.ai/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Free LLM",
-      "base": "https://api.free-llm.com/v1",
+      "label": "FreeLLM",
+      "base": "https://freellm.net",
       "testModel": null,
       "note": ""
     },
     {
       "label": "WisGate AI",
-      "base": "https://api.wisgate.ai/v1",
+      "base": "https://wisgate.ai",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "LMSpeed (benchmark site, may list endpoints)",
-      "base": "https://lmspeed.net",
+      "label": "YangMao AI",
+      "base": "https://yangmao.ai",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "freeinference.dev",
+      "label": "LMSpeed Free API",
+      "base": "https://lmspeed.net/zh/free",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "AITools Platform",
+      "base": "https://platform.aitools.cfd/docs",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Apidog Blog",
+      "base": "https://apidog.com",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Free Inference",
       "base": "https://freeinference.dev",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "freeinference.org",
-      "base": "http://freeinference.org",
+      "label": "Free Inferencing",
+      "base": "https://freeinferencing.com",
       "testModel": null,
       "note": ""
     },
@@ -248,14 +134,14 @@
       "note": ""
     },
     {
-      "label": "freeinferencing.com",
-      "base": "https://freeinferencing.com",
+      "label": "OpenRouter",
+      "base": "https://openrouter.ai",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "FreeLLM.net",
-      "base": "https://freellm.net",
+      "label": "Speka Blog",
+      "base": "https://speka.me/blog/free-openai-compatible-api",
       "testModel": null,
       "note": ""
     }
