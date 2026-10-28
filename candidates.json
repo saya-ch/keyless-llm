@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-27T09:53:42.398Z",
+  "generatedAt": "2026-10-28T10:40:40.499Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,7 +15,7 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 4
+      "found": 3
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -33,7 +33,7 @@
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 4
+      "found": 5
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
@@ -45,31 +45,25 @@
       "query": "public inference API free without key openai format",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 4
     }
   ],
   "candidates": [
     {
       "label": "Puter AI",
-      "base": "https://api.puter.com",
+      "base": "https://api.puter.com/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "FreeLLMPool",
-      "base": "https://freellmpool.0xzr.workers.dev",
+      "label": "Free LLM Pool",
+      "base": "https://0xzr.github.io/freellmpool",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "FreeLLMPool Alt",
-      "base": "https://free-llm-api.0xzr.workers.dev",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "FreeLLMPool Domain",
-      "base": "https://api.freellmpool.com",
+      "label": "Yangmao AI",
+      "base": "https://yangmao.ai",
       "testModel": null,
       "note": ""
     },
@@ -80,8 +74,20 @@
       "note": ""
     },
     {
-      "label": "FreeLLM",
-      "base": "https://freellm.net",
+      "label": "LaoZhang AI",
+      "base": "https://laozhang.ai",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "AnyAPI",
+      "base": "https://anyapi.ai",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Eden AI",
+      "base": "https://edenai.co",
       "testModel": null,
       "note": ""
     },
@@ -92,56 +98,38 @@
       "note": ""
     },
     {
-      "label": "YangMao AI",
-      "base": "https://yangmao.ai",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "LMSpeed Free API",
-      "base": "https://lmspeed.net/zh/free",
-      "testModel": null,
-      "note": ""
-    },
-    {
       "label": "AITools Platform",
-      "base": "https://platform.aitools.cfd/docs",
+      "base": "https://platform.aitools.cfd",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Apidog Blog",
-      "base": "https://apidog.com",
+      "label": "LMSpeed",
+      "base": "https://lmspeed.net",
       "testModel": null,
       "note": ""
     },
     {
       "label": "Free Inference",
+      "base": "http://freeinference.org",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Puter AI",
+      "base": "https://api.puter.com",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Openference",
+      "base": "https://openference.com",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Free Inference Dev",
       "base": "https://freeinference.dev",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Free Inferencing",
-      "base": "https://freeinferencing.com",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Logfare AI",
-      "base": "https://logfare.ai",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "OpenRouter",
-      "base": "https://openrouter.ai",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Speka Blog",
-      "base": "https://speka.me/blog/free-openai-compatible-api",
       "testModel": null,
       "note": ""
     }
