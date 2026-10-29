@@ -26,6 +26,11 @@ const has = (k) => argv.includes(k);
 const UA = "keyless-llm-validate/1.0";
 const TIMEOUT = 20000;
 
+// /models 返回 200 但解析不出模型名时，用常见模型名逐个试 chat。
+// 不少候选的 base 指向 API 路径，但 /models 格式不标准（或返回 HTML），
+// 直接判 not-keyless 会漏掉真正免鉴权的端点。
+const FALLBACK_MODELS = ["gpt-4o-mini", "gpt-3.5-turbo", "gpt-4o", "deepseek-chat", "qwen-turbo"];
+
 // ── 请求（绝不附带 Authorization / x-api-key / api-key 等任何鉴权头）──
 async function req(url, opts = {}) {
   const ctrl = new AbortController();
@@ -111,11 +116,44 @@ async function validateSource(base, modelHint) {
   if (models.length) report.models = models.slice(0, 50);
 
   // 2) chat/completions 匿名可用？—— 这是关键判定
-  const testModel = modelHint || models[0];
+  const testModel = modelHint || models[0] || null;
   if (!testModel) {
-    report.reasons.push("没有可用于对话测试的模型名（/models 拿不到，或未指定 --model）");
-    report.chatEndpoint = { status: mr.status, note: "跳过" };
-    report.verdict = "not-keyless";
+    // /models 拿不到或解析不出模型名：分两种情况，不能一律判死
+    if (!mr.ok) {
+      report.reasons.push(`/models 返回 ${mr.status}，无法枚举模型，也未指定 --model`);
+      report.chatEndpoint = { status: mr.status, note: "跳过" };
+      report.verdict = "not-keyless";
+      return report;
+    }
+    // /models 200 但解析不出模型名 —— 只有 base 确实指向 API 路径才值得试常见模型名
+    const looksApiPath = /\/(v\d+|api|openai)(\/|$)/i.test(new URL(base).pathname);
+    if (!looksApiPath) {
+      report.reasons.push("base 指向网站根路径而非 API 端点，/models 返回的不是模型清单");
+      report.chatEndpoint = { status: mr.status, note: "跳过" };
+      report.verdict = "not-keyless";
+      return report;
+    }
+    const tried = [];
+    for (const m of FALLBACK_MODELS) {
+      tried.push(m);
+      const r = await req(base + "/chat/completions", {
+        method: "POST",
+        body: JSON.stringify({ model: m, messages: [{ role: "user", content: "ping" }], max_tokens: 8, stream: false }),
+      });
+      const j = parseJson(r.text);
+      const real = looksLikeRealCompletion(j, r.text);
+      report.chatEndpoint = { status: r.status, model: m, real: real.ok, detail: real.reason };
+      report.modelTested = m;
+      if (r.status === 200 && real.ok) { report.verdict = "keyless"; report.ok = true; break; }
+      if (r.status === 401) { report.reasons.push(`chat 返回 401：需要鉴权（模型 ${m}）`); break; }
+      if (r.status === 403) { report.reasons.push(`chat 返回 403（模型 ${m}）`); break; }
+      if (r.status === 429) { report.reasons.push(`chat 返回 429：匿名额度受限（模型 ${m}）`); report.verdict = "limited"; report.ok = true; break; }
+      // 404 / 400：模型名可能不对，换下一个继续试
+    }
+    if (report.verdict !== "keyless" && report.verdict !== "limited") {
+      report.reasons.push(`常见模型名均无法匿名调用（试过 ${tried.join(", ")}）`);
+      report.verdict = "not-keyless";
+    }
     return report;
   }
   const cr = await req(base + "/chat/completions", {
