@@ -86,7 +86,7 @@
       "extraFree": [],
       "rate": "匿名额度极小，耗尽后 401",
       "enabled": false,
-      "comment": "2026-10-25 实测：匿名调用 gpt-oss-20b 首次成功，随后持续 401 UNAUTHORIZED（要求 key）。匿名层仅偶发可用，/models 的 405 个模型与 paid_only=false 元数据不可信。停用观察，若恢复再启用。",
+      "comment": "2026-10-29 复测：匿名调用 openai/gpt-5.4-nano 首次 200，随后连续 3 次 401「A valid API key is required」。匿名层仅偶发可用，需 key 才能稳定调用，停用观察。",
       "staticModels": [
         { "id": "openai/gpt-oss-20b", "context_length": 131072, "supported_parameters": ["tools"] }
       ]
@@ -122,14 +122,33 @@
       ]
     },
     {
+      "id": "llm7",
+      "label": "LLM7.io",
+      "base": "https://api.llm7.io/v1",
+      "modelsPath": "/models",
+      "freeRule": { "type": "field", "field": "tier", "value": "turbo" },
+      "extraFree": [],
+      "rate": "匿名 10 req/min（仅 turbo 集）",
+      "enabled": true,
+      "comment": "免 key 免账号，OpenAI 兼容。匿名仅 tier=turbo 的模型可用，pro 集需要付费 token。2026-10-29 实测 5 个 turbo 模型（gpt-oss:20b / minimax-m2.7 / mistral-Nemo / codestral / nemotron-3-nano:30b）全部 200。",
+      "staticModels": [
+        { "id": "nemotron-3-nano:30b", "context_length": 1000000, "tier": "turbo", "supported_parameters": ["tools"] },
+        { "id": "minimax-m2.7", "context_length": 180000, "tier": "turbo" },
+        { "id": "gpt-oss:20b", "context_length": 128000, "tier": "turbo", "supported_parameters": ["tools"] },
+        { "id": "mistral-Nemo-Instruct-2407", "context_length": 128000, "tier": "turbo" },
+        { "id": "codestral-latest", "context_length": 32000, "tier": "turbo" }
+      ]
+    },
+    {
       "id": "opencode",
       "label": "OpenCode",
       "base": "https://opencode.ai/inference/v1",
       "modelsPath": "/models",
       "freeRule": { "type": "contains", "value": "-free" },
       "extraFree": ["big-pickle", "beam-free", "grok-code"],
-      "rate": "按 IP（当前整体 429）",
+      "rate": "按 IP（匿名每日额度，当前 429）",
       "enabled": false,
+      "comment": "2026-10-29 复测：/models 200（82 个模型），但 chat 匿名返回 429「Free usage limit reached」，匿名每日额度已用尽或需 OpenCode 客户端身份。停用观察。",
       "staticModels": []
     }
   ]

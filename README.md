@@ -54,16 +54,19 @@ python scripts/make_lnk.py   # 生成 C:\Users\<你>\Desktop\keyless-llm.lnk
 
 ## 为什么做这个
 
-现在能用的免鉴权来源（2026-10-25 实测）：
+现在能用的免鉴权来源（2026-10-29 实测）：
 
-| 来源           | 端点                            | 免费模型 | 可用 | 限流           |
-| ------------ | ----------------------------- | ---- | -- | ------------ |
-| Kilo Code    | `api.kilo.ai/api/gateway`     | 16   | 12 | 200 次/小时/IP  |
-| Pollinations | `text.pollinations.ai/openai` | 1    | 1  | 4 次/分钟       |
-| BlockRun     | `blockrun.ai/api/v1`          | 5    | 4  | IP 限流，免费容量常满 |
-| OVHcloud     | `oai.endpoints.kepler.ai.cloud.ovh.net/v1` | 7 | 新增，待巡检 | 2 次/分钟/IP/模型 |
+| 来源           | 端点                            | 免费模型 | 限流           |
+| ------------ | ----------------------------- | ---- | ------------ |
+| Kilo Code    | `api.kilo.ai/api/gateway`     | 16   | 200 次/小时/IP  |
+| Pollinations | `text.pollinations.ai/openai` | 1    | 4 次/分钟       |
+| BlockRun     | `blockrun.ai/api/v1`          | 4    | IP 限流，免费容量常满 |
+| OVHcloud     | `oai.endpoints.kepler.ai.cloud.ovh.net/v1` | 7 | 2 次/分钟/IP/模型 |
+| Vireonix     | `vireonix.ai/v1`              | 1    | 20M 入/200K 出 tokens 每小时/IP |
+| ch.at        | `ch.at/v1`                    | 1    | 公平使用，未公开限额 |
+| LLM7.io      | `api.llm7.io/v1`              | 5    | 匿名 10 次/分钟 |
 
-合计 **4 个启用来源、29 个免费模型**，其中 beam-free 等支持 1M 上下文。这些模型是 `gpt-oss`、`nemotron-3-ultra`、`beam-free`、`north-mini-code` 这类开源权重模型，跑在 NVIDIA、Poolside、Cohere 等基础设施上。另有 2 个来源（pollinations-gen、opencode）停用观察中，见[来源](#来源)。
+合计 **7 个启用来源**，免费模型 30+ 个，其中 beam-free、nemotron-3-nano 等支持 1M 上下文。这些模型是 `gpt-oss`、`nemotron`、`beam-free`、`north-mini-code` 这类开源权重模型，跑在 NVIDIA、Poolside、Cohere 等基础设施上。另有 2 个来源（pollinations-gen、opencode）停用观察中，见[来源](#来源)。
 
 问题在于它们不能直接拼在一起用：
 
@@ -138,6 +141,7 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
 | `ovh`          | `oai.endpoints.kepler.ai.cloud.ovh.net/v1` | `staticModels` 手工收录 | 2 req/min/IP/模型，匿名层，欧盟节点。只收对话模型——embedding/TTS/内容安全分类器一律不收 |
 | `vireonix`     | `vireonix.ai/v1`              | `staticModels` 手工收录 | 免 key 免账号，唯一模型 `auto`（1M ctx 路由），20M 入/200K 出 tokens 每小时每 IP |
 | `chat`         | `ch.at/v1`                    | `staticModels` 手工收录 | 免 key OpenAI 兼容代理，接受任意模型名；`/models` 是假的（把请求也当聊天），只能静态声明 |
+| `llm7`         | `api.llm7.io/v1`              | `tier == "turbo"`      | 免 key 免账号，匿名 10 req/min；仅 turbo 集 5 个模型可用，pro 集需付费 token |
 | `pollinations-gen` | `gen.pollinations.ai/v1`  | 全部                    | **已停用**：匿名额度极小，耗尽后 401，恢复前不启用 |
 | `opencode`     | `opencode.ai/inference/v1`    | id 含 `-free`          | **已停用**，匿名额度整体 429      |
 
