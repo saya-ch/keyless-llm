@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-28T09:51:01.306Z",
+  "generatedAt": "2026-10-29T10:12:03.964Z",
   "env": "ci",
   "summary": {
     "providers": 6,
@@ -17,10 +17,10 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 402,
+      "modelsFound": 389,
       "freeModels": 16,
-      "ok": 11,
-      "limited": 4,
+      "ok": 12,
+      "limited": 3,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -44,9 +44,9 @@
         },
         {
           "model": "recursive/flint-v1.0:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "xingchen-agi/xing4.0-29b-a4b:free",
@@ -62,9 +62,9 @@
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -92,9 +92,9 @@
         },
         {
           "model": "nvidia/nemotron-3.5-content-safety:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -164,9 +164,9 @@
       "models": [
         {
           "model": "nvidia/gpt-oss-120b",
-          "status": 429,
+          "status": -1,
           "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Message @bc1max on Telegram for help."
+          "error": "TIMEOUT"
         },
         {
           "model": "nvidia/deepseek-v4-flash",
@@ -188,9 +188,9 @@
         },
         {
           "model": "nvidia/mistral-nemotron",
-          "status": 429,
+          "status": -1,
           "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Message @bc1max on Telegram for help."
+          "error": "TIMEOUT"
         }
       ],
       "failStreak": 0,
@@ -205,16 +205,16 @@
       "modelsError": "",
       "modelsFound": 7,
       "freeModels": 7,
-      "ok": 7,
-      "limited": 0,
+      "ok": 6,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "Qwen3.8-27B",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "Qwen3.6-27B",
