@@ -12,8 +12,8 @@ name: discover
 #   agent 负责 —— 搜索 + 语义判断 + 产出候选（candidates.json）
 #   脚本负责 —— 实测候选是否真的免鉴权（validate-source.mjs）
 #
-# 本 workflow 只在有 agent 运行环境时启用（例如设置了 OPENAI_API_KEY）。
-# 未配置 key 时自动跳过，不影响仓库的日常 CI。
+# 本 workflow 零配置可跑：优先用网关自举，网关不通时降级到直连或纯规则提取。
+# 即使没有任何 LLM 后端，也仍会产出候选清单，不影响仓库的日常 CI。
 
 on:
   schedule:
@@ -28,11 +28,6 @@ on:
 
 permissions:
   contents: write
-  # 让 GITHUB_TOKEN 能调用 GitHub Models 作为 agent 的 LLM 后端。
-  # 为什么不用我们的网关：GitHub Actions 是共享出口 IP，
-  # 免费来源普遍按 IP 限流，网关在 CI 上很可能一到就全部 429。
-  # GitHub Models 走官方通道，零配置、无 secret，是 CI 场景的可靠后端。
-  models: read
 
 concurrency:
   group: discover
@@ -46,7 +41,7 @@ jobs:
     #
     # agent 的 LLM 后端优先级：
     #   ① 本项目自己的网关（自举，零成本）—— CI 共享出口 IP 可能被限流，不一定通
-    #   ② GitHub Models（GITHUB_TOKEN，零配置）—— 走官方通道，最可靠
+    #   ② 直连上游（需自备 AGENT_BASE_URL / AGENT_API_KEY，未配置则跳过）
     #   ③ 纯规则提取（完全不用 LLM）
     # 降级链在脚本内部，任何一档失败都不会让 job 失败。
     env:
@@ -106,13 +101,11 @@ jobs:
           else
             echo "usable=false" >> "$GITHUB_OUTPUT"
             echo "### 网关自检：不可用（HTTP $code）" >> "$GITHUB_STEP_SUMMARY"
-            echo "CI 共享出口 IP 大概率被免费来源限流，agent 降级到 GitHub Models。" >> "$GITHUB_STEP_SUMMARY"
+            echo "CI 共享出口 IP 大概率被免费来源限流，agent 降级到直连或纯规则提取。" >> "$GITHUB_STEP_SUMMARY"
             head -c 300 /tmp/gw.json >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
           fi
 
       - name: Agent 搜索并产出候选来源
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/discover-with-agent.mjs
 
       - name: 实测候选是否真的免鉴权

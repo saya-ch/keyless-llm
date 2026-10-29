@@ -42,14 +42,6 @@ const DIRECT_BASE = (process.env.AGENT_BASE_URL || "").replace(/\/+$/, "");
 const DIRECT_KEY = process.env.AGENT_API_KEY || "";
 const DIRECT_MODEL = process.env.AGENT_MODEL || "gpt-4o-mini";
 
-// GitHub Models：GitHub Actions 内置 GITHUB_TOKEN 就能用（需 permissions: models: read）
-// 这是 CI 场景最可靠的 LLM 后端 —— 免费来源按 IP 限流，
-// GitHub Actions 的共享出口 IP 很可能在网关侧就已经 429 了，
-// 而 GitHub Models 走官方通道，不受这个影响，且零配置、无 secret。
-const GH_MODELS_BASE = "https://models.github.ai/inference";
-const GH_TOKEN = process.env.GITHUB_TOKEN || "";
-const GH_MODEL = process.env.GH_MODELS_MODEL || "openai/gpt-4o-mini";
-
 const UA_BROWSER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36";
 
 const DEFAULT_QUERIES = [
@@ -185,31 +177,6 @@ async function callGateway(prompt) {
   return { text: txt, model: j.model };
 }
 
-// GitHub Models：CI 里最可靠的一档（零配置，走官方通道不受免费来源限流影响）
-async function callGitHubModels(prompt) {
-  if (!GH_TOKEN) throw new Error("未设置 GITHUB_TOKEN（workflow 需 permissions: models: read）");
-  const r = await fetch(`${GH_MODELS_BASE}/chat/completions`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${GH_TOKEN}` },
-    body: JSON.stringify({
-      model: GH_MODEL, max_tokens: 1500, stream: false,
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: prompt },
-      ],
-    }),
-    signal: AbortSignal.timeout(TIMEOUT),
-  });
-  if (!r.ok) {
-    const t = await r.text().catch(() => "");
-    throw new Error(`GitHubModels ${r.status}: ${t.slice(0, 160)}`);
-  }
-  const j = await r.json();
-  const txt = j.choices?.[0]?.message?.content || "";
-  if (!txt.trim()) throw new Error("GitHubModels 返回空内容");
-  return { text: txt, model: GH_MODEL };
-}
-
 // 直连兜底
 async function callDirect(prompt) {
   if (!DIRECT_BASE || !DIRECT_KEY) throw new Error("未配置 AGENT_BASE_URL / AGENT_API_KEY");
@@ -255,13 +222,10 @@ function ruleExtract(links) {
 async function llmExtract(prompt, links) {
   // 顺序即优先级：
   //   网关   —— 本地最快，且自举（用我们聚合的免费模型跑我们自己的维护任务）
-  //   GitHub Models —— CI 最可靠：共享出口 IP 容易把免费来源打限流，
-  //                   而 GITHUB_TOKEN 走官方通道不受影响，且零配置
   //   直连   —— 用户自备 key 时的兜底
   //   规则   —— 完全不用 LLM 也能出结果
   const backends = [
     { name: "网关(auto)", fn: callGateway },
-    { name: "GitHubModels", fn: callGitHubModels },
     { name: "直连API", fn: callDirect },
   ];
   for (const be of backends) {

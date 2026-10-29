@@ -234,7 +234,7 @@ curl http://127.0.0.1:8788/v1/chat/completions \
 | workflow            | 触发                                | 作用                                     |
 | ------------------ | --------------------------------- | -------------------------------------- |
 | `probe.yml`        | 每日 UTC 3:17 + 改 `providers.json` 时        | 探测全部来源，自动提交 `snapshots/status.json` |
-| `discover.yml`     | 每日 UTC 4:23（**零配置**，`GITHUB_TOKEN` 即可）   | agent 搜索新来源 → 候选清单 → 实测        |
+| `discover.yml`     | 每日 UTC 4:23（**零配置**）   | agent 搜索新来源 → 候选清单 → 实测        |
 | `validate-source.yml` | 改动 `providers.json` 的 PR        | **硬门禁**：新增来源必须通过免鉴权实测，不通过就 fail |
 
 ### 用法
@@ -256,7 +256,7 @@ node scripts/validate-source.mjs --base https://example.com/api/v1 --model xxx
 
 429 判成 `limited` 而不是 `not-keyless` 是个刻意的区分：前者说明「不需要 key」这件事成立，只是此刻没额度；后者说明它根本不是免鉴权来源。
 
-`discover.yml` 零配置可跑：CI 的 agent 优先用网关自举，不通就自动降级到 GitHub Models（内置 `GITHUB_TOKEN`），最后还有纯规则提取兜底。
+`discover.yml` 零配置可跑：CI 的 agent 优先用网关自举，不通就自动降级到直连（需自备 `AGENT_BASE_URL` / `AGENT_API_KEY`），最后还有纯规则提取兜底。
 
 **加一个新来源的完整流程**：
 
@@ -279,7 +279,7 @@ node scripts/validate-source.mjs --file candidates.json
 | 档位 | 后端 | 特点 |
 | --- | --- | --- |
 | ① | **本项目自己的网关** `model=auto` | **自举**：先起网关，用聚合来的免费模型维护聚合清单，零成本 |
-| ② | **GitHub Models**（`GITHUB_TOKEN`） | `permissions: models: read` + 内置 token，**零配置、无 secret、免费** |
+| ② | 直连上游（`AGENT_BASE_URL` / `AGENT_API_KEY`） | 自备 key 时的兜底，未配置则跳过 |
 | ③ | 纯规则提取 | 完全不用 LLM，从搜索结果里按特征挑 URL |
 
 为什么需要第 ② 档——GitHub Actions 是**共享出口 IP**：
@@ -292,7 +292,7 @@ node scripts/validate-source.mjs --file candidates.json
 
 ```
 ### 网关自检：可用（实际模型 `kilo/...`）    ← 走自举，零成本
-### 网关自检：不可用（HTTP 429）            ← 降级到 GitHub Models
+### 网关自检：不可用（HTTP 429）            ← 降级到直连或纯规则提取
 ```
 
 跑几次就能看出实际比例，不用猜。
