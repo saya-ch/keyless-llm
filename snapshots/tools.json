@@ -1,0 +1,223 @@
+{
+  "generatedAt": "2026-10-29T12:27:00.850Z",
+  "env": "local",
+  "summary": {
+    "checked": 26,
+    "confirmed": 21,
+    "text": 1,
+    "rejected": 0,
+    "missing": 0,
+    "plain": 2,
+    "inconclusive": 2
+  },
+  "models": [
+    {
+      "id": "blockrun/nvidia/gpt-oss-120b",
+      "provider": "blockrun",
+      "label": "BlockRun",
+      "status": 200,
+      "verdict": "tools_text",
+      "detail": "200，工具调用以文本泄漏，无结构化 tool_calls"
+    },
+    {
+      "id": "blockrun/nvidia/mistral-nemotron",
+      "provider": "blockrun",
+      "label": "BlockRun",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "blockrun/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "provider": "blockrun",
+      "label": "BlockRun",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "blockrun/nvidia/step-3.7-flash",
+      "provider": "blockrun",
+      "label": "BlockRun",
+      "status": 429,
+      "verdict": "inconclusive",
+      "detail": "429 限流"
+    },
+    {
+      "id": "kilo/cohere/north-mini-code:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/dots-studio/dots-3-note-preview:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/kilo-auto/free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/liquid/lfm-2.5-2.6b:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "text_only",
+      "detail": "200，未调用工具（可能模型选择直接回答）"
+    },
+    {
+      "id": "kilo/nvidia/nemotron-3.5-lightning:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/nvidia/nemotron-3.5-super-vl:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/openrouter/free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/poolside/laguna-s-2.1:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/poolside/laguna-xs-2.1:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/recursive/flint-v1.0:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/reflection/beam-free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "kilo/xingchen-agi/xing4.0-29b-a4b:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 429,
+      "verdict": "inconclusive",
+      "detail": "429 限流"
+    },
+    {
+      "id": "ovh/gpt-oss-120b",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "ovh/Meta-Llama-3_3-70B-Instruct",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "ovh/Mistral-Small-3.2-24B-Instruct-2506",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "ovh/Qwen3.5-397B-A17B",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "ovh/Qwen3.5-9B",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "ovh/Qwen3.6-27B",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 200,
+      "verdict": "text_only",
+      "detail": "200，未调用工具（可能模型选择直接回答）"
+    },
+    {
+      "id": "ovh/Qwen3.8-27B",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "pollinations/openai-fast",
+      "provider": "pollinations",
+      "label": "Pollinations",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "vireonix/auto",
+      "provider": "vireonix",
+      "label": "Vireonix",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    }
+  ]
+}

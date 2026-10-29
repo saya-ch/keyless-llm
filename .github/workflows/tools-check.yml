@@ -1,0 +1,83 @@
+name: tools-check
+
+# 工具调用能力巡检：确认 auto 池候选模型真的支持结构化 tool_calls
+# （v2 触发索引）
+#
+# 为什么单独一条：
+#   /models 的 supported_parameters 只是声明，不等于可用。
+#   实测踩到过 chat 的 gpt-4o-mini 声明可用但 HTTP 400「Tool calling is not supported」，
+#   以及 kilo 的 nemotron-3-ultra 把工具调用以文本泄漏、没有结构化 tool_calls。
+#   这类差异只能靠带 tools 的真实请求验证，probe.yml 的轻探测（max_tokens=1）看不出来。
+#
+# 为什么不每天跑：
+#   免费来源按请求数计额度，每个模型一次请求。每周一次足够发现「声明与实现不一致」，
+#   又不会和每天的 probe / discover 抢配额。需要时手动 workflow_dispatch 立刻跑。
+
+on:
+  schedule:
+    # 每周一 UTC 5:00（北京时间 13:00），避开 probe（3:17）和 discover（4:23）
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tools-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 探测工具调用能力
+        env:
+          # 标注探测环境：CI 共享出口 IP 更容易被限流
+          KEYLESS_PROBE_ENV: ci
+        run: node scripts/probe-tools.mjs --out snapshots/tools.json
+
+      - name: 校验快照格式
+        run: |
+          node -e '
+            const s = require("./snapshots/tools.json");
+            if (!s.generatedAt) throw new Error("缺少 generatedAt");
+            if (!Array.isArray(s.models) || !s.models.length) throw new Error("快照为空");
+            console.log("环境:", s.env || "(未标注)");
+            console.log("汇总:", JSON.stringify(s.summary));
+            for (const m of s.models) {
+              if (m.verdict === "tools_rejected") console.warn(`⚠ ${m.id} 明确不支持工具调用`);
+              if (m.verdict === "model_missing") console.warn(`⚠ ${m.id} 模型已失效（404）`);
+            }
+          '
+
+      - name: 提交快照
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add snapshots/tools.json
+          if git diff --staged --quiet; then
+            echo "快照无变化"
+          else
+            git commit -m "chore(snapshot): 更新工具调用能力快照"
+            # probe / discover 可能同时在跑，沿用它们的并发处理方式：
+            # 软重置到远端最新再重放，不做 rebase 合并
+            ok=0
+            for i in 1 2 3 4; do
+              git fetch origin "$GITHUB_REF_NAME" || { sleep 10; continue; }
+              if git reset --soft "origin/$GITHUB_REF_NAME"; then
+                git add snapshots/tools.json
+                git commit -m "chore(snapshot): 更新工具调用能力快照"
+                if git push; then ok=1; break; fi
+              fi
+              echo "push 第${i}次被拒（并发提交竞争），10s 后重试"
+              sleep 10
+            done
+            [ "$ok" = "1" ] || { echo "::error::push 重试 4 次仍失败"; exit 1; }
+          fi

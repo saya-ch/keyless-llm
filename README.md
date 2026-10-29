@@ -184,6 +184,8 @@ curl http://127.0.0.1:8788/v1/chat/completions \
 
 被排除的模型通过显式模型名仍然可以访问，auto 只是不再自动选它们。
 
+`tools` 的判定分两层：`providers.json` 里显式标注的 `tools: false` 优先级最高（实测确认不支持的就标上），其余靠各来源 `/models` 的元数据，未知的不误杀。`tools-check.yml` 每周用一次真实的 `tool_calls` 请求复核，结果落在 `snapshots/tools.json`——因为「声明支持」和「实际返回结构化 tool_calls」是两回事（遇到过声明支持但把工具调用当文本输出的端点）。
+
 ### 怎么选、怎么重试
 
 `auto` 对每个可用模型打分取最高：健康状态（`healthy` ≫ `unknown` ≫ `limited`）> 实测 TPS/TTFT > 上下文长度 > 确认支持 tools 加分 > 冷却剩余（负分）> 空闲时长（轻微正分，避免单模型被反复消耗）。
@@ -236,6 +238,7 @@ curl http://127.0.0.1:8788/v1/chat/completions \
 | `probe.yml`        | 每日 UTC 3:17 + 改 `providers.json` 时        | 探测全部来源，自动提交 `snapshots/status.json` |
 | `discover.yml`     | 每日 UTC 4:23（**零配置**）   | agent 搜索新来源 → 候选清单 → 实测        |
 | `validate-source.yml` | 改动 `providers.json` 的 PR        | **硬门禁**：新增来源必须通过免鉴权实测，不通过就 fail |
+| `tools-check.yml`  | 每周一 UTC 5:00 + 手动              | 实测 auto 池候选的工具调用能力，自动提交 `snapshots/tools.json` |
 
 ### 用法
 
