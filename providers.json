@@ -16,8 +16,7 @@
         "recursive/flint-v1.0:free",
         "nvidia/nemotron-3.5-super-vl:free",
         "nvidia/nemotron-3.5-lightning:free",
-        "nvidia/nemotron-3-ultra-550b-a55b:free",
-        "nvidia/nemotron-3-super-120b-a12b:free",
+        { "id": "nvidia/nemotron-3-ultra-550b-a55b:free", "tools": false, "comment": "2026-10-29 实测：Kilo 端点返回文本格式工具调用（content 泄漏 [[{name,...}]]），无结构化 tool_calls，对 agent 不可用；模型本身支持，等上游修解析器后可改回" },
         "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
         "poolside/laguna-s-2.1:free",
         "poolside/laguna-xs-2.1:free",
@@ -51,7 +50,6 @@
       "enabled": true,
       "staticModels": [
         "nvidia/gpt-oss-120b",
-        "nvidia/deepseek-v4-flash",
         "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
         "nvidia/step-3.7-flash",
         "nvidia/mistral-nemotron"
@@ -120,7 +118,7 @@
       "enabled": true,
       "comment": "免 key 的 OpenAI 兼容代理，接受任意模型名。/models 不返回真实清单（把请求也当聊天回答），只能静态声明。ctx 未知 → 不进 auto 池，靠显式模型名访问。",
       "staticModels": [
-        { "id": "gpt-4o-mini" }
+        { "id": "gpt-4o-mini", "tools": false, "comment": "2026-10-29 实测：HTTP 400 Tool calling is not supported，仅文本对话，不进 auto 池" }
       ]
     },
     {

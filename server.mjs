@@ -129,7 +129,7 @@ function addModel(p, m) {
   const tools = (Array.isArray(sp) && (sp.includes("tools") || sp.includes("tool_choice")))
     || caps.tools === true || m.tools === true
     ? true
-    : (Array.isArray(sp) && sp.length && !sp.includes("tools") && !sp.includes("tool_choice")) || caps.tools === false
+    : m.tools === false || (Array.isArray(sp) && sp.length && !sp.includes("tools") && !sp.includes("tool_choice")) || caps.tools === false
       ? false
       : null;
   if (!registry.has(key)) {
