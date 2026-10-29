@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-10-29T12:34:31.690Z",
+  "generatedAt": "2026-10-29T12:55:03.097Z",
   "env": "ci",
   "summary": {
-    "providers": 6,
-    "freeModels": 29,
-    "healthy": 26,
-    "limited": 3,
+    "providers": 7,
+    "freeModels": 34,
+    "healthy": 28,
+    "limited": 6,
     "blocked": 0,
     "failed": 0
   },
@@ -151,8 +151,8 @@
       "modelsError": "",
       "modelsFound": 4,
       "freeModels": 4,
-      "ok": 3,
-      "limited": 1,
+      "ok": 2,
+      "limited": 2,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -164,9 +164,9 @@
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "nvidia/step-3.7-flash",
@@ -193,16 +193,16 @@
       "modelsError": "",
       "modelsFound": 7,
       "freeModels": 7,
-      "ok": 7,
-      "limited": 0,
+      "ok": 6,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "Qwen3.8-27B",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "Qwen3.6-27B",
@@ -253,19 +253,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 1,
-      "limited": 0,
+      "ok": 0,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 502,
+          "state": "limited",
+          "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 0,
+      "failStreak": 1,
       "suggestDead": false
     },
     {
@@ -284,6 +284,54 @@
       "models": [
         {
           "model": "gpt-4o-mini",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        }
+      ],
+      "failStreak": 0,
+      "suggestDead": false
+    },
+    {
+      "id": "llm7",
+      "label": "LLM7.io",
+      "enabled": true,
+      "base": "https://api.llm7.io/v1",
+      "rate": "匿名 10 req/min（仅 turbo 集）",
+      "modelsError": "",
+      "modelsFound": 67,
+      "freeModels": 5,
+      "ok": 5,
+      "limited": 0,
+      "blocked": 0,
+      "failed": 0,
+      "models": [
+        {
+          "model": "codestral-latest",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "gpt-oss:20b",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "minimax-m2.7",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "mistral-Nemo-Instruct-2407",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nemotron-3-nano:30b",
           "status": 200,
           "state": "healthy",
           "error": ""
