@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-10-29T12:55:03.097Z",
+  "generatedAt": "2026-10-29T13:41:14.843Z",
   "env": "ci",
   "summary": {
     "providers": 7,
-    "freeModels": 34,
-    "healthy": 28,
-    "limited": 6,
+    "freeModels": 37,
+    "healthy": 33,
+    "limited": 4,
     "blocked": 0,
     "failed": 0
   },
@@ -19,8 +19,8 @@
       "modelsError": "",
       "modelsFound": 388,
       "freeModels": 15,
-      "ok": 13,
-      "limited": 2,
+      "ok": 15,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -50,9 +50,9 @@
         },
         {
           "model": "xingchen-agi/xing4.0-29b-a4b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "dots-studio/dots-3-note-preview:free",
@@ -62,9 +62,9 @@
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -170,15 +170,15 @@
         },
         {
           "model": "nvidia/step-3.7-flash",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
-        },
-        {
-          "model": "nvidia/mistral-nemotron",
           "status": 200,
           "state": "healthy",
           "error": ""
+        },
+        {
+          "model": "nvidia/mistral-nemotron",
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         }
       ],
       "failStreak": 0,
@@ -191,9 +191,9 @@
       "base": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
       "rate": "2 req/min/IP/模型（匿名层，欧盟节点）",
       "modelsError": "",
-      "modelsFound": 7,
-      "freeModels": 7,
-      "ok": 6,
+      "modelsFound": 10,
+      "freeModels": 10,
+      "ok": 9,
       "limited": 1,
       "blocked": 0,
       "failed": 0,
@@ -229,6 +229,12 @@
           "error": ""
         },
         {
+          "model": "gpt-oss-20b",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
           "model": "Meta-Llama-3_3-70B-Instruct",
           "status": 200,
           "state": "healthy",
@@ -236,6 +242,18 @@
         },
         {
           "model": "Mistral-Small-3.2-24B-Instruct-2506",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "Qwen2.5-VL-72B-Instruct",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "Mistral-Nemo-Instruct-2407",
           "status": 200,
           "state": "healthy",
           "error": ""
@@ -265,7 +283,7 @@
           "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 1,
+      "failStreak": 2,
       "suggestDead": false
     },
     {
