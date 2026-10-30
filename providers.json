@@ -154,6 +154,38 @@
       "enabled": false,
       "comment": "2026-10-29 复测：/models 200（82 个模型），但 chat 匿名返回 429「Free usage limit reached」，匿名每日额度已用尽或需 OpenCode 客户端身份。停用观察。",
       "staticModels": []
+    },
+    {
+      "id": "zhipu",
+      "label": "智谱 GLM",
+      "base": "https://open.bigmodel.cn/api/paas/v4",
+      "modelsPath": "/models",
+      "discover": false,
+      "freeRule": { "type": "all" },
+      "apiKeyEnv": "ZHIPU_API_KEY",
+      "rate": "免费模型 glm-4.7-flash / glm-4-flash（注册领 key，免费）",
+      "enabled": true,
+      "comment": "需要注册 key（免费）：https://open.bigmodel.cn/ 。未配置 ZHIPU_API_KEY 时该来源自动跳过，不参与调度。",
+      "staticModels": [
+        { "id": "glm-4.7-flash", "context_length": 131072, "supported_parameters": ["tools"] },
+        { "id": "glm-4-flash-250414", "context_length": 131072, "supported_parameters": ["tools"] }
+      ]
+    },
+    {
+      "id": "groq",
+      "label": "Groq",
+      "base": "https://api.groq.com/openai/v1",
+      "modelsPath": "/models",
+      "discover": false,
+      "freeRule": { "type": "all" },
+      "apiKeyEnv": "GROQ_API_KEY",
+      "rate": "免费层 30 RPM / 1000 RPD（注册领 key，免费）",
+      "enabled": true,
+      "comment": "需要注册 key（免费）：https://console.groq.com/ 。未配置 GROQ_API_KEY 时该来源自动跳过，不参与调度。",
+      "staticModels": [
+        { "id": "openai/gpt-oss-120b", "context_length": 131072, "supported_parameters": ["tools"] },
+        { "id": "openai/gpt-oss-20b", "context_length": 131072, "supported_parameters": ["tools"] }
+      ]
     }
   ]
 }
