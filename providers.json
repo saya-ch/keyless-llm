@@ -156,35 +156,20 @@
       "staticModels": []
     },
     {
-      "id": "zhipu",
-      "label": "智谱 GLM",
-      "base": "https://open.bigmodel.cn/api/paas/v4",
+      "id": "aihorde",
+      "label": "AI Horde",
+      "base": "https://aihorde.net/api/v2",
       "modelsPath": "/models",
       "discover": false,
       "freeRule": { "type": "all" },
-      "apiKeyEnv": "ZHIPU_API_KEY",
-      "rate": "免费模型 glm-4.7-flash / glm-4-flash（注册领 key，免费）",
+      "api": "ai-horde",
+      "apiKey": "0000000000",
+      "rate": "公开匿名 key（0000000000），社区众包算力；排队 0~40+，生成通常 3~10s",
       "enabled": true,
-      "comment": "需要注册 key（免费）：https://open.bigmodel.cn/ 。未配置 ZHIPU_API_KEY 时该来源自动跳过，不参与调度。",
+      "comment": "官方公开的匿名 key 0000000000，无需注册。非 OpenAI 兼容：网关负责异步提交+轮询，只支持非流式。模型来自社区 worker，可用性会波动。",
       "staticModels": [
-        { "id": "glm-4.7-flash", "context_length": 131072, "supported_parameters": ["tools"] },
-        { "id": "glm-4-flash-250414", "context_length": 131072, "supported_parameters": ["tools"] }
-      ]
-    },
-    {
-      "id": "groq",
-      "label": "Groq",
-      "base": "https://api.groq.com/openai/v1",
-      "modelsPath": "/models",
-      "discover": false,
-      "freeRule": { "type": "all" },
-      "apiKeyEnv": "GROQ_API_KEY",
-      "rate": "免费层 30 RPM / 1000 RPD（注册领 key，免费）",
-      "enabled": true,
-      "comment": "需要注册 key（免费）：https://console.groq.com/ 。未配置 GROQ_API_KEY 时该来源自动跳过，不参与调度。",
-      "staticModels": [
-        { "id": "openai/gpt-oss-120b", "context_length": 131072, "supported_parameters": ["tools"] },
-        { "id": "openai/gpt-oss-20b", "context_length": 131072, "supported_parameters": ["tools"] }
+        { "id": "wicked-tutu-26b-w8a16", "context_length": 4096 },
+        { "id": "koboldcpp/gemma-4-31B-it-heretic", "context_length": 4096 }
       ]
     }
   ]

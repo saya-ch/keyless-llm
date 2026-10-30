@@ -148,8 +148,7 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
 | `vireonix`     | `vireonix.ai/v1`              | `staticModels` 手工收录 | 免 key 免账号，唯一模型 `auto`（1M ctx 路由），20M 入/200K 出 tokens 每小时每 IP |
 | `chat`         | `ch.at/v1`                    | `staticModels` 手工收录 | 免 key OpenAI 兼容代理，接受任意模型名；`/models` 是假的（把请求也当聊天），只能静态声明 |
 | `llm7`         | `api.llm7.io/v1`              | `tier == "turbo"`      | 免 key 免账号，匿名 10 req/min；仅 turbo 集 5 个模型可用，pro 集需付费 token |
-| `zhipu`        | `open.bigmodel.cn/api/paas/v4` | 全部 + `apiKeyEnv`     | **需 key**（免费注册）：glm-4.7-flash 等；未配 `ZHIPU_API_KEY` 时自动跳过 |
-| `groq`         | `api.groq.com/openai/v1`      | 全部 + `apiKeyEnv`     | **需 key**（免费注册）：gpt-oss-120b/20b；未配 `GROQ_API_KEY` 时自动跳过 |
+| `aihorde`      | `aihorde.net/api/v2`          | `staticModels` 手工收录 | **公开匿名 key**（`0000000000`），社区众包算力；非 OpenAI 兼容，网关适配异步提交+轮询，仅非流式 |
 | `pollinations-gen` | `gen.pollinations.ai/v1`  | 全部                    | **已停用**：匿名额度极小，耗尽后 401，恢复前不启用 |
 | `opencode`     | `opencode.ai/inference/v1`    | id 含 `-free`          | **已停用**，匿名额度整体 429      |
 

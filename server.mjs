@@ -629,6 +629,59 @@ function gateAcquire(pid) {
   return new Promise((resolve) => g.waiters.push(() => { g.active++; resolve(release); }));
 }
 
+// AI Horde：公开匿名 key（0000000000，官方文档写明），非 OpenAI 兼容——
+// 协议是「提交异步任务 → 轮询状态 → 取文本」。网关把 OpenAI chat 请求翻译成它的格式。
+// 只支持一次性返回；流式请求由 handler 降级为非流式。
+async function callAiHordeUpstream(p, key, body, timeoutMs) {
+  const base = p.base.replace(/\/+$/, "");
+  const prompt = (body.messages || []).map((m) => {
+    const role = m.role === "system" ? "System" : m.role === "assistant" ? "Assistant" : "User";
+    const c = typeof m.content === "string" ? m.content : JSON.stringify(m.content ?? "");
+    return `${role}: ${c}`;
+  }).join("\n") + "\nAssistant:";
+  const maxLen = Math.min(512, Number(body.max_tokens) || 256);
+  const modelList = (p.staticModels || [])
+    .map((m) => (typeof m === "string" ? m : m.id))
+    .filter(Boolean).slice(0, 8);
+
+  const sub = await fetch(`${base}/generate/text/async`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "User-Agent": CFG.ua, apikey: p.apiKey || "0000000000" },
+    body: JSON.stringify({ prompt, params: { max_length: maxLen, max_context_length: 2048 }, models: modelList }),
+  });
+  if (!sub.ok) {
+    let msg = `${sub.status}`;
+    try { const j = await sub.json(); msg = j.message || j.error || msg; } catch {}
+    throw new UpstreamError(sub.status, "ai_horde", `AI Horde 提交失败: ${msg}`, key);
+  }
+  const { id } = await sub.json();
+  if (!id) throw new UpstreamError(502, "ai_horde", "AI Horde 未返回任务 id", key);
+
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    await sleep(1500);
+    let s = null;
+    try {
+      const st = await fetch(`${base}/generate/text/status/${id}`, { headers: { "User-Agent": CFG.ua } });
+      if (st.ok) s = await st.json();
+    } catch {}
+    if (!s) continue;
+    if (s.faulted) throw new UpstreamError(502, "ai_horde", `AI Horde 生成失败: ${s.faulted}`, key);
+    if (s.done) {
+      const text = s.generations?.[0]?.text || "";
+      if (!text) throw new UpstreamError(200, "empty_response", "AI Horde 返回空内容", key);
+      const payload = {
+        id: "chatcmpl-" + rid(), object: "chat.completion", created: Math.floor(Date.now() / 1000),
+        model: key,
+        choices: [{ index: 0, message: { role: "assistant", content: text }, finish_reason: "stop" }],
+        usage: { prompt_tokens: 0, completion_tokens: text.length, total_tokens: text.length },
+      };
+      return new Response(JSON.stringify(payload), { status: 200, headers: { "Content-Type": "application/json" } });
+    }
+  }
+  throw new UpstreamError(504, "ai_horde_timeout", `AI Horde 排队超时 (${Math.round(timeoutMs / 1000)}s)`, key);
+}
+
 async function callUpstream(key, body, stream, timeoutMs = 0) {
   const e = registry.get(key);
   const p = e && providerOf(key);
@@ -642,6 +695,11 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
 
   // 按来源协议转换请求体与路径（pivot = OpenAI Chat）
   const api = p.api || "openai-completions";
+  // AI Horde 走独立的异步协议，不走 fetch/SSE 那条路
+  if (api === "ai-horde") {
+    clearTimeout(timer);
+    return callAiHordeUpstream(p, key, body, ms);
+  }
   let url = `${p.base}/chat/completions`;
   let payload = { ...body, model: e.model, stream };
   if (api === "anthropic-messages") {
@@ -847,7 +905,7 @@ async function handleOpenAI(req, res, body) {
     reasoning_effort: body.reasoning_effort,
   }, stream);
   setModelHeader(res, model, failover);
-  if (!stream) {
+  if (!stream || api === "ai-horde") {
     const j = await up.json();
     tallyUsage(j.usage);
     // auto 模式下把响应体里的 model 换成实际选中的模型，方便排查
@@ -927,7 +985,7 @@ async function handleAnthropic(req, res, body) {
   const { res: up, model, failover, api } = await callWithRotation(body.model, oai, stream);
   setModelHeader(res, model, failover);
   const msgId = "msg_" + rid();
-  if (!stream) {
+  if (!stream || api === "ai-horde") {
     const j = await up.json();
     tallyUsage(j.usage);
     const m = j.choices?.[0]?.message ?? {};
@@ -1022,7 +1080,7 @@ async function handleResponses(req, res, body) {
   setModelHeader(res, model, failover);
   const respId = "resp_" + rid();
   const itemId = "msg_" + rid();
-  if (!stream) {
+  if (!stream || api === "ai-horde") {
     const j = await up.json();
     tallyUsage(j.usage);
     const m = j.choices?.[0]?.message ?? {};
