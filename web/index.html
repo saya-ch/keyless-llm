@@ -448,6 +448,19 @@ body::after{
    运行
    ══════════════════════════════════════════════════════════ */
 .runtime{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:14px;align-items:start}
+.runtime .panel.full{grid-column:1 / -1}
+.reqlist{display:flex;flex-direction:column;margin-top:9px;max-height:340px;overflow:auto}
+.reqrow{display:grid;grid-template-columns:64px 96px minmax(0,1fr) minmax(0,1.35fr) 44px 58px 18px;gap:10px;align-items:center;padding:6px 8px;border-bottom:1px solid var(--line);font-family:var(--font-mono);font-size:11px;line-height:1.5}
+.reqrow:last-child{border-bottom:0}
+.reqrow .t,.reqrow .ms{color:var(--fg-4);text-align:right}
+.reqrow .ep{color:var(--fg-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reqrow .rm,.reqrow .um{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reqrow .um{color:var(--fg-2)}
+.reqrow .st{font-weight:600;text-align:right}
+.reqrow .st.ok{color:var(--ok)}
+.reqrow .st.warn{color:var(--warn)}
+.reqrow .st.err{color:var(--bad)}
+.reqrow .fo{color:var(--fg-4);text-align:center}
 .panel{
   border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);box-shadow:var(--shadow-1);
   padding:18px 20px;
@@ -744,6 +757,10 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
             上游报 429 即进入冷却，冷却期内的模型不再参与 auto 打分；
             请求失败自动换下一个候选，调用方无感。
           </p>
+        </div>
+        <div class="panel full" data-fx>
+          <h3>最近请求<span class="hint" id="req-hint">暂无</span></h3>
+          <div class="reqlist" id="reqlist"></div>
         </div>
       </div>
     </section>
@@ -1149,6 +1166,35 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
     ].map(([k, v]) => '<div><div class="k">' + esc(k) + '</div><div class="v">' + esc(v) + '</div></div>').join('');
   }
 
+  // 最近请求：端点 / 请求模型 / 实际模型 / 状态码 / 耗时 / 是否转移
+  // 数据来自 /v1/status 的 recentRequests（后端内存环形缓冲，只含元信息）
+  function renderRequests(st) {
+    const rows = (st.recentRequests || []).slice().reverse();
+    const hint = $('#req-hint');
+    if (hint) hint.textContent = rows.length ? rows.length + ' 条' : '暂无';
+    const el = $('#reqlist');
+    if (!el) return;
+    if (!rows.length) {
+      el.innerHTML = '<div class="reqrow" style="color:var(--fg-4)">还没有请求。客户端发一次请求后，这里会显示端点和模型。</div>';
+      return;
+    }
+    el.innerHTML = rows.map((r) => {
+      const t = new Date(r.ts).toLocaleTimeString('zh-CN', { hour12: false });
+      const ep = String(r.endpoint || '').replace('/v1/', '').replace('/completions', '') || '–';
+      const cls = r.status === -1 || r.status >= 500 ? 'err' : r.status >= 400 ? 'warn' : 'ok';
+      const ms = r.ms != null ? r.ms + 'ms' : '–';
+      return '<div class="reqrow">' +
+        '<span class="t">' + esc(t) + '</span>' +
+        '<span class="ep">' + esc(ep) + '</span>' +
+        '<span class="rm">' + esc(r.requested || '–') + '</span>' +
+        '<span class="um">' + esc(r.used || '–') + '</span>' +
+        '<span class="st ' + cls + '">' + esc(String(r.status)) + '</span>' +
+        '<span class="ms">' + esc(ms) + '</span>' +
+        '<span class="fo" title="' + (r.failover ? '发生过失败转移' : '') + '">' + (r.failover ? '↷' : '') + '</span>' +
+      '</div>';
+    }).join('');
+  }
+
   /* ── 主渲染 ─────────────────────────────────────────── */
   function render(st) {
     setFigure(st.models.filter((m) => m.auto).length, st.summary.total);
@@ -1178,6 +1224,7 @@ footer .r{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
     $('#r-req').textContent = fmtInt(st.stats.requests);
     $('#r-fo').textContent = fmtInt(st.stats.failovers);
     $('#r-tk').textContent = fmtInt(st.stats.tokensIn + st.stats.tokensOut);
+    renderRequests(st);
     sample(st.stats.requests);
   }
 

@@ -70,6 +70,15 @@ const state = new Map();                // key -> {state, stateAt, cooldownUntil
 const stats = { requests: 0, failovers: 0, tokensIn: 0, tokensOut: 0, startedAt: Date.now() };
 let lastProbeAt = 0, lastModelsAt = 0, probing = false;
 
+// 最近请求记录（内存环形缓冲，供控制台「请求」页展示）。
+// 只存元信息：端点、请求模型、实际模型、状态码、耗时、是否转移；不存 prompt/响应体。
+const requestLog = [];
+const REQUEST_LOG_MAX = 120;
+function recordRequest(e) {
+  requestLog.push({ ts: Date.now(), ...e });
+  if (requestLog.length > REQUEST_LOG_MAX) requestLog.splice(0, requestLog.length - REQUEST_LOG_MAX);
+}
+
 // ── 来源配置 ──────────────────────────────────────────────────────
 function loadProviders() {
   let cfg = { providers: [] };
@@ -1120,11 +1129,23 @@ const server = http.createServer(async (req, res) => {
         if (url.pathname === "/v1/chat/completions") await handleOpenAI(req, res, body);
         else if (url.pathname === "/v1/messages") await handleAnthropic(req, res, body);
         else await handleResponses(req, res, body);
-        logReq(body.model, res.getHeader("x-keyless-model"), 200, Date.now() - t0);
+        const used = res.getHeader("x-keyless-model") || "";
+        const ms = Date.now() - t0;
+        logReq(body.model, used, 200, ms);
+        recordRequest({
+          endpoint: url.pathname, requested: body.model || "", used,
+          status: 200, ms, stream: body.stream !== false,
+          failover: res.getHeader("x-keyless-failover") === "1",
+        });
       } catch (e) {
         if (e instanceof UpstreamError) {
           markResult(e.model, e.status, e.message);
           const status = e.status >= 400 && e.status < 600 ? e.status : 502;
+          recordRequest({
+            endpoint: url.pathname, requested: body.model || "", used: e.model || "",
+            status, ms: Date.now() - t0, stream: body.stream !== false,
+            failover: true, error: e.message,
+          });
           if (url.pathname === "/v1/messages") {
             return sendJson(res, status, { type: "error", error: { type: e.type, message: e.message } });
           }
@@ -1179,7 +1200,7 @@ function statusPayload() {
     bind: { host: CFG.host, port: CFG.port, localOnly: /^(127\.|localhost$|::1$)/.test(CFG.host) },
     providers: provs,
     summary: { healthy: cnt("healthy"), limited: cnt("limited"), blocked: cnt("blocked"), unknown: cnt("unknown"), total: models.length },
-    models, stats,
+    models, stats, recentRequests: requestLog.slice(-60),
     lastProbeAt, nextProbeAt: lastProbeAt ? lastProbeAt + CFG.probeSeconds * 1000 : 0,
     probeSeconds: CFG.probeSeconds, probing,
     // 探测策略：默认被动学习（0=不主动探测，状态由真实请求得出）
