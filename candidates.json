@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T10:57:43.744Z",
+  "generatedAt": "2026-10-30T03:05:25.562Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,13 +15,13 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 3
+      "found": 10
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 34
+      "found": 5
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
@@ -33,7 +33,7 @@
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 4
+      "found": 7
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
@@ -45,10 +45,22 @@
       "query": "public inference API free without key openai format",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 5
+      "found": 8
     }
   ],
   "candidates": [
+    {
+      "label": "FreeLLMPool",
+      "base": "https://api.0xzr.dev/v1",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "PersorAI",
+      "base": "https://api.persorai.com/v1",
+      "testModel": null,
+      "note": ""
+    },
     {
       "label": "Puter",
       "base": "https://api.puter.com/v1",
@@ -56,230 +68,98 @@
       "note": ""
     },
     {
-      "label": "Requesty",
-      "base": "https://api.requesty.ai/v1",
+      "label": "Yangmao AI",
+      "base": "https://api.yangmao.ai/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "freellmpool",
-      "base": "https://freellmpool.0xzr.workers.dev/v1",
+      "label": "WackyDawg Free GPT",
+      "base": "https://api.wackydawg.dev/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Free LLM API",
-      "base": "https://api.free-llm.com/v1",
+      "label": "Free Unofficial OpenAI API",
+      "base": "https://api.sreejan.dev/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "GPTs.Vin",
-      "base": "https://api.gpts.vin/v1",
+      "label": "Niko Pasetore Free LLM APIs",
+      "base": "https://api.nikopastore.dev/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "OpenAI Proxy",
-      "base": "https://api.openai-proxy.org/v1",
+      "label": "Mixed Analytics Free APIs",
+      "base": "https://api.mixedapis.com/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Free V36",
-      "base": "https://free.v36.cm/v1",
+      "label": "LM Stadium API",
+      "base": "https://api.lmstudio.local/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "OhMyGPT",
-      "base": "https://api.ohmygpt.com/v1",
+      "label": "FreeGPT API",
+      "base": "https://api.freegptapi.com/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "AIGC369",
-      "base": "https://api.aigc369.com/v1",
+      "label": "zhuanlan.zhihu.com",
+      "base": "https://zhuanlan.zhihu.com",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "XTY",
-      "base": "https://api.xty.app/v1",
+      "label": "blog.csdn.net",
+      "base": "https://blog.csdn.net",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "LLM7",
-      "base": "https://api.llm7.top/v1",
+      "label": "segmentfault.com",
+      "base": "https://segmentfault.com",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Bianxie",
-      "base": "https://api.bianxie.ai/v1",
+      "label": "xusearch.com",
+      "base": "https://xusearch.com",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "AGicto",
-      "base": "https://api.agicto.cn/v1",
+      "label": "my.oschina.net",
+      "base": "https://my.oschina.net",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "FE8",
-      "base": "https://api.fe8.cn/v1",
+      "label": "OpenRouter Free",
+      "base": "https://openrouter.ai/openrouter/free",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "8090",
-      "base": "https://api.8090.pm/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "302.ai",
-      "base": "https://api.302.ai/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "GPTGod",
-      "base": "https://api.gptgod.online/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "999999999",
-      "base": "https://api.999999999.xyz/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "132999",
-      "base": "https://api.132999.xyz/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "520AI",
-      "base": "https://api.520ai.xyz/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "666Chat",
-      "base": "https://api.666chat.xyz/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "777Chat",
-      "base": "https://api.777chat.xyz/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "888Chat",
-      "base": "https://api.888chat.xyz/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "999Chat",
-      "base": "https://api.999chat.xyz/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.free-llm.com",
-      "base": "https://api.free-llm.com",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.gpts.vin",
-      "base": "https://api.gpts.vin",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.openai-proxy.org",
-      "base": "https://api.openai-proxy.org",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "free.v36.cm",
-      "base": "https://free.v36.cm",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.ohmygpt.com",
-      "base": "https://api.ohmygpt.com",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.aigc369.com",
-      "base": "https://api.aigc369.com",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.xty.app",
-      "base": "https://api.xty.app",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.llm7.top",
-      "base": "https://api.llm7.top",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.bianxie.ai",
-      "base": "https://api.bianxie.ai",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.agicto.cn",
-      "base": "https://api.agicto.cn",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.fe8.cn",
-      "base": "https://api.fe8.cn",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.8090.pm",
-      "base": "https://api.8090.pm",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.302.ai",
-      "base": "https://api.302.ai",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "TokenMix AI",
+      "label": "TokenMix",
       "base": "https://tokenmix.ai",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "OpenRouter",
-      "base": "https://openrouter.ai",
+      "label": "YangMao",
+      "base": "https://yangmao.ai",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Free LLM",
+      "base": "https://free-llm.com",
       "testModel": null,
       "note": ""
     },
@@ -290,50 +170,62 @@
       "note": ""
     },
     {
-      "label": "LLM Gateway",
-      "base": "https://llmgateway.io",
+      "label": "EdenAI",
+      "base": "https://edenai.co",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "LMSpeed",
-      "base": "https://lmspeed.net",
+      "label": "LaoZhang AI",
+      "base": "https://laozhang.ai",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "AITools.platform",
+      "label": "aitools.cfd Platform",
       "base": "https://platform.aitools.cfd",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Free Inference",
+      "label": "FreeInference",
       "base": "http://freeinference.org",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Free Inference Dev",
+      "label": "Puter Developer",
+      "base": "https://developer.puter.com",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Puter AI API",
+      "base": "https://developer.puter.com/tutorials/free-unlimited-ai-api",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Puter OpenAI API",
+      "base": "https://developer.puter.com/tutorials/free-unlimited-openai-api",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "FreeInference Dev",
       "base": "https://freeinference.dev",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Openference",
-      "base": "https://openference.com",
+      "label": "Dev Community",
+      "base": "https://dev.to",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Logfare AI",
-      "base": "https://logfare.ai",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Free Inferencing",
-      "base": "https://freeinferencing.com",
+      "label": "Speka Blog",
+      "base": "https://speka.me",
       "testModel": null,
       "note": ""
     }
