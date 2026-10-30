@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-30T04:56:59.737Z",
+  "generatedAt": "2026-10-30T10:14:09.662Z",
   "env": "ci",
   "summary": {
     "providers": 8,
     "freeModels": 40,
-    "healthy": 32,
+    "healthy": 31,
     "limited": 6,
     "blocked": 0,
-    "failed": 2
+    "failed": 3
   },
   "providers": [
     {
@@ -19,10 +19,10 @@
       "modelsError": "",
       "modelsFound": 387,
       "freeModels": 16,
-      "ok": 12,
-      "limited": 4,
+      "ok": 10,
+      "limited": 5,
       "blocked": 0,
-      "failed": 0,
+      "failed": 1,
       "models": [
         {
           "model": "kilo-auto/free",
@@ -44,9 +44,9 @@
         },
         {
           "model": "recursive/flint-v1.0:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 503,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "xingchen-agi/xing4.0-29b-a4b:free",
@@ -56,15 +56,15 @@
         },
         {
           "model": "dots-studio/dots-3-note-preview:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -74,9 +74,9 @@
         },
         {
           "model": "poolside/laguna-s-2.1:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "poolside/laguna-xs-2.1:free",
@@ -92,9 +92,9 @@
         },
         {
           "model": "nvidia/nemotron-3.5-content-safety:free",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 404,
+          "state": "unknown",
+          "error": "Provider returned error"
         },
         {
           "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -199,8 +199,8 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 8,
-      "limited": 2,
+      "ok": 9,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -212,15 +212,15 @@
         },
         {
           "model": "Qwen3.6-27B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
-        },
-        {
-          "model": "Qwen3.5-397B-A17B",
           "status": 200,
           "state": "healthy",
           "error": ""
+        },
+        {
+          "model": "Qwen3.5-397B-A17B",
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "Qwen3.5-9B",
@@ -242,9 +242,9 @@
         },
         {
           "model": "Meta-Llama-3_3-70B-Instruct",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Mistral-Small-3.2-24B-Instruct-2506",
@@ -391,7 +391,7 @@
           "error": ""
         }
       ],
-      "failStreak": 1,
+      "failStreak": 2,
       "suggestDead": false
     }
   ]
