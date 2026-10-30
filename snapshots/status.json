@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-30T04:23:13.702Z",
+  "generatedAt": "2026-10-30T04:56:59.737Z",
   "env": "ci",
   "summary": {
-    "providers": 9,
-    "freeModels": 42,
-    "healthy": 33,
-    "limited": 5,
+    "providers": 8,
+    "freeModels": 40,
+    "healthy": 32,
+    "limited": 6,
     "blocked": 0,
-    "failed": 4
+    "failed": 2
   },
   "providers": [
     {
@@ -199,8 +199,8 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 10,
-      "limited": 0,
+      "ok": 8,
+      "limited": 2,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -212,9 +212,9 @@
         },
         {
           "model": "Qwen3.6-27B",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "Qwen3.5-397B-A17B",
@@ -242,9 +242,9 @@
         },
         {
           "model": "Meta-Llama-3_3-70B-Instruct",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "Mistral-Small-3.2-24B-Instruct-2506",
@@ -277,19 +277,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 0,
-      "limited": 1,
+      "ok": 1,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 502,
-          "state": "limited",
-          "error": "Vireonix is temporarily unavailable. Please try again shortly."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         }
       ],
-      "failStreak": 1,
+      "failStreak": 0,
       "suggestDead": false
     },
     {
@@ -365,11 +365,11 @@
       "suggestDead": false
     },
     {
-      "id": "zhipu",
-      "label": "智谱 GLM",
+      "id": "aihorde",
+      "label": "AI Horde",
       "enabled": true,
-      "base": "https://open.bigmodel.cn/api/paas/v4",
-      "rate": "免费模型 glm-4.7-flash / glm-4-flash（注册领 key，免费）",
+      "base": "https://aihorde.net/api/v2",
+      "rate": "公开匿名 key（0000000000），社区众包算力；排队 0~40+，生成通常 3~10s",
       "modelsError": "",
       "modelsFound": 2,
       "freeModels": 2,
@@ -379,46 +379,16 @@
       "failed": 2,
       "models": [
         {
-          "model": "glm-4.7-flash",
-          "status": 401,
+          "model": "wicked-tutu-26b-w8a16",
+          "status": 404,
           "state": "unknown",
-          "error": "Header中未收到Authorization参数，无法进行身份验证。"
+          "error": ""
         },
         {
-          "model": "glm-4-flash-250414",
-          "status": 401,
+          "model": "koboldcpp/gemma-4-31B-it-heretic",
+          "status": 404,
           "state": "unknown",
-          "error": "Header中未收到Authorization参数，无法进行身份验证。"
-        }
-      ],
-      "failStreak": 1,
-      "suggestDead": false
-    },
-    {
-      "id": "groq",
-      "label": "Groq",
-      "enabled": true,
-      "base": "https://api.groq.com/openai/v1",
-      "rate": "免费层 30 RPM / 1000 RPD（注册领 key，免费）",
-      "modelsError": "",
-      "modelsFound": 2,
-      "freeModels": 2,
-      "ok": 0,
-      "limited": 0,
-      "blocked": 0,
-      "failed": 2,
-      "models": [
-        {
-          "model": "openai/gpt-oss-120b",
-          "status": 401,
-          "state": "unknown",
-          "error": "Invalid API Key"
-        },
-        {
-          "model": "openai/gpt-oss-20b",
-          "status": 401,
-          "state": "unknown",
-          "error": "Invalid API Key"
+          "error": ""
         }
       ],
       "failStreak": 1,
