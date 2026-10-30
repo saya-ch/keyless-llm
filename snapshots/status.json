@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-30T04:10:53.740Z",
+  "generatedAt": "2026-10-30T04:23:13.702Z",
   "env": "ci",
   "summary": {
-    "providers": 7,
-    "freeModels": 38,
-    "healthy": 37,
-    "limited": 1,
+    "providers": 9,
+    "freeModels": 42,
+    "healthy": 33,
+    "limited": 5,
     "blocked": 0,
-    "failed": 0
+    "failed": 4
   },
   "providers": [
     {
@@ -19,8 +19,8 @@
       "modelsError": "",
       "modelsFound": 387,
       "freeModels": 16,
-      "ok": 15,
-      "limited": 1,
+      "ok": 12,
+      "limited": 4,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -50,9 +50,9 @@
         },
         {
           "model": "xingchen-agi/xing4.0-29b-a4b:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "dots-studio/dots-3-note-preview:free",
@@ -80,9 +80,9 @@
         },
         {
           "model": "poolside/laguna-xs-2.1:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "cohere/north-mini-code:free",
@@ -92,9 +92,9 @@
         },
         {
           "model": "nvidia/nemotron-3.5-content-safety:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -277,19 +277,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 1,
-      "limited": 0,
+      "ok": 0,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 502,
+          "state": "limited",
+          "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 0,
+      "failStreak": 1,
       "suggestDead": false
     },
     {
@@ -362,6 +362,66 @@
         }
       ],
       "failStreak": 0,
+      "suggestDead": false
+    },
+    {
+      "id": "zhipu",
+      "label": "智谱 GLM",
+      "enabled": true,
+      "base": "https://open.bigmodel.cn/api/paas/v4",
+      "rate": "免费模型 glm-4.7-flash / glm-4-flash（注册领 key，免费）",
+      "modelsError": "",
+      "modelsFound": 2,
+      "freeModels": 2,
+      "ok": 0,
+      "limited": 0,
+      "blocked": 0,
+      "failed": 2,
+      "models": [
+        {
+          "model": "glm-4.7-flash",
+          "status": 401,
+          "state": "unknown",
+          "error": "Header中未收到Authorization参数，无法进行身份验证。"
+        },
+        {
+          "model": "glm-4-flash-250414",
+          "status": 401,
+          "state": "unknown",
+          "error": "Header中未收到Authorization参数，无法进行身份验证。"
+        }
+      ],
+      "failStreak": 1,
+      "suggestDead": false
+    },
+    {
+      "id": "groq",
+      "label": "Groq",
+      "enabled": true,
+      "base": "https://api.groq.com/openai/v1",
+      "rate": "免费层 30 RPM / 1000 RPD（注册领 key，免费）",
+      "modelsError": "",
+      "modelsFound": 2,
+      "freeModels": 2,
+      "ok": 0,
+      "limited": 0,
+      "blocked": 0,
+      "failed": 2,
+      "models": [
+        {
+          "model": "openai/gpt-oss-120b",
+          "status": 401,
+          "state": "unknown",
+          "error": "Invalid API Key"
+        },
+        {
+          "model": "openai/gpt-oss-20b",
+          "status": 401,
+          "state": "unknown",
+          "error": "Invalid API Key"
+        }
+      ],
+      "failStreak": 1,
       "suggestDead": false
     }
   ]
