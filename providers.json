@@ -7,11 +7,12 @@
       "base": "https://api.kilo.ai/api/gateway",
       "modelsPath": "/models",
       "freeRule": { "type": "suffix", "value": ":free" },
-      "extraFree": ["kilo-auto/free", "reflection/beam-free", "openrouter/free"],
+      "extraFree": ["kilo-auto/free", "kilo-auto/small", "reflection/beam-free", "openrouter/free"],
       "rate": "200 req/h/IP",
       "enabled": true,
       "staticModels": [
         "kilo-auto/free",
+        { "id": "kilo-auto/small", "context_length": 262144, "supported_parameters": ["tools"] },
         "reflection/beam-free",
         "recursive/flint-v1.0:free",
         "nvidia/nemotron-3.5-super-vl:free",
