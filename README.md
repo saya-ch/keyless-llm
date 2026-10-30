@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/ai-girls-tea-party.png" alt="Keyless LLM Gateway — 模型拟人茶会" width="100%">
+</p>
+
 <h1 align="center">Keyless LLM Gateway</h1>
 
 <p align="center">
@@ -60,10 +64,10 @@ python scripts/make_lnk.py   # 生成 C:\Users\<你>\Desktop\keyless-llm.lnk
 
 | 来源           | 端点                            | 免费模型 | 限流           |
 | ------------ | ----------------------------- | ---- | ------------ |
-| Kilo Code    | `api.kilo.ai/api/gateway`     | 16   | 200 次/小时/IP  |
+| Kilo Code    | `api.kilo.ai/api/gateway`     | 15   | 200 次/小时/IP  |
 | Pollinations | `text.pollinations.ai/openai` | 1    | 4 次/分钟       |
 | BlockRun     | `blockrun.ai/api/v1`          | 4    | IP 限流，免费容量常满 |
-| OVHcloud     | `oai.endpoints.kepler.ai.cloud.ovh.net/v1` | 7 | 2 次/分钟/IP/模型 |
+| OVHcloud     | `oai.endpoints.kepler.ai.cloud.ovh.net/v1` | 10 | 2 次/分钟/IP/模型 |
 | Vireonix     | `vireonix.ai/v1`              | 1    | 20M 入/200K 出 tokens 每小时/IP |
 | ch.at        | `ch.at/v1`                    | 1    | 公平使用，未公开限额 |
 | LLM7.io      | `api.llm7.io/v1`              | 5    | 匿名 10 次/分钟 |
