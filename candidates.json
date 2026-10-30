@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-30T03:57:06.816Z",
+  "generatedAt": "2026-10-30T10:56:12.317Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,13 +15,13 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 6
+      "found": 3
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "duckduckgo",
-      "llmBackend": "网关(auto)",
-      "found": 5
+      "llmBackend": "规则兜底",
+      "found": 1
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
@@ -33,13 +33,13 @@
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 5
+      "found": 7
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 3
+      "found": 1
     },
     {
       "query": "public inference API free without key openai format",
@@ -50,146 +50,116 @@
   ],
   "candidates": [
     {
-      "label": "FreeLLMpool",
-      "base": "https://0xzr.github.io/freellmpool",
+      "label": "Puter.js",
+      "base": "https://api.puter.com/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Puter",
-      "base": "https://developer.puter.com/tutorials/free-unlimited-openai-api",
+      "label": "FreeLLMPool",
+      "base": "https://api.freellmpool.com/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Puter",
-      "base": "https://developer.puter.com/tutorials/free-unlimited-ai-api",
+      "label": "GPTFree",
+      "base": "https://api.gptfree.com/v1",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Yangmao AI",
-      "base": "https://yangmao.ai/en/questions/free-openai-compatible-api-no-credit-card",
+      "label": "jidan.si",
+      "base": "https://jidan.si",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Niko Pastore Portfolio (Free LLM APIs 2026)",
-      "base": "https://nikopastore-portfolio.vercel.app/blog/free-llm-apis-2026",
+      "label": "OpenRouter Free",
+      "base": "https://openrouter.ai/openrouter/free",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "LM Studio API Server",
-      "base": "https://markaicode.com/lm-studio-api-server-openai-compatible",
+      "label": "Free-LLM.com",
+      "base": "https://free-llm.com/guides/openrouter-alternatives",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Poe API",
-      "base": "https://api.poe.com/v1",
+      "label": "Mixed Analytics Free No-Auth APIs List",
+      "base": "https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Groq API",
-      "base": "https://api.groq.com/openai/v1",
+      "label": "TokenMix",
+      "base": "https://tokenmix.ai/blog/openrouter-alternative-free-cheaper",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Hugging Face API",
-      "base": "https://api-inference.huggingface.co/v1",
+      "label": "LaoZhang.ai",
+      "base": "https://blog.laozhang.ai/en/posts/openrouter-alternatives-free-models",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Cloudflare Workers AI",
-      "base": "https://api.cloudflare.com/client/v4",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "OpenAI API",
-      "base": "https://api.openai.com/v1",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "AnyAPI",
-      "base": "https://anyapi.ai",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Mixed Analytics (Free API list)",
-      "base": "https://mixedanalytics.com",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "OpenRouter API",
-      "base": "https://openrouter.ai",
+      "label": "AnyAPI.ai",
+      "base": "https://anyapi.ai/blog/openrouter-alternatives-in-2026-the-best-api-aggregators-for-developers",
       "testModel": null,
       "note": ""
     },
     {
       "label": "AIMLAPI",
-      "base": "https://aimlapi.com",
+      "base": "https://aimlapi.com/blog/the-best-openrouter-alternatives-in-2026",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Novita AI Blog",
-      "base": "https://blogs.novita.ai",
+      "label": "APIRank Free AI API Models 2026",
+      "base": "https://apirank.vip/zh/tutorials/free-ai-api-models-2026-daily-use",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "AI Tools Platform",
-      "base": "https://platform.aitools.cfd",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "XuSearch API",
-      "base": "https://xusearch.com/docs/free-api.html",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "AI Tools Platform Docs",
-      "base": "https://platform.aitools.cfd/docs",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "Free Inference",
+      "label": "freeinference.org",
       "base": "http://freeinference.org",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Free Inference",
+      "label": "Puter AI API",
+      "base": "https://developer.puter.com/tutorials/free-unlimited-ai-api",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "Puter OpenAI API",
+      "base": "https://developer.puter.com/tutorials/free-unlimited-openai-api",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "freeinference.dev",
       "base": "https://freeinference.dev",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Free APIs Article",
-      "base": "https://dev.to/canpolat_kaya_220016375c2/30-free-rest-apis-you-can-call-without-an-api-key-in-2026-no-credit-card-zero-auth-1h15",
+      "label": "StationX Free LLM API",
+      "base": "https://app.stationx.net/articles/free-llm-api",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Openflows",
+      "label": "OpenFlows Free LLM Inference API Resources",
       "base": "https://openflows.org/currency/currents/free-llm-inference-api-resources",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "StationX",
-      "base": "https://app.stationx.net/articles/free-llm-api",
+      "label": "Logfare AI",
+      "base": "https://logfare.ai",
       "testModel": null,
       "note": ""
     }
