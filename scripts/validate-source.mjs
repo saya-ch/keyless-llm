@@ -16,6 +16,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { lookup } from "node:dns/promises";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -102,6 +103,14 @@ async function validateSource(base, modelHint) {
   };
   if (!/^https?:\/\//i.test(base)) {
     report.reasons.push(`base 不是合法 URL: ${base}`);
+    return report;
+  }
+  // 域名解析预检：NXDOMAIN 的候选直接判死，避免把「编造/失效的域名」当成网络波动。
+  // （本地 Clash fake-ip 环境下 lookup 恒成功，此检查在 CI 里才真正生效）
+  try {
+    await lookup(new URL(base).hostname);
+  } catch {
+    report.reasons.push("域名解析失败（域名不存在）");
     return report;
   }
   // 1) /models 匿名可读？

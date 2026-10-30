@@ -131,9 +131,10 @@ A valid candidate must:
 
 Exclude: anything needing a key, needing registration, shut down, or demo-only.
 
-List every URL or domain in the search results that could be an AI/LLM API provider.
-One per line. No numbering, no explanation, no JSON. Include the service name after a
-pipe, like: https://api.example.com/v1 | Example API`;
+Only list URLs that literally appear in the search results text below. Never construct,
+complete, or guess a domain name — if you did not see it verbatim, do not output it.
+One URL per line. No numbering, no explanation, no JSON. Include the service name after
+a pipe, like: https://api.example.com/v1 | Example API`;
 
 // 从模型输出里提取 URL/域名行
 function extractLines(text) {
