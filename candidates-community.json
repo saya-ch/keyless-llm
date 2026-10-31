@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-31T10:47:51.449Z",
+  "sources": [
+    {
+      "source": "reddit",
+      "query": "free llm api no api key",
+      "error": "HTTP 403"
+    },
+    {
+      "source": "hackernews",
+      "query": "free llm api no api key",
+      "urls": 42
+    },
+    {
+      "source": "github-repos",
+      "query": "free llm api no api key",
+      "urls": 10
+    },
+    {
+      "source": "reddit",
+      "query": "openai compatible endpoint no signup",
+      "error": "HTTP 403"
+    },
+    {
+      "source": "hackernews",
+      "query": "openai compatible endpoint no signup",
+      "urls": 2
+    },
+    {
+      "source": "github-repos",
+      "query": "openai compatible endpoint no signup",
+      "urls": 0
+    },
+    {
+      "source": "reddit",
+      "query": "免鉴权 大模型 api 免费",
+      "error": "HTTP 403"
+    },
+    {
+      "source": "hackernews",
+      "query": "免鉴权 大模型 api 免费",
+      "urls": 0
+    },
+    {
+      "source": "github-repos",
+      "query": "免鉴权 大模型 api 免费",
+      "urls": 0
+    }
+  ],
+  "candidates": []
+}
