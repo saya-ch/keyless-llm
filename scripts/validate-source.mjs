@@ -237,6 +237,34 @@ async function main() {
     }
   }
 
+  // 更新「已确认不可行」清单（供 discover 去重，避免每天重复验证同一批死端点）。
+  // 只记录明确不可行（401/403/404/假 200）；网络失败和 429 是临时的，不写入黑名单。
+  const rejectedFile = arg("--update-rejected", null);
+  if (rejectedFile) {
+    const p = path.resolve(process.cwd(), rejectedFile);
+    let store = { updatedAt: "", entries: [] };
+    try { store = JSON.parse(fs.readFileSync(p, "utf8")); } catch {}
+    const byBase = new Map((store.entries || []).map((e) => [e.base, e]));
+    const now = new Date().toISOString();
+    for (const r of reports) {
+      if (r.verdict !== "not-keyless") continue;
+      const st = r.chatEndpoint?.status;
+      if (st === -1 || st === 429) continue;
+      const prev = byBase.get(r.base);
+      byBase.set(r.base, {
+        base: r.base,
+        reason: String(r.reasons[0] || "").slice(0, 160),
+        firstSeen: prev?.firstSeen || now,
+        lastChecked: now,
+        failCount: (prev?.failCount || 0) + 1,
+      });
+    }
+    store.entries = [...byBase.values()];
+    store.updatedAt = now;
+    fs.writeFileSync(p, JSON.stringify(store, null, 2) + "\n", "utf8");
+    if (!asJson) console.log(`\nrejected 清单更新: ${store.entries.length} 条 -> ${path.relative(process.cwd(), p)}`);
+  }
+
   if (asJson) console.log(JSON.stringify(reports, null, 2));
   else {
     const keyless = reports.filter((r) => r.verdict === "keyless").length;

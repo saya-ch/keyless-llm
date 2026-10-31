@@ -276,9 +276,33 @@ function normalize(items) {
   return out;
 }
 
+// ── 已确认不可行清单（去重）────────────────────────────────────────
+const REJECTED_FILE = path.join(ROOT, "snapshots", "rejected.json");
+const REJECTED_TTL_MS = 30 * 86400000;
+
+function loadRejected() {
+  try {
+    const j = JSON.parse(fs.readFileSync(REJECTED_FILE, "utf8"));
+    const cutoff = Date.now() - REJECTED_TTL_MS;
+    return (j.entries || [])
+      .filter((e) => !e.lastChecked || Date.parse(e.lastChecked) > cutoff)
+      .map((e) => e.base)
+      .filter(Boolean);
+  } catch { return []; }
+}
+
+function hostOf(u) {
+  try { return new URL(u).hostname.toLowerCase(); } catch { return ""; }
+}
+
 // ── main ──────────────────────────────────────────────────────────
 async function main() {
   const queries = process.env.SEARCH_QUERY ? [process.env.SEARCH_QUERY] : DEFAULT_QUERIES;
+
+  // 已确认不可行的端点：注入 prompt + 最终过滤，避免每天重复采集/验证同一批死端点
+  const rejectedBases = loadRejected();
+  const rejectedHosts = new Set(rejectedBases.map(hostOf).filter(Boolean));
+  if (rejectedBases.length) log(`已确认不可行: ${rejectedBases.length} 个（本轮会跳过）`);
 
   const all = [];
   const report = { generatedAt: new Date().toISOString(), queries, searchBackend: null, llmBackend: null, rounds: [] };
@@ -297,7 +321,10 @@ async function main() {
     report.searchBackend = report.searchBackend || s.backend;
 
     const linkBlock = s.links.slice(0, 40).join("\n");
-    const prompt = `Search results for "${q}":\n${linkBlock}\n\nList the AI/LLM API provider URLs from these results.`;
+    const rejectBlock = rejectedBases.length
+      ? `\n\nThese endpoints were already tested and are NOT usable. Do NOT list them again:\n${rejectedBases.slice(0, 50).join("\n")}`
+      : "";
+    const prompt = `Search results for "${q}":\n${linkBlock}${rejectBlock}\n\nList the AI/LLM API provider URLs from these results.`;
 
     const ex = await llmExtract(prompt, s.links);
     round.llmBackend = ex.source;
@@ -319,7 +346,12 @@ async function main() {
   }
 
   const seen = new Set();
-  const uniq = all.filter((c) => (seen.has(c.base) ? false : (seen.add(c.base), true)));
+  const uniq = all.filter((c) => {
+    if (seen.has(c.base)) return false;
+    seen.add(c.base);
+    if (rejectedHosts.has(hostOf(c.base))) return false;
+    return true;
+  });
 
   const out = { ...report, candidates: uniq };
   const file = path.join(ROOT, "candidates.json");

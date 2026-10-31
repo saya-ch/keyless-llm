@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-30T10:14:09.662Z",
+  "generatedAt": "2026-10-31T10:38:25.048Z",
   "env": "ci",
   "summary": {
     "providers": 8,
     "freeModels": 40,
-    "healthy": 31,
+    "healthy": 30,
     "limited": 6,
     "blocked": 0,
-    "failed": 3
+    "failed": 4
   },
   "providers": [
     {
@@ -17,10 +17,10 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 387,
+      "modelsFound": 388,
       "freeModels": 16,
-      "ok": 10,
-      "limited": 5,
+      "ok": 11,
+      "limited": 4,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -56,9 +56,9 @@
         },
         {
           "model": "dots-studio/dots-3-note-preview:free",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
@@ -199,8 +199,8 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 9,
-      "limited": 1,
+      "ok": 10,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -218,9 +218,9 @@
         },
         {
           "model": "Qwen3.5-397B-A17B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Qwen3.5-9B",
@@ -323,12 +323,12 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 67,
+      "modelsFound": 68,
       "freeModels": 5,
-      "ok": 5,
-      "limited": 0,
+      "ok": 2,
+      "limited": 2,
       "blocked": 0,
-      "failed": 0,
+      "failed": 1,
       "models": [
         {
           "model": "codestral-latest",
@@ -338,27 +338,27 @@
         },
         {
           "model": "gpt-oss:20b",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "minimax-m2.7",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Rate limit exceeded. Retry after 1 seconds."
         },
         {
           "model": "mistral-Nemo-Instruct-2407",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Rate limit exceeded. Retry after 1 seconds."
         },
         {
           "model": "nemotron-3-nano:30b",
           "status": 200,
           "state": "healthy",
           "error": ""
+        },
+        {
+          "model": "minimax-m2.7",
+          "status": 400,
+          "state": "unknown",
+          "error": "Model 'minimax-m2.7' is currently unavailable."
         }
       ],
       "failStreak": 0,
@@ -391,7 +391,7 @@
           "error": ""
         }
       ],
-      "failStreak": 2,
+      "failStreak": 4,
       "suggestDead": false
     }
   ]

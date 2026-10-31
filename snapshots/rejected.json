@@ -1,0 +1,313 @@
+{
+  "updatedAt": "2026-10-31T10:30:31.862Z",
+  "entries": [
+    {
+      "base": "https://api.puter.com/v1",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.free-llm.com/v1",
+      "reason": "/models 返回 410，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.openai-proxy.org/v1",
+      "reason": "/models 返回 401，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.ohmygpt.com/v1",
+      "reason": "chat 返回 401：需要鉴权，不是免鉴权来源",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.xty.app/v1",
+      "reason": "/models 返回 401，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.bianxie.ai/v1",
+      "reason": "/models 返回 401，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.agicto.cn/v1",
+      "reason": "常见模型名均无法匿名调用（试过 gpt-4o-mini, gpt-3.5-turbo, gpt-4o, deepseek-chat, qwen-turbo）",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.gptgod.online/v1",
+      "reason": "chat 返回 403：被拒绝访问",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.132999.xyz/v1",
+      "reason": "/models 返回 401，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.free-llm.com",
+      "reason": "/models 返回 410，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.openai-proxy.org",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.ohmygpt.com",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.xty.app",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.bianxie.ai",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.agicto.cn",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.fe8.cn",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://tokenmix.ai",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://anyapi.ai",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://llmgateway.io",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://lmspeed.net",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://platform.aitools.cfd",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "http://freeinference.org",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://freeinference.dev",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://openference.com",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://freeinferencing.com",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:46:51.299Z",
+      "lastChecked": "2026-10-31T07:46:51.299Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://yangmao.ai",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://0xzr.github.io",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://speka.me",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://developer.puter.com",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://freellm.net/free-openai-api-key",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://apidog.com",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://blog.laozhang.ai",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://toolscout.ai",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://openrouter.ai",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://free-llm.com",
+      "reason": "/models 返回 403，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://haimaker.ai",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://app.stationx.net",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://huggingface.co",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T07:49:37.728Z",
+      "lastChecked": "2026-10-31T07:49:37.728Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T10:30:31.862Z",
+      "lastChecked": "2026-10-31T10:30:31.862Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://nikopastore-portfolio.vercel.app/blog/free-llm-apis-2026",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T10:30:31.862Z",
+      "lastChecked": "2026-10-31T10:30:31.862Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://xusearch.com/docs/free-api.html",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T10:30:31.862Z",
+      "lastChecked": "2026-10-31T10:30:31.862Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://mixedanalytics.com",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-10-31T10:30:31.862Z",
+      "lastChecked": "2026-10-31T10:30:31.862Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://aimlapi.com",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T10:30:31.862Z",
+      "lastChecked": "2026-10-31T10:30:31.862Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://openflows.org",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-10-31T10:30:31.862Z",
+      "lastChecked": "2026-10-31T10:30:31.862Z",
+      "failCount": 1
+    }
+  ]
+}

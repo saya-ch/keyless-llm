@@ -1,0 +1,283 @@
+{
+  "generatedAt": "2026-10-31T09:02:56.766Z",
+  "sources": [
+    {
+      "name": "freellms",
+      "url": "https://raw.githubusercontent.com/freellms/free-openai-compatible-api/main/README.md",
+      "extracted": 15,
+      "candidates": 11
+    },
+    {
+      "name": "awesome-free-llm-apis",
+      "url": "https://raw.githubusercontent.com/mnfst/awesome-free-llm-apis/main/README.md",
+      "extracted": 19,
+      "candidates": 10
+    },
+    {
+      "name": "free-AI-free-token",
+      "url": "https://raw.githubusercontent.com/konglong87/free-AI-free-token/main/README.md",
+      "extracted": 25,
+      "candidates": 9
+    },
+    {
+      "name": "free-llm-api",
+      "url": "https://raw.githubusercontent.com/xyzs996/free-llm-api/main/data/providers.json",
+      "extracted": 26,
+      "candidates": 22
+    }
+  ],
+  "candidates": [
+    {
+      "label": "Groq",
+      "base": "https://api.groq.com/openai/v1",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "Google Gemini",
+      "base": "https://generativelanguage.googleapis.com/v1beta",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "Mistral AI",
+      "base": "https://api.mistral.ai/v1",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "Cohere",
+      "base": "https://api.cohere.com/v2",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "NVIDIA NIM",
+      "base": "https://integrate.api.nvidia.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "GitHub Models",
+      "base": "https://models.github.ai/inference",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "Cerebras",
+      "base": "https://api.cerebras.ai/v1",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "Hugging Face",
+      "base": "https://router.huggingface.co/v1",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "SambaNova",
+      "base": "https://api.sambanova.ai/v1",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "Z AI (Zhipu)",
+      "base": "https://open.bigmodel.cn/api/paas/v4",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "DeepSeek",
+      "base": "https://api.deepseek.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "freellms"
+    },
+    {
+      "label": "api.aionlabs.ai",
+      "base": "https://api.aionlabs.ai/v1",
+      "testModel": null,
+      "note": "",
+      "source": "awesome-free-llm-apis"
+    },
+    {
+      "label": "proxy.gonkabroker.com",
+      "base": "https://proxy.gonkabroker.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "awesome-free-llm-apis"
+    },
+    {
+      "label": "api-inference.modelscope.cn",
+      "base": "https://api-inference.modelscope.cn/v1",
+      "testModel": null,
+      "note": "",
+      "source": "awesome-free-llm-apis"
+    },
+    {
+      "label": "api.siliconflow.cn",
+      "base": "https://api.siliconflow.cn/v1",
+      "testModel": null,
+      "note": "",
+      "source": "awesome-free-llm-apis"
+    },
+    {
+      "label": "apihub.agnes-ai.com",
+      "base": "https://apihub.agnes-ai.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-AI-free-token"
+    },
+    {
+      "label": "token.sensenova.cn",
+      "base": "https://token.sensenova.cn/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-AI-free-token"
+    },
+    {
+      "label": "maas-api.cn-huabei-1.xf-yun.com",
+      "base": "https://maas-api.cn-huabei-1.xf-yun.com/v2",
+      "testModel": null,
+      "note": "",
+      "source": "free-AI-free-token"
+    },
+    {
+      "label": "api.b.ai",
+      "base": "https://api.b.ai/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-AI-free-token"
+    },
+    {
+      "label": "api.ai21.com",
+      "base": "https://api.ai21.com/studio/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-AI-free-token"
+    },
+    {
+      "label": "Google Gemini API",
+      "base": "https://generativelanguage.googleapis.com/v1beta/openai",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Cohere",
+      "base": "https://api.cohere.ai/compatibility/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "SiliconFlow",
+      "base": "https://api.siliconflow.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Fireworks AI",
+      "base": "https://api.fireworks.ai/inference/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Z.AI Open Platform",
+      "base": "https://api.z.ai/api/paas/v4",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Novita AI",
+      "base": "https://api.novita.ai/openai",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Alibaba Cloud Model Studio",
+      "base": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Moonshot AI (Kimi)",
+      "base": "https://api.moonshot.ai/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Ollama Cloud",
+      "base": "https://ollama.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Vercel AI Gateway",
+      "base": "https://ai-gateway.vercel.sh/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "IBM watsonx.ai",
+      "base": "https://us-south.ml.cloud.ibm.com/ml/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Together AI",
+      "base": "https://api.together.xyz/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Nebius Token Factory",
+      "base": "https://api.tokenfactory.nebius.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "DeepInfra",
+      "base": "https://api.deepinfra.com/v1/openai",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Chutes",
+      "base": "https://llm.chutes.ai/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    },
+    {
+      "label": "Scaleway Generative APIs",
+      "base": "https://api.scaleway.ai/v1",
+      "testModel": null,
+      "note": "",
+      "source": "free-llm-api"
+    }
+  ]
+}

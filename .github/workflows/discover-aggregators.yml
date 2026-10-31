@@ -1,0 +1,88 @@
+name: discover-aggregators
+
+# 聚合源采集 —— discover 的第二条线（与全网搜索并行）
+#
+# 全网搜索（discover.yml）召回广但噪音大：中转站、教程页、商业免费层。
+# 这条线只盯人工维护的高质量免费 LLM API 聚合列表，噪音小、更新及时。
+# 两条线产物分开（candidates-aggregators.json vs candidates.json），互不覆盖。
+
+on:
+  schedule:
+    # 每天 UTC 6:17（北京时间 14:17），错开 probe(3:17) 和 discover(4:23)
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: discover-aggregators
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 从聚合源采集候选
+        run: node scripts/discover-aggregators.mjs
+
+      - name: 实测候选是否真的免鉴权
+        run: |
+          if [ ! -f candidates-aggregators.json ]; then
+            echo "无候选文件，跳过"
+            exit 0
+          fi
+          # 只读 rejected（--update-rejected 由 discover 主线负责），避免两条线写冲突
+          node scripts/validate-source.mjs --file candidates-aggregators.json --json | tee /tmp/report.json || true
+
+      - name: 汇总
+        run: |
+          echo "### 聚合源采集结果" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f candidates-aggregators.json ]; then
+            node -e '
+              const c = require("./candidates-aggregators.json");
+              console.log(`候选：${(c.candidates || []).length}`);
+              for (const s of c.sources) console.log(`- ${s.name}: ${s.error ? "ERR " + s.error : s.candidates + " 个"}`);
+            ' | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f /tmp/report.json ]; then
+            node -e '
+              const r = require("/tmp/report.json");
+              const k = r.filter(x => x.verdict === "keyless");
+              const l = r.filter(x => x.verdict === "limited");
+              console.log(`免鉴权 ${k.length} 个，受限 ${l.length} 个`);
+              for (const x of k) console.log(`  ✓ ${x.base}`);
+              for (const x of l) console.log(`  △ ${x.base}（当前限流）`);
+            ' | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: 提交候选清单
+        if: always() && hashFiles('candidates-aggregators.json') != ''
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f candidates-aggregators.json
+          if git diff --staged --quiet; then
+            echo "候选清单无变化"
+            exit 0
+          fi
+          git commit -m "chore(discover): 聚合源采集的候选来源"
+          ok=0
+          for i in 1 2 3 4; do
+            git fetch origin "$GITHUB_REF_NAME" || { sleep 10; continue; }
+            if git reset --mixed "origin/$GITHUB_REF_NAME"; then
+              git add -f candidates-aggregators.json
+              git commit -m "chore(discover): 聚合源采集的候选来源"
+              if git push; then ok=1; break; fi
+            fi
+            echo "push 第${i}次被拒（并发提交竞争），10s 后重试"
+            sleep 10
+          done
+          [ "$ok" = "1" ] || { echo "::error::push 重试 4 次仍失败"; exit 1; }

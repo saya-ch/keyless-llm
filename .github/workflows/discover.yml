@@ -114,7 +114,7 @@ jobs:
             echo "agent 未产出候选文件，跳过"
             exit 0
           fi
-          node scripts/validate-source.mjs --file candidates.json --json | tee /tmp/candidates-report.json || true
+          node scripts/validate-source.mjs --file candidates.json --json --update-rejected snapshots/rejected.json | tee /tmp/candidates-report.json || true
 
       - name: 汇总结果
         run: |
@@ -157,7 +157,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           # candidates.json 在本地 .gitignore 里（属于运行产物，不该手工提交），
           # 但 CI 的归档是有价值的，用 -f 强制加入
-          git add -f candidates.json
+          git add -f candidates.json snapshots/rejected.json
           if git diff --staged --quiet; then
             echo "候选清单无变化"
           else
@@ -167,8 +167,8 @@ jobs:
             ok=0
             for i in 1 2 3 4; do
               git fetch origin "$GITHUB_REF_NAME" || { sleep 10; continue; }
-              if git reset --soft "origin/$GITHUB_REF_NAME"; then
-                git add -f candidates.json
+              if git reset --mixed "origin/$GITHUB_REF_NAME"; then
+                git add -f candidates.json snapshots/rejected.json
                 git commit -m "chore(discover): agent 搜索到的新候选来源"
                 if git push; then ok=1; break; fi
               fi

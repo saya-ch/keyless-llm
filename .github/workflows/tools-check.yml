@@ -71,7 +71,7 @@ jobs:
             ok=0
             for i in 1 2 3 4; do
               git fetch origin "$GITHUB_REF_NAME" || { sleep 10; continue; }
-              if git reset --soft "origin/$GITHUB_REF_NAME"; then
+              if git reset --mixed "origin/$GITHUB_REF_NAME"; then
                 git add snapshots/tools.json
                 git commit -m "chore(snapshot): 更新工具调用能力快照"
                 if git push; then ok=1; break; fi
