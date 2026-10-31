@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T10:38:25.048Z",
+  "generatedAt": "2026-10-31T10:45:34.498Z",
   "env": "ci",
   "summary": {
     "providers": 8,
@@ -62,9 +62,9 @@
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -74,9 +74,9 @@
         },
         {
           "model": "poolside/laguna-s-2.1:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "poolside/laguna-xs-2.1:free",
@@ -391,8 +391,8 @@
           "error": ""
         }
       ],
-      "failStreak": 4,
-      "suggestDead": false
+      "failStreak": 5,
+      "suggestDead": true
     }
   ]
 }
