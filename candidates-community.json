@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-10-31T10:47:51.449Z",
+  "generatedAt": "2026-10-31T10:57:08.620Z",
   "sources": [
     {
-      "source": "reddit",
+      "source": "v2ex",
       "query": "free llm api no api key",
-      "error": "HTTP 403"
+      "urls": 126
     },
     {
       "source": "hackernews",
@@ -17,9 +17,9 @@
       "urls": 10
     },
     {
-      "source": "reddit",
+      "source": "v2ex",
       "query": "openai compatible endpoint no signup",
-      "error": "HTTP 403"
+      "urls": 89
     },
     {
       "source": "hackernews",
@@ -32,9 +32,9 @@
       "urls": 0
     },
     {
-      "source": "reddit",
+      "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "error": "HTTP 403"
+      "urls": 106
     },
     {
       "source": "hackernews",
@@ -47,5 +47,48 @@
       "urls": 0
     }
   ],
-  "candidates": []
+  "candidates": [
+    {
+      "label": "api.aigatego.com",
+      "base": "https://api.aigatego.com",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "aikey365.com",
+      "base": "https://aikey365.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.cxbl.top",
+      "base": "https://api.cxbl.top",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.openai.com",
+      "base": "https://api.openai.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "token-plan-cn.xiaomimimo.com",
+      "base": "https://token-plan-cn.xiaomimimo.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    }
+  ]
 }
