@@ -1,0 +1,118 @@
+name: discover-community
+
+# 社区动态采集 —— discover 的第三条线
+#
+# 前两条线：全网搜索（DuckDuckGo）、人工聚合列表（GitHub）。
+# 这条线补社区动态：Reddit / Hacker News / GitHub 仓库搜索，抓「刚有人分享的新端点」。
+# 爬完先用网关的 auto 模型审核一遍（滤掉教程页/注册页等噪音），再交给 validate 实测。
+
+on:
+  schedule:
+    # 每天 UTC 7:17（北京时间 15:17），错开 probe(3:17)/discover(4:23)/aggregators(6:17)
+    - cron: "17 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: discover-community
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 启动网关（供 agent 审核）
+        env:
+          KEYLESS_PROBE_ON_START: "0"
+          KEYLESS_PROBE: "0"
+        run: |
+          node server.mjs > gateway.log 2>&1 &
+          echo $! > gateway.pid
+          for i in $(seq 1 30); do
+            if curl -sf -m 3 http://127.0.0.1:8788/health > /dev/null 2>&1; then
+              echo "网关已就绪（${i}s）"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::warning::网关启动超时，agent 审核将自动跳过"
+
+      - name: 社区采集 + agent 审核
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          KEYLESS_GATEWAY: http://127.0.0.1:8788
+          KEYLESS_KEY: sk-keyless-local
+          KEYLESS_MODEL: auto
+        run: node scripts/discover-community.mjs
+
+      - name: 实测候选是否真的免鉴权
+        run: |
+          if [ ! -f candidates-community.json ]; then
+            echo "无候选文件，跳过"
+            exit 0
+          fi
+          node scripts/validate-source.mjs --file candidates-community.json --json | tee /tmp/report.json || true
+
+      - name: 汇总
+        run: |
+          echo "### 社区采集结果" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f candidates-community.json ]; then
+            node -e '
+              const c = require("./candidates-community.json");
+              console.log(`最终候选：${(c.candidates || []).length}`);
+              const bySrc = {};
+              for (const s of c.sources) { if (s.error) continue; bySrc[s.source] = (bySrc[s.source] || 0) + s.urls; }
+              console.log("各源 URL 数：" + JSON.stringify(bySrc));
+            ' | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f /tmp/report.json ]; then
+            node -e '
+              const r = require("/tmp/report.json");
+              const k = r.filter(x => x.verdict === "keyless");
+              const l = r.filter(x => x.verdict === "limited");
+              console.log(`免鉴权 ${k.length} 个，受限 ${l.length} 个`);
+              for (const x of k) console.log(`  ✓ ${x.base}`);
+              for (const x of l) console.log(`  △ ${x.base}（当前限流）`);
+            ' | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: 停止网关
+        if: always()
+        run: |
+          if [ -f gateway.pid ]; then
+            kill "$(cat gateway.pid)" 2>/dev/null || true
+          fi
+          tail -15 gateway.log 2>/dev/null || true
+
+      - name: 提交候选清单
+        if: always() && hashFiles('candidates-community.json') != ''
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f candidates-community.json
+          if git diff --staged --quiet; then
+            echo "候选清单无变化"
+            exit 0
+          fi
+          git commit -m "chore(discover): 社区采集的候选来源"
+          ok=0
+          for i in 1 2 3 4; do
+            git fetch origin "$GITHUB_REF_NAME" || { sleep 10; continue; }
+            if git reset --mixed "origin/$GITHUB_REF_NAME"; then
+              git add -f candidates-community.json
+              git commit -m "chore(discover): 社区采集的候选来源"
+              if git push; then ok=1; break; fi
+            fi
+            echo "push 第${i}次被拒（并发提交竞争），10s 后重试"
+            sleep 10
+          done
+          [ "$ok" = "1" ] || { echo "::error::push 重试 4 次仍失败"; exit 1; }
