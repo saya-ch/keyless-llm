@@ -23,7 +23,7 @@ const ROOT = path.resolve(__dirname, "..");
 const UA = "keyless-llm-discover/1.0 (+https://github.com/saya-ch/keyless-llm)";
 const API_PATH_RE = /\/(v\d+[a-z]*|api|openai|inference)\b/i;
 // 排除「来源站自己」和非 API 站点
-const EXCLUDE_HOST_RE = /^(github\.com|raw\.githubusercontent\.com|gist\.github\.com|news\.ycombinator\.com|hn\.algolia\.com|reddit\.com|old\.reddit\.com|docs\.|console\.|aistudio\.|ai\.google\.dev|platform\.|accounts\.google|cloud\.|developers\.|blog\.|medium\.|twitter\.com|x\.com|www\.|forum\.|community\.)/i;
+const EXCLUDE_HOST_RE = /^(github\.com|raw\.githubusercontent\.com|gist\.github\.com|news\.ycombinator\.com|hn\.algolia\.com|reddit\.com|old\.reddit\.com|v2ex\.com|sov2ex\.com|docs\.|console\.|aistudio\.|ai\.google\.dev|platform\.|accounts\.google|cloud\.|developers\.|blog\.|medium\.|twitter\.com|x\.com|www\.|forum\.|community\.)/i;
 
 const QUERIES = process.env.SEARCH_QUERY ? [process.env.SEARCH_QUERY] : [
   "free llm api no api key",
@@ -74,7 +74,10 @@ function normalize(urls, knownHosts, rejectedHosts) {
     if (EXCLUDE_HOST_RE.test(host)) continue;
     if (knownHosts.has(host)) continue;
     if (rejectedHosts.has(host)) continue;
-    if (!API_PATH_RE.test(u.pathname)) continue;
+    // 放宽：路径含 API 词，或 host 以 api/openai/llm/gpt 等子域开头（根路径 API base 也能过），
+    // 「是不是真的 API 端点」交给下游 agent 审核精筛
+    const looksApi = API_PATH_RE.test(u.pathname) || /^(api|openai|llm|gpt|chat|inference)\./i.test(host);
+    if (!looksApi) continue;
     base = base.replace(/\/+$/, "");
     if (seen.has(base)) continue;
     seen.add(base);
@@ -83,13 +86,16 @@ function normalize(urls, knownHosts, rejectedHosts) {
   return out;
 }
 
-async function fetchReddit(q) {
-  const url = `https://www.reddit.com/search.json?q=${encodeURIComponent(q)}&sort=new&limit=50`;
-  const r = await fetch(url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(20000) });
+// V2EX 搜索：官方 API 对数据中心 IP 会被 Cloudflare 挡（403），改用公开的 sov2ex 搜索 API
+async function fetchV2ex(q) {
+  const url = `https://www.sov2ex.com/api/search?q=${encodeURIComponent(q)}&from=0&size=30&sort=created`;
+  const r = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" }, signal: AbortSignal.timeout(20000) });
   if (!r.ok) throw new Error("HTTP " + r.status);
   const j = await r.json();
-  const posts = j?.data?.children?.map((c) => c.data) || [];
-  return posts.map((p) => `${p.title || ""}\n${p.selftext || ""}\n${p.url || ""}`).join("\n");
+  return (j.hits || []).map((h) => {
+    const s = h._source || {};
+    return `${s.title || ""}\n${s.content || ""}`;
+  }).join("\n");
 }
 
 async function fetchHN(q) {
@@ -111,7 +117,7 @@ async function fetchGithubRepos(q) {
 }
 
 const SOURCES = [
-  ["reddit", fetchReddit],
+  ["v2ex", fetchV2ex],
   ["hackernews", fetchHN],
   ["github-repos", fetchGithubRepos],
 ];
