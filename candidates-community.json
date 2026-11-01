@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-10-31T10:57:08.620Z",
+  "generatedAt": "2026-11-01T14:16:18.365Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 126
+      "urls": 122
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 10
+      "urls": 11
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 106
+      "urls": 107
     },
     {
       "source": "hackernews",
@@ -49,8 +49,36 @@
   ],
   "candidates": [
     {
-      "label": "api.aigatego.com",
-      "base": "https://api.aigatego.com",
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/pricing",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "stock-compass.app",
+      "base": "https://stock-compass.app/api/mcp`（",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "stock-compass.app",
+      "base": "https://stock-compass.app/api/v1`。",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "cheapbuddy.cc",
+      "base": "https://cheapbuddy.cc/api-docs",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`，模型名填",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -58,6 +86,20 @@
     {
       "label": "aikey365.com",
       "base": "https://aikey365.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -77,15 +119,8 @@
       "source": "community"
     },
     {
-      "label": "api.openai.com",
-      "base": "https://api.openai.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "token-plan-cn.xiaomimimo.com",
-      "base": "https://token-plan-cn.xiaomimimo.com/v1",
+      "label": "edge.v2ex.com",
+      "base": "https://edge.v2ex.com/chat/v1",
       "testModel": null,
       "note": "",
       "source": "community"
