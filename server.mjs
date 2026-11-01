@@ -786,8 +786,15 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
       const content = ch?.message?.content ?? ch?.text ?? ch?.delta?.content;
       const empty = content === null || content === undefined || content === "";
       if (empty && ch?.finish_reason === "length") {
-        // 截断且无内容 —— 几乎可以肯定是 reasoning 吃光了预算
-        throw new UpstreamError(200, "empty_response", "上游返回空内容（可能 max_tokens 被 reasoning 耗尽）", key);
+        // 截断且无内容：如果是 reasoning 模型把预算花在思考上，用 reasoning 兜底而不是判失败
+        const reasoning = ch?.message?.reasoning_content || ch?.message?.reasoning || "";
+        if (reasoning) {
+          if (ch.message) ch.message.content = reasoning;
+          else ch.text = reasoning;
+          text = JSON.stringify(j);
+        } else {
+          throw new UpstreamError(200, "empty_response", "上游返回空内容（可能 max_tokens 被 reasoning 耗尽）", key);
+        }
       }
       // 重新包装成可被调用方正常解析的 Response
       const r2 = new Response(text, { status: res.status, headers: res.headers });
