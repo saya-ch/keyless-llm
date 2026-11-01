@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-31T10:30:31.862Z",
+  "updatedAt": "2026-11-01T11:23:10.615Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -307,6 +307,55 @@
       "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
       "firstSeen": "2026-10-31T10:30:31.862Z",
       "lastChecked": "2026-10-31T10:30:31.862Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://markaicode.com/lm-studio-api-server-openai-compatible",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-01T11:23:10.615Z",
+      "lastChecked": "2026-11-01T11:23:10.615Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://futureagi.com/blog/openrouter-alternatives-2026",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-01T11:23:10.615Z",
+      "lastChecked": "2026-11-01T11:23:10.615Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://dev.to/jaipalsingh/16-best-openrouter-alternatives-for-private-production-ai-2026-7cn",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-01T11:23:10.615Z",
+      "lastChecked": "2026-11-01T11:23:10.615Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://nexos.ai/blog/openrouter-alternatives",
+      "reason": "/models 返回 403，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-01T11:23:10.615Z",
+      "lastChecked": "2026-11-01T11:23:10.615Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://zhuanlan.zhihu.com/p/2050524686992380835",
+      "reason": "/models 返回 403，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-01T11:23:10.615Z",
+      "lastChecked": "2026-11-01T11:23:10.615Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://blog.csdn.net/lxx309707872/article/details/159698599",
+      "reason": "/models 返回 521，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-01T11:23:10.615Z",
+      "lastChecked": "2026-11-01T11:23:10.615Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://blog.csdn.net/2501_94005722/article/details/157252023",
+      "reason": "/models 返回 521，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-01T11:23:10.615Z",
+      "lastChecked": "2026-11-01T11:23:10.615Z",
       "failCount": 1
     }
   ]

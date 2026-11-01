@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T10:29:04.806Z",
+  "generatedAt": "2026-11-01T11:21:51.909Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,13 +15,13 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 4
+      "found": 7
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
-      "searchBackend": "duckduckgo",
-      "llmBackend": "网关(auto)",
-      "found": 1
+      "searchBackend": "bing",
+      "llmBackend": "规则兜底",
+      "found": 0
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
@@ -32,56 +32,68 @@
     {
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
-      "llmBackend": "规则兜底",
-      "found": 6
+      "llmBackend": "网关(auto)",
+      "found": 7
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
-      "llmBackend": "规则兜底",
-      "found": 0
+      "llmBackend": "网关(auto)",
+      "found": 6
     },
     {
       "query": "public inference API free without key openai format",
       "searchBackend": "duckduckgo",
-      "llmBackend": "规则兜底",
-      "found": 6
+      "llmBackend": "网关(auto)",
+      "found": 13
     }
   ],
   "candidates": [
     {
-      "label": "Mixed Analytics Free APIs List",
-      "base": "https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis",
+      "label": "markaicode.com",
+      "base": "https://markaicode.com/lm-studio-api-server-openai-compatible",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "Nikopastore Free LLM APIs 2026",
-      "base": "https://nikopastore-portfolio.vercel.app/blog/free-llm-apis-2026",
+      "label": "futureagi.com",
+      "base": "https://futureagi.com/blog/openrouter-alternatives-2026",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "xusearch free API docs",
-      "base": "https://xusearch.com/docs/free-api.html",
+      "label": "dev.to",
+      "base": "https://dev.to/jaipalsingh/16-best-openrouter-alternatives-for-private-production-ai-2026-7cn",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "mixedanalytics.com",
-      "base": "https://mixedanalytics.com",
+      "label": "nexos.ai",
+      "base": "https://nexos.ai/blog/openrouter-alternatives",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "aimlapi.com",
-      "base": "https://aimlapi.com",
+      "label": "alternativeto.net",
+      "base": "https://alternativeto.net/software/openrouter",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "openflows.org",
-      "base": "https://openflows.org",
+      "label": "zhuanlan.zhihu.com",
+      "base": "https://zhuanlan.zhihu.com/p/2050524686992380835",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "blog.csdn.net",
+      "base": "https://blog.csdn.net/lxx309707872/article/details/159698599",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "blog.csdn.net",
+      "base": "https://blog.csdn.net/2501_94005722/article/details/157252023",
       "testModel": null,
       "note": ""
     }
