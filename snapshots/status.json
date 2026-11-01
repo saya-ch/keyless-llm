@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-31T10:45:34.498Z",
+  "generatedAt": "2026-11-01T06:22:24.391Z",
   "env": "ci",
   "summary": {
     "providers": 8,
     "freeModels": 40,
-    "healthy": 30,
-    "limited": 6,
+    "healthy": 31,
+    "limited": 3,
     "blocked": 0,
-    "failed": 4
+    "failed": 6
   },
   "providers": [
     {
@@ -17,12 +17,12 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 388,
+      "modelsFound": 386,
       "freeModels": 16,
-      "ok": 11,
-      "limited": 4,
+      "ok": 10,
+      "limited": 3,
       "blocked": 0,
-      "failed": 1,
+      "failed": 3,
       "models": [
         {
           "model": "kilo-auto/free",
@@ -73,18 +73,6 @@
           "error": ""
         },
         {
-          "model": "poolside/laguna-s-2.1:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "poolside/laguna-xs-2.1:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
-        },
-        {
           "model": "cohere/north-mini-code:free",
           "status": 200,
           "state": "healthy",
@@ -118,6 +106,18 @@
           "model": "kilo-auto/small",
           "status": 200,
           "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "poolside/laguna-s-2.1:free",
+          "status": 404,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": "poolside/laguna-xs-2.1:free",
+          "status": 404,
+          "state": "unknown",
           "error": ""
         }
       ],
@@ -325,8 +325,8 @@
       "modelsError": "",
       "modelsFound": 68,
       "freeModels": 5,
-      "ok": 2,
-      "limited": 2,
+      "ok": 4,
+      "limited": 0,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -338,15 +338,15 @@
         },
         {
           "model": "gpt-oss:20b",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded. Retry after 1 seconds."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "mistral-Nemo-Instruct-2407",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded. Retry after 1 seconds."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nemotron-3-nano:30b",
@@ -391,7 +391,7 @@
           "error": ""
         }
       ],
-      "failStreak": 5,
+      "failStreak": 6,
       "suggestDead": true
     }
   ]
