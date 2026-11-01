@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-01T06:22:24.391Z",
+  "generatedAt": "2026-11-01T10:38:39.620Z",
   "env": "ci",
   "summary": {
     "providers": 8,
     "freeModels": 40,
-    "healthy": 31,
-    "limited": 3,
+    "healthy": 30,
+    "limited": 4,
     "blocked": 0,
     "failed": 6
   },
@@ -277,19 +277,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 1,
-      "limited": 0,
+      "ok": 0,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 502,
+          "state": "limited",
+          "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 0,
+      "failStreak": 1,
       "suggestDead": false
     },
     {
@@ -391,7 +391,7 @@
           "error": ""
         }
       ],
-      "failStreak": 6,
+      "failStreak": 7,
       "suggestDead": true
     }
   ]
