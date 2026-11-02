@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-02T12:39:06.900Z",
+  "updatedAt": "2026-11-02T15:59:06.433Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -391,6 +391,48 @@
       "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
       "firstSeen": "2026-11-02T12:39:06.900Z",
       "lastChecked": "2026-11-02T12:39:06.900Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://shahriarlabs.com/blog/openrouter-alternatives-free",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-02T15:59:06.433Z",
+      "lastChecked": "2026-11-02T15:59:06.433Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://wisgate.ai/blogs/openrouter-alternatives-for-free-api-access-a-complete-comparison-guide-for-2026",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-02T15:59:06.433Z",
+      "lastChecked": "2026-11-02T15:59:06.433Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://altaitools.com/openrouter-alternatives",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-02T15:59:06.433Z",
+      "lastChecked": "2026-11-02T15:59:06.433Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.deepinfra.com",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-02T15:59:06.433Z",
+      "lastChecked": "2026-11-02T15:59:06.433Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://watermelonwater.tech/insights/2026%E5%85%8D%E8%B4%B9%E5%A4%A7%E6%A8%A1%E5%9E%8Bapi%E8%B5%84%E6%BA%90%E7%9B%98%E7%82%B9",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-02T15:59:06.433Z",
+      "lastChecked": "2026-11-02T15:59:06.433Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://logfare.ai",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-02T15:59:06.433Z",
+      "lastChecked": "2026-11-02T15:59:06.433Z",
       "failCount": 1
     }
   ]

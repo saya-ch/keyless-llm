@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-02T12:38:09.978Z",
+  "generatedAt": "2026-11-02T15:58:12.515Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -21,7 +21,7 @@
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 1
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
@@ -33,13 +33,13 @@
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 8
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 8
+      "found": 6
     },
     {
       "query": "public inference API free without key openai format",
@@ -50,32 +50,38 @@
   ],
   "candidates": [
     {
-      "label": "jishuzhan.net",
-      "base": "https://jishuzhan.net/article/2051477220120657922",
+      "label": "shahriarlabs.com",
+      "base": "https://shahriarlabs.com/blog/openrouter-alternatives-free",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "segmentfault.com",
-      "base": "https://segmentfault.com/a/1190000048018486",
+      "label": "wisgate.ai",
+      "base": "https://wisgate.ai/blogs/openrouter-alternatives-for-free-api-access-a-complete-comparison-guide-for-2026",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "juejin.cn",
-      "base": "https://juejin.cn/post/7438111283612205096",
+      "label": "altaitools.com",
+      "base": "https://altaitools.com/openrouter-alternatives",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "developer.baidu.com",
-      "base": "https://developer.baidu.com/article/detail.html?id=4022647",
+      "label": "api.deepinfra.com",
+      "base": "https://api.deepinfra.com",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "developer.baidu.com",
-      "base": "https://developer.baidu.com/article/detail.html?id=4022886",
+      "label": "watermelonwater.tech",
+      "base": "https://watermelonwater.tech/insights/2026%E5%85%8D%E8%B4%B9%E5%A4%A7%E6%A8%A1%E5%9E%8Bapi%E8%B5%84%E6%BA%90%E7%9B%98%E7%82%B9",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "logfare.ai",
+      "base": "https://logfare.ai",
       "testModel": null,
       "note": ""
     }
