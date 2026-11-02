@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-10-29T12:27:00.850Z",
-  "env": "local",
+  "generatedAt": "2026-11-02T13:12:12.235Z",
+  "env": "ci",
   "summary": {
-    "checked": 26,
-    "confirmed": 21,
-    "text": 1,
-    "rejected": 0,
-    "missing": 0,
-    "plain": 2,
-    "inconclusive": 2
+    "checked": 35,
+    "confirmed": 26,
+    "text": 0,
+    "rejected": 3,
+    "missing": 2,
+    "plain": 1,
+    "inconclusive": 3
   },
   "models": [
     {
@@ -16,8 +16,8 @@
       "provider": "blockrun",
       "label": "BlockRun",
       "status": 200,
-      "verdict": "tools_text",
-      "detail": "200，工具调用以文本泄漏，无结构化 tool_calls"
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "blockrun/nvidia/mistral-nemotron",
@@ -39,9 +39,9 @@
       "id": "blockrun/nvidia/step-3.7-flash",
       "provider": "blockrun",
       "label": "BlockRun",
-      "status": 429,
-      "verdict": "inconclusive",
-      "detail": "429 限流"
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "kilo/cohere/north-mini-code:free",
@@ -63,6 +63,14 @@
       "id": "kilo/kilo-auto/free",
       "provider": "kilo",
       "label": "Kilo Code",
+      "status": 400,
+      "verdict": "tools_rejected",
+      "detail": "HTTP 400: This model does not support a required or named tool choice. Remove it and retry."
+    },
+    {
+      "id": "kilo/kilo-auto/small",
+      "provider": "kilo",
+      "label": "Kilo Code",
       "status": 200,
       "verdict": "tools_confirmed",
       "detail": "tool_calls: get_weather"
@@ -80,8 +88,8 @@
       "provider": "kilo",
       "label": "Kilo Code",
       "status": 200,
-      "verdict": "text_only",
-      "detail": "200，未调用工具（可能模型选择直接回答）"
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "kilo/nvidia/nemotron-3.5-lightning:free",
@@ -111,25 +119,25 @@
       "id": "kilo/poolside/laguna-s-2.1:free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "status": 404,
+      "verdict": "model_missing",
+      "detail": "HTTP 404: {\"error\":\"The requested model 'poolside/laguna-s-2.1:free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly rel"
     },
     {
       "id": "kilo/poolside/laguna-xs-2.1:free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "status": 404,
+      "verdict": "model_missing",
+      "detail": "HTTP 404: {\"error\":\"The requested model 'poolside/laguna-xs-2.1:free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly re"
     },
     {
       "id": "kilo/recursive/flint-v1.0:free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "status": 503,
+      "verdict": "inconclusive",
+      "detail": "HTTP 503: Provider returned error"
     },
     {
       "id": "kilo/reflection/beam-free",
@@ -148,7 +156,55 @@
       "detail": "429 限流"
     },
     {
+      "id": "llm7/codestral-latest",
+      "provider": "llm7",
+      "label": "LLM7.io",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "llm7/gpt-oss:20b",
+      "provider": "llm7",
+      "label": "LLM7.io",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "llm7/minimax-m2.7",
+      "provider": "llm7",
+      "label": "LLM7.io",
+      "status": 429,
+      "verdict": "inconclusive",
+      "detail": "429 限流"
+    },
+    {
+      "id": "llm7/mistral-Nemo-Instruct-2407",
+      "provider": "llm7",
+      "label": "LLM7.io",
+      "status": 400,
+      "verdict": "tools_rejected",
+      "detail": "HTTP 400: Model 'mistral-Nemo-Instruct-2407' does not support tools."
+    },
+    {
+      "id": "llm7/nemotron-3-nano:30b",
+      "provider": "llm7",
+      "label": "LLM7.io",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
       "id": "ovh/gpt-oss-120b",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
+      "id": "ovh/gpt-oss-20b",
       "provider": "ovh",
       "label": "OVHcloud AI Endpoints",
       "status": 200,
@@ -164,6 +220,14 @@
       "detail": "tool_calls: get_weather"
     },
     {
+      "id": "ovh/Mistral-Nemo-Instruct-2407",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
+    },
+    {
       "id": "ovh/Mistral-Small-3.2-24B-Instruct-2506",
       "provider": "ovh",
       "label": "OVHcloud AI Endpoints",
@@ -172,12 +236,20 @@
       "detail": "tool_calls: get_weather"
     },
     {
+      "id": "ovh/Qwen2.5-VL-72B-Instruct",
+      "provider": "ovh",
+      "label": "OVHcloud AI Endpoints",
+      "status": 400,
+      "verdict": "tools_rejected",
+      "detail": "HTTP 400: {\"message\":\"feature 'tool calls' is not currently supported\"}"
+    },
+    {
       "id": "ovh/Qwen3.5-397B-A17B",
       "provider": "ovh",
       "label": "OVHcloud AI Endpoints",
       "status": 200,
       "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "detail": "finish_reason=tool_calls"
     },
     {
       "id": "ovh/Qwen3.5-9B",
