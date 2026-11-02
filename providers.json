@@ -145,15 +145,25 @@
     },
     {
       "id": "opencode",
-      "label": "OpenCode",
-      "base": "https://opencode.ai/inference/v1",
+      "label": "OpenCode Zen",
+      "base": "https://opencode.ai/inference/openai/v1",
       "modelsPath": "/models",
+      "api": "opencode",
+      "discover": false,
       "freeRule": { "type": "contains", "value": "-free" },
       "extraFree": ["big-pickle", "beam-free", "grok-code"],
-      "rate": "按 IP（匿名每日额度，当前 429）",
-      "enabled": false,
-      "comment": "2026-10-29 复测：/models 200（82 个模型），但 chat 匿名返回 429「Free usage limit reached」，匿名每日额度已用尽或需 OpenCode 客户端身份。停用观察。",
-      "staticModels": []
+      "rate": "匿名免费车道：需模拟官方客户端指纹（UA/session/工具集），免费额度按 project × 出口 IP 记账，用尽返回 429",
+      "enabled": true,
+      "comment": "指纹逻辑移植自 dsh-our-free-model（见 docs/opencode-free-lane.md）。额度按 IP 计：本机/CI 出口可能已用尽（429），干净 IP 通常有额度。",
+      "staticModels": [
+        "deepseek-v4.1-flash-free",
+        "glm-5.3-flash-free",
+        "mimo-v2.6-flash-free",
+        "nemotron-3.5-super-vl-free",
+        "nemotron-3.5-lightning-free",
+        "beam-free",
+        "flint-40b-free"
+      ]
     },
     {
       "id": "aihorde",

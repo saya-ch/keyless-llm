@@ -11,6 +11,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
+import { mintSession, opencodeHeaders, shapeBody } from "./lib/opencode.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const VERSION = "2.0.0";
@@ -714,6 +715,10 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
   } else if (api === "openai-responses") {
     url = `${p.base}/responses`;
     payload = { ...openAIToResponses(body, e.model), stream };
+  } else if (api === "opencode") {
+    // OpenCode 免费车道：注入官方工具集与系统提示，模拟官方客户端指纹
+    url = `${p.base}/chat/completions`;
+    payload = shapeBody({ ...body, model: e.model, stream });
   }
 
   let release = gateAcquire(p.id);
@@ -723,12 +728,18 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
 
   let res;
   try {
-    const headers = { "Content-Type": "application/json", "User-Agent": CFG.ua };
-    // 来源级鉴权：有些「免费」来源需要注册后拿 key（公开可申请，但不是免鉴权）。
-    // providers.json 里配 apiKey（明文）或 apiKeyEnv（环境变量名）即可；
-    // 没配 key 的此类来源会被 providerEnabled() 直接跳过，不参与调度。
-    const upKey = p.apiKey || (p.apiKeyEnv ? process.env[p.apiKeyEnv] : "") || "";
-    if (upKey) headers.Authorization = `Bearer ${upKey}`;
+    let headers;
+    if (api === "opencode") {
+      // 免费车道要的整套客户端指纹头（含 session/project/UA）
+      headers = opencodeHeaders(mintSession());
+    } else {
+      headers = { "Content-Type": "application/json", "User-Agent": CFG.ua };
+      // 来源级鉴权：有些「免费」来源需要注册后拿 key（公开可申请，但不是免鉴权）。
+      // providers.json 里配 apiKey（明文）或 apiKeyEnv（环境变量名）即可；
+      // 没配 key 的此类来源会被 providerEnabled() 直接跳过，不参与调度。
+      const upKey = p.apiKey || (p.apiKeyEnv ? process.env[p.apiKeyEnv] : "") || "";
+      if (upKey) headers.Authorization = `Bearer ${upKey}`;
+    }
     res = await fetch(url, {
       method: "POST",
       headers,
