@@ -148,7 +148,7 @@ API Key 填 `sk-keyless-local`（本地自设，仅用于挡本机其它程序�
 | `llm7`         | `api.llm7.io/v1`              | `tier == "turbo"`      | 免 key 免账号，匿名 10 req/min；仅 turbo 集 5 个模型可用，pro 集需付费 token |
 | `aihorde`      | `aihorde.net/api/v2`          | `staticModels` 手工收录 | **公开匿名 key**（`0000000000`），社区众包算力；非 OpenAI 兼容，网关适配异步提交+轮询，仅非流式 |
 | `pollinations-gen` | `gen.pollinations.ai/v1`  | 全部                    | **已停用**：匿名额度极小，耗尽后 401，恢复前不启用 |
-| `opencode`     | `opencode.ai/inference/v1`    | id 含 `-free`          | **已停用**，匿名额度整体 429      |
+| `opencode`     | `opencode.ai/inference/openai/v1` | id 含 `-free`     | 匿名免费车道，需模拟官方客户端指纹（UA / session / 官方工具集 / 系统提示）；移植自 dsh-our-free-model，见 [接入笔记](docs/opencode-free-lane.md) |
 
 各来源的免费模型 id 规则完全不同（`:free` 后缀 / `tier` 字段 / 自由价），所以用 `freeRule` 区分，不要硬编码模型名。
 
@@ -205,7 +205,7 @@ curl http://127.0.0.1:8788/v1/chat/completions \
 
 - `429` / `403` / `5xx` / 网络错误 → 换模型重试
 - **HTTP 200 但内容为空** → 也算失败，换模型重试
-- auto 模式单请求超时 `KEYLESS_AUTO_TIMEOUT`（默认 45s），宁可快速失败换下一个，也不卡死在不响应的上游上
+- auto 模式单请求超时 `KEYLESS_AUTO_TIMEOUT`（默认 18s）+ 首字节超时 `KEYLESS_TTFT`（默认 12s），宁可快速失败换下一个，也不卡死在不响应的上游上；另设 auto 整体预算 `KEYLESS_AUTO_BUDGET`（默认 45s），到点即收手
 
 「200 但空内容」这条是实测踩出来的：推理型模型（gpt-oss、step-3.7 等）会把 `max_tokens` 全烧在 reasoning 上，`finish_reason=length` 而正文一个字都没有。对调用方来说这是「成功但没结果」，比报错更难排查。
 
@@ -223,12 +223,15 @@ curl http://127.0.0.1:8788/v1/chat/completions \
 | --- | --- | --- |
 | `KEYLESS_AUTO_NAMES` | `auto,auto-fast,auto-thinking` | 识别为 auto 的模型名（多个等价于同一个策略） |
 | `KEYLESS_AUTO_ATTEMPTS` | `6` | 最多试几个模型 |
-| `KEYLESS_AUTO_TIMEOUT` | `45000` | auto 单模型超时（毫秒） |
+| `KEYLESS_AUTO_TIMEOUT` | `18000` | auto 单模型超时（毫秒） |
+| `KEYLESS_TTFT` | `12000` | 首字节超时：响应头迟迟不回就换模型 |
+| `KEYLESS_AUTO_BUDGET` | `45000` | auto 整个请求的时间预算 |
 | `KEYLESS_AUTO_MIN_CTX` | `256000` | auto 准入的最低上下文 |
 | `KEYLESS_AUTO_REQUIRE_TOOLS` | `1` | 要求工具调用能力，`0` 关闭准入 |
 | `KEYLESS_AUTO_STICKY` | `1` | 记住上次成功的模型并优先复用（减少切换开销） |
 | `KEYLESS_PROVIDER_CONCURRENCY` | `3` | 单来源最大在途请求数（防自己打爆自己的配额） |
-| `KEYLESS_TIMEOUT` | `120000` | 普通（非 auto）请求的上游超时 |
+| `KEYLESS_TIMEOUT` | `30000` | 普通（非 auto）请求的上游超时 |
+| `KEYLESS_TIMEOUT_STREAM` | `75000` | 流式请求的上游超时 |
 | `KEYLESS_ATTEMPTS` | `2` | 指定具体模型时的最大转移次数 |
 
 ## 自动化：agent 搜索，脚本验证
