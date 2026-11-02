@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-01T13:24:32.870Z",
+  "generatedAt": "2026-11-02T15:51:39.893Z",
   "sources": [
     {
       "name": "freellms",
@@ -10,8 +10,8 @@
     {
       "name": "awesome-free-llm-apis",
       "url": "https://raw.githubusercontent.com/mnfst/awesome-free-llm-apis/main/README.md",
-      "extracted": 19,
-      "candidates": 10
+      "extracted": 22,
+      "candidates": 12
     },
     {
       "name": "free-AI-free-token",
@@ -112,6 +112,20 @@
       "source": "awesome-free-llm-apis"
     },
     {
+      "label": "api.cohere.ai",
+      "base": "https://api.cohere.ai/compatibility/v1",
+      "testModel": null,
+      "note": "",
+      "source": "awesome-free-llm-apis"
+    },
+    {
+      "label": "generativelanguage.googleapis.com",
+      "base": "https://generativelanguage.googleapis.com/v1beta/openai",
+      "testModel": null,
+      "note": "",
+      "source": "awesome-free-llm-apis"
+    },
+    {
       "label": "proxy.gonkabroker.com",
       "base": "https://proxy.gonkabroker.com/v1",
       "testModel": null,
@@ -166,20 +180,6 @@
       "testModel": null,
       "note": "",
       "source": "free-AI-free-token"
-    },
-    {
-      "label": "Google Gemini API",
-      "base": "https://generativelanguage.googleapis.com/v1beta/openai",
-      "testModel": null,
-      "note": "",
-      "source": "free-llm-api"
-    },
-    {
-      "label": "Cohere",
-      "base": "https://api.cohere.ai/compatibility/v1",
-      "testModel": null,
-      "note": "",
-      "source": "free-llm-api"
     },
     {
       "label": "SiliconFlow",
