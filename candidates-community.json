@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-01T14:16:18.365Z",
+  "generatedAt": "2026-11-02T15:58:28.623Z",
   "sources": [
     {
       "source": "v2ex",
@@ -9,12 +9,12 @@
     {
       "source": "hackernews",
       "query": "free llm api no api key",
-      "urls": 42
+      "urls": 41
     },
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 11
+      "urls": 10
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 107
+      "urls": 104
     },
     {
       "source": "hackernews",
@@ -49,36 +49,15 @@
   ],
   "candidates": [
     {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/pricing",
+      "label": "api.kevoryn.com",
+      "base": "https://api.kevoryn.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
     },
     {
-      "label": "stock-compass.app",
-      "base": "https://stock-compass.app/api/mcp`（",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "stock-compass.app",
-      "base": "https://stock-compass.app/api/v1`。",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "cheapbuddy.cc",
-      "base": "https://cheapbuddy.cc/api-docs",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`，模型名填",
+      "label": "api.kevoryn.com",
+      "base": "https://api.kevoryn.com",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -121,6 +100,13 @@
     {
       "label": "edge.v2ex.com",
       "base": "https://edge.v2ex.com/chat/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.openai.com",
+      "base": "https://api.openai.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
