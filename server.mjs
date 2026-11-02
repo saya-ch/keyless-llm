@@ -54,9 +54,11 @@ const CFG = {
   // providerConcurrency 限制单来源在途请求数，超出的排队（队列也满则放弃该来源换模型）。
   providerConcurrency: int(env("PROVIDER_CONCURRENCY", 3), 3),
   // 超时（毫秒）：auto 模式单次请求更快失败好换模型；普通模式留足生成时间
-  timeout: int(env("TIMEOUT", 120000), 120000),
-  timeoutStream: int(env("TIMEOUT_STREAM", 300000), 300000),
-  autoTimeout: int(env("AUTO_TIMEOUT", 45000), 45000),   // auto 模式单模型超时
+  timeout: int(env("TIMEOUT", 30000), 30000),
+  timeoutStream: int(env("TIMEOUT_STREAM", 75000), 75000),
+  autoTimeout: int(env("AUTO_TIMEOUT", 18000), 18000),   // auto 模式单模型超时（快速失败换下一个）
+  ttft: int(env("TTFT", 12000), 12000),                  // 首字节超时：响应头迟迟不回就换模型
+  autoBudget: int(env("AUTO_BUDGET", 45000), 45000),     // auto 模式整个请求的时间预算
 };
 function int(v, d) { const n = parseInt(v, 10); return Number.isFinite(n) ? n : d; }
 
@@ -691,7 +693,11 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
   // auto 模式用较短的超时（快速失败换模型），普通模式留足生成时间。
   const ms = timeoutMs || (stream ? CFG.timeoutStream : CFG.timeout);
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), ms);
+  // 两段超时：首字节（响应头）用更短的 ttft，响应头到了再重置为总超时 ms。
+  // 目的：上游「连上但不响应」时快速放弃、换下一个模型，而不是干等总超时。
+  const ttft = Math.min(CFG.ttft, ms);
+  let phase = "ttft";
+  let timer = setTimeout(() => ctrl.abort(), ttft);
 
   // 按来源协议转换请求体与路径（pivot = OpenAI Chat）
   const api = p.api || "openai-completions";
@@ -733,10 +739,15 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
     release();
     clearTimeout(timer);
     const timedOut = err.name === "AbortError";
-    throw new UpstreamError(timedOut ? 504 : -1, timedOut ? "upstream_timeout" : "network_error",
-      timedOut ? `上游超时 (${ms}ms)` : (err.message || "网络错误"), key);
+    const why = timedOut
+      ? (phase === "ttft" ? `上游首字节超时 (${ttft}ms)` : `上游超时 (${ms}ms)`)
+      : (err.message || "网络错误");
+    throw new UpstreamError(timedOut ? 504 : -1, timedOut ? "upstream_timeout" : "network_error", why, key);
   }
   release(); // 响应头已到，闸释放；后续读体/转换不占并发额度
+  clearTimeout(timer);
+  phase = "body";
+  timer = setTimeout(() => ctrl.abort(), ms);  // 响应头已到，切回总超时
 
   if (!res.ok) {
     let type = "upstream_error", message = `${res.status}`;
@@ -821,8 +832,12 @@ async function callWithRotation(requested, body, stream) {
   const maxTry = auto ? CFG.autoAttempts : CFG.maxAttempts;
   let attempt = 0, lastErr = null;
   const tried = [];
+  const startAt = Date.now();
+  const budget = auto ? CFG.autoBudget : 0;
 
   while (attempt < maxTry) {
+    // auto：超出整体时间预算就收手，避免在一个慢请求上耗尽时间
+    if (budget && Date.now() - startAt > budget) break;
     let key, failover;
 
     if (auto) {
