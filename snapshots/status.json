@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-02T11:26:04.958Z",
+  "generatedAt": "2026-11-02T16:39:22.228Z",
   "env": "ci",
   "summary": {
-    "providers": 8,
-    "freeModels": 42,
+    "providers": 9,
+    "freeModels": 49,
     "healthy": 27,
-    "limited": 10,
+    "limited": 17,
     "blocked": 0,
     "failed": 5
   },
@@ -17,7 +17,7 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 386,
+      "modelsFound": 385,
       "freeModels": 16,
       "ok": 11,
       "limited": 2,
@@ -50,9 +50,9 @@
         },
         {
           "model": "xingchen-agi/xing4.0-29b-a4b:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "dots-studio/dots-3-note-preview:free",
@@ -62,9 +62,9 @@
         },
         {
           "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -199,8 +199,8 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 8,
-      "limited": 2,
+      "ok": 9,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -218,9 +218,9 @@
         },
         {
           "model": "Qwen3.5-397B-A17B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Qwen3.5-9B",
@@ -277,19 +277,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 1,
-      "limited": 0,
+      "ok": 0,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 502,
+          "state": "limited",
+          "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 0,
+      "failStreak": 1,
       "suggestDead": false
     },
     {
@@ -364,16 +364,76 @@
           "model": "mistral-Nemo-Instruct-2407",
           "status": 429,
           "state": "limited",
-          "error": "Rate limit exceeded. Retry after 40 seconds."
+          "error": "Rate limit exceeded. Retry after 39 seconds."
         },
         {
           "model": "nemotron-3-nano:30b",
           "status": 429,
           "state": "limited",
-          "error": "Rate limit exceeded. Retry after 39 seconds."
+          "error": "Rate limit exceeded. Retry after 38 seconds."
         }
       ],
       "failStreak": 0,
+      "suggestDead": false
+    },
+    {
+      "id": "opencode",
+      "label": "OpenCode Zen",
+      "enabled": true,
+      "base": "https://opencode.ai/inference/openai/v1",
+      "rate": "匿名免费车道：需模拟官方客户端指纹（UA/session/工具集），免费额度按 project × 出口 IP 记账，用尽返回 429",
+      "modelsError": "",
+      "modelsFound": 7,
+      "freeModels": 7,
+      "ok": 0,
+      "limited": 7,
+      "blocked": 0,
+      "failed": 0,
+      "models": [
+        {
+          "model": "deepseek-v4.1-flash-free",
+          "status": 429,
+          "state": "limited",
+          "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
+        },
+        {
+          "model": "glm-5.3-flash-free",
+          "status": 429,
+          "state": "limited",
+          "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
+        },
+        {
+          "model": "mimo-v2.6-flash-free",
+          "status": 429,
+          "state": "limited",
+          "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
+        },
+        {
+          "model": "nemotron-3.5-super-vl-free",
+          "status": 429,
+          "state": "limited",
+          "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
+        },
+        {
+          "model": "nemotron-3.5-lightning-free",
+          "status": 429,
+          "state": "limited",
+          "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
+        },
+        {
+          "model": "beam-free",
+          "status": 429,
+          "state": "limited",
+          "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
+        },
+        {
+          "model": "flint-40b-free",
+          "status": 429,
+          "state": "limited",
+          "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
+        }
+      ],
+      "failStreak": 1,
       "suggestDead": false
     },
     {
@@ -403,7 +463,7 @@
           "error": ""
         }
       ],
-      "failStreak": 8,
+      "failStreak": 9,
       "suggestDead": true
     }
   ]
