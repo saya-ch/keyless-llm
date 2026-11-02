@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-01T11:21:51.909Z",
+  "generatedAt": "2026-11-02T12:38:09.978Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -19,9 +19,9 @@
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
-      "searchBackend": "bing",
-      "llmBackend": "规则兜底",
-      "found": 0
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 7
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
@@ -39,61 +39,43 @@
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 6
+      "found": 8
     },
     {
       "query": "public inference API free without key openai format",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 13
+      "found": 7
     }
   ],
   "candidates": [
     {
-      "label": "markaicode.com",
-      "base": "https://markaicode.com/lm-studio-api-server-openai-compatible",
+      "label": "jishuzhan.net",
+      "base": "https://jishuzhan.net/article/2051477220120657922",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "futureagi.com",
-      "base": "https://futureagi.com/blog/openrouter-alternatives-2026",
+      "label": "segmentfault.com",
+      "base": "https://segmentfault.com/a/1190000048018486",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "dev.to",
-      "base": "https://dev.to/jaipalsingh/16-best-openrouter-alternatives-for-private-production-ai-2026-7cn",
+      "label": "juejin.cn",
+      "base": "https://juejin.cn/post/7438111283612205096",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "nexos.ai",
-      "base": "https://nexos.ai/blog/openrouter-alternatives",
+      "label": "developer.baidu.com",
+      "base": "https://developer.baidu.com/article/detail.html?id=4022647",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "alternativeto.net",
-      "base": "https://alternativeto.net/software/openrouter",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "zhuanlan.zhihu.com",
-      "base": "https://zhuanlan.zhihu.com/p/2050524686992380835",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "blog.csdn.net",
-      "base": "https://blog.csdn.net/lxx309707872/article/details/159698599",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "blog.csdn.net",
-      "base": "https://blog.csdn.net/2501_94005722/article/details/157252023",
+      "label": "developer.baidu.com",
+      "base": "https://developer.baidu.com/article/detail.html?id=4022886",
       "testModel": null,
       "note": ""
     }

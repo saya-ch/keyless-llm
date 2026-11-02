@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-01T11:23:10.615Z",
+  "updatedAt": "2026-11-02T12:39:06.900Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -356,6 +356,41 @@
       "reason": "/models 返回 521，无法枚举模型，也未指定 --model",
       "firstSeen": "2026-11-01T11:23:10.615Z",
       "lastChecked": "2026-11-01T11:23:10.615Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://jishuzhan.net/article/2051477220120657922",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-02T12:39:06.900Z",
+      "lastChecked": "2026-11-02T12:39:06.900Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://segmentfault.com/a/1190000048018486",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-02T12:39:06.900Z",
+      "lastChecked": "2026-11-02T12:39:06.900Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://juejin.cn/post/7438111283612205096",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-02T12:39:06.900Z",
+      "lastChecked": "2026-11-02T12:39:06.900Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://developer.baidu.com/article/detail.html?id=4022647",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-02T12:39:06.900Z",
+      "lastChecked": "2026-11-02T12:39:06.900Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://developer.baidu.com/article/detail.html?id=4022886",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-02T12:39:06.900Z",
+      "lastChecked": "2026-11-02T12:39:06.900Z",
       "failCount": 1
     }
   ]
