@@ -1,0 +1,22 @@
+name: test-opencode
+
+# 临时验证：OpenCode 免费车道（指纹移植自 dsh-our-free-model）
+# 本机出口 IP 配额用尽（429），用 CI 的干净 IP 验证指纹是否被接受（200）。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: 测试 OpenCode 免费车道
+        run: node scripts/test-opencode.mjs
