@@ -19,3 +19,7 @@ console.log("model:", model, "session:", session);
 console.log("status:", r.status);
 const text = await r.text();
 console.log(text.slice(0, 800));
+if (!r.ok) {
+  console.error("::error::OpenCode 免费车道返回非 200:", r.status);
+  process.exit(1);
+}
