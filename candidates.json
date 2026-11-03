@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-02T15:58:12.515Z",
+  "generatedAt": "2026-11-03T12:04:21.170Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,7 +15,7 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 11
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -33,7 +33,7 @@
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 8
+      "found": 6
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
@@ -45,45 +45,8 @@
       "query": "public inference API free without key openai format",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 14
     }
   ],
-  "candidates": [
-    {
-      "label": "shahriarlabs.com",
-      "base": "https://shahriarlabs.com/blog/openrouter-alternatives-free",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "wisgate.ai",
-      "base": "https://wisgate.ai/blogs/openrouter-alternatives-for-free-api-access-a-complete-comparison-guide-for-2026",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "altaitools.com",
-      "base": "https://altaitools.com/openrouter-alternatives",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "api.deepinfra.com",
-      "base": "https://api.deepinfra.com",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "watermelonwater.tech",
-      "base": "https://watermelonwater.tech/insights/2026%E5%85%8D%E8%B4%B9%E5%A4%A7%E6%A8%A1%E5%9E%8Bapi%E8%B5%84%E6%BA%90%E7%9B%98%E7%82%B9",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "logfare.ai",
-      "base": "https://logfare.ai",
-      "testModel": null,
-      "note": ""
-    }
-  ]
+  "candidates": []
 }
