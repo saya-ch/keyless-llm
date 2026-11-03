@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-02T15:58:05.419Z",
+  "generatedAt": "2026-11-03T14:14:33.331Z",
   "sources": [
     {
       "name": "freellms",
@@ -23,7 +23,7 @@
       "name": "free-llm-api",
       "url": "https://raw.githubusercontent.com/xyzs996/free-llm-api/main/data/providers.json",
       "extracted": 26,
-      "candidates": 22
+      "candidates": 21
     }
   ],
   "candidates": [
@@ -254,13 +254,6 @@
     {
       "label": "Nebius Token Factory",
       "base": "https://api.tokenfactory.nebius.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "free-llm-api"
-    },
-    {
-      "label": "DeepInfra",
-      "base": "https://api.deepinfra.com/v1/openai",
       "testModel": null,
       "note": "",
       "source": "free-llm-api"
