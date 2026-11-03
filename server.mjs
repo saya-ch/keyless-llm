@@ -12,6 +12,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { mintSession, opencodeHeaders, shapeBody } from "./lib/opencode.mjs";
+import { createGates } from "./lib/gate.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const VERSION = "2.0.0";
@@ -619,18 +620,11 @@ function normalizeUpstreamSSE(up, api) {
   return parseUpstreamSSE(up);
 }
 
-// 同来源并发闸：acquire 返回 release 函数；排队过长返回 null（调用方放弃该来源换模型）
+// 同来源并发闸：await acquire 得到 release 函数；排队过长得到 null（调用方放弃该来源换模型）
 // 闸只覆盖「发起请求 → 收到响应头」这一段——限流计数发生在请求时刻，
 // 响应体读取不占闸，流式长响应不会被卡住。
-const providerGates = new Map(); // pid -> {active, waiters:[]}
-function gateAcquire(pid) {
-  const g = providerGates.get(pid) || { active: 0, waiters: [] };
-  providerGates.set(pid, g);
-  const release = () => { g.active--; const w = g.waiters.shift(); if (w) { g.active++; w(); } };
-  if (g.active < CFG.providerConcurrency) { g.active++; return release; }
-  if (g.waiters.length >= 8) return null;
-  return new Promise((resolve) => g.waiters.push(() => { g.active++; resolve(release); }));
-}
+// 实现见 lib/gate.mjs（独立模块，便于离线测试）。
+const { acquire: gateAcquire } = createGates(CFG.providerConcurrency);
 
 // AI Horde：公开匿名 key（0000000000，官方文档写明），非 OpenAI 兼容——
 // 协议是「提交异步任务 → 轮询状态 → 取文本」。网关把 OpenAI chat 请求翻译成它的格式。
@@ -721,7 +715,7 @@ async function callUpstream(key, body, stream, timeoutMs = 0) {
     payload = shapeBody({ ...body, model: e.model, stream });
   }
 
-  let release = gateAcquire(p.id);
+  let release = await gateAcquire(p.id);
   if (!release) {
     throw new UpstreamError(429, "provider_busy", `来源并发已达上限(${CFG.providerConcurrency})且排队满，换模型重试`, key);
   }
