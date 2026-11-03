@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-02T17:04:24.074Z",
+  "generatedAt": "2026-11-03T15:06:38.637Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 122
+      "urls": 118
     },
     {
       "source": "hackernews",
@@ -14,12 +14,12 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 11
+      "urls": 13
     },
     {
       "source": "v2ex",
       "query": "openai compatible endpoint no signup",
-      "urls": 89
+      "urls": 86
     },
     {
       "source": "hackernews",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 104
+      "urls": 105
     },
     {
       "source": "hackernews",
@@ -63,22 +63,15 @@
       "source": "community"
     },
     {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`，模型名填",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
       "label": "aikey365.com",
       "base": "https://aikey365.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -91,15 +84,15 @@
       "source": "community"
     },
     {
-      "label": "api.cxbl.top",
-      "base": "https://api.cxbl.top",
+      "label": "edge.v2ex.com",
+      "base": "https://edge.v2ex.com/chat/v1",
       "testModel": null,
       "note": "",
       "source": "community"
     },
     {
-      "label": "edge.v2ex.com",
-      "base": "https://edge.v2ex.com/chat/v1",
+      "label": "api.openai.com",
+      "base": "https://api.openai.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
