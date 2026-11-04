@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-03T15:06:38.637Z",
+  "generatedAt": "2026-11-04T15:27:01.754Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 118
+      "urls": 113
     },
     {
       "source": "hackernews",
@@ -14,12 +14,12 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 13
+      "urls": 12
     },
     {
       "source": "v2ex",
       "query": "openai compatible endpoint no signup",
-      "urls": 86
+      "urls": 75
     },
     {
       "source": "hackernews",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 105
+      "urls": 102
     },
     {
       "source": "hackernews",
@@ -78,21 +78,28 @@
     },
     {
       "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`，模型名用表里的完整",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "edge.v2ex.com",
-      "base": "https://edge.v2ex.com/chat/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.openai.com",
-      "base": "https://api.openai.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
