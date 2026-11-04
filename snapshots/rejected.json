@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-03T12:05:04.847Z",
+  "updatedAt": "2026-11-04T12:19:16.462Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -433,6 +433,27 @@
       "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
       "firstSeen": "2026-11-02T15:59:06.433Z",
       "lastChecked": "2026-11-02T15:59:06.433Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://r.bing.com/rp/zh5yhbkbJVkzFqNrcigech9CW1Y.br.css",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-04T12:19:16.462Z",
+      "lastChecked": "2026-11-04T12:19:16.462Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://r.bing.com/rp/8YXKcnI039FrUqdxRc0GhYCz_fM.br.css",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-04T12:19:16.462Z",
+      "lastChecked": "2026-11-04T12:19:16.462Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://blogs.novita.ai/free-llm-api-comparison-2026",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-04T12:19:16.462Z",
+      "lastChecked": "2026-11-04T12:19:16.462Z",
       "failCount": 1
     }
   ]

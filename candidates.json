@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T12:04:21.170Z",
+  "generatedAt": "2026-11-04T12:18:04.191Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,19 +15,19 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 11
+      "found": 54
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 1
+      "found": 5
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
       "searchBackend": "bing",
-      "llmBackend": "规则兜底",
-      "found": 0
+      "llmBackend": "网关(auto)",
+      "found": 49
     },
     {
       "query": "openrouter alternative anonymous free api no signup",
@@ -39,14 +39,33 @@
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 6
+      "found": 7
     },
     {
       "query": "public inference API free without key openai format",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 14
+      "found": 56
     }
   ],
-  "candidates": []
+  "candidates": [
+    {
+      "label": "r.bing.com",
+      "base": "https://r.bing.com/rp/zh5yhbkbJVkzFqNrcigech9CW1Y.br.css",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "r.bing.com",
+      "base": "https://r.bing.com/rp/8YXKcnI039FrUqdxRc0GhYCz_fM.br.css",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "blogs.novita.ai",
+      "base": "https://blogs.novita.ai/free-llm-api-comparison-2026",
+      "testModel": null,
+      "note": ""
+    }
+  ]
 }
