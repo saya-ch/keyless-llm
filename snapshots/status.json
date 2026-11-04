@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-03T11:03:14.976Z",
+  "generatedAt": "2026-11-04T11:10:22.695Z",
   "env": "ci",
   "summary": {
     "providers": 9,
-    "freeModels": 52,
-    "healthy": 24,
-    "limited": 23,
+    "freeModels": 48,
+    "healthy": 27,
+    "limited": 14,
     "blocked": 0,
-    "failed": 5
+    "failed": 7
   },
   "providers": [
     {
@@ -17,12 +17,12 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 387,
-      "freeModels": 19,
-      "ok": 9,
-      "limited": 7,
+      "modelsFound": 385,
+      "freeModels": 15,
+      "ok": 10,
+      "limited": 0,
       "blocked": 0,
-      "failed": 3,
+      "failed": 5,
       "models": [
         {
           "model": "kilo-auto/free",
@@ -32,9 +32,9 @@
         },
         {
           "model": "nvidia/nemotron-3.5-super-vl:free",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "reflection/beam-free",
@@ -43,28 +43,10 @@
           "error": ""
         },
         {
-          "model": "recursive/flint-v1.0:free",
-          "status": 503,
-          "state": "limited",
-          "error": "Provider returned error"
-        },
-        {
-          "model": "xingchen-agi/xing4.0-29b-a4b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
-        },
-        {
           "model": "dots-studio/dots-3-note-preview:free",
           "status": 200,
           "state": "healthy",
           "error": ""
-        },
-        {
-          "model": "liquid/lfm-2.5-2.6b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
@@ -73,28 +55,10 @@
           "error": ""
         },
         {
-          "model": "thinkingmachines/inkling-small:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded: limit_rpd/thinkingmachines/inkling-small-20260730/e27a9a6d-1451-4be4-876e-292ffcbf1e71. Daily limit reached for thinkingmachines/inkling-small:free via Thinking Machines. Credits don't affect this cap. Add your own provider key to use your own limits: https://openrouter.ai/workspaces/default/byok"
-        },
-        {
-          "model": "thinkingmachines/inkling:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded: limit_rpd/thinkingmachines/inkling-20260715/89249263-425e-4099-a555-ea5c9698ba76. Daily limit reached for thinkingmachines/inkling:free via Thinking Machines. Credits don't affect this cap. Add your own provider key to use your own limits: https://openrouter.ai/workspaces/default/byok"
-        },
-        {
           "model": "cohere/north-mini-code:free",
           "status": 200,
           "state": "healthy",
           "error": ""
-        },
-        {
-          "model": "nvidia/nemotron-3.5-content-safety:free",
-          "status": 404,
-          "state": "unknown",
-          "error": "Provider returned error"
         },
         {
           "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -109,12 +73,6 @@
           "error": ""
         },
         {
-          "model": "google/gemma-4-31b-it:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
-        },
-        {
           "model": "openrouter/free",
           "status": 200,
           "state": "healthy",
@@ -127,6 +85,12 @@
           "error": ""
         },
         {
+          "model": "recursive/flint-v1.0:free",
+          "status": 404,
+          "state": "unknown",
+          "error": ""
+        },
+        {
           "model": "poolside/laguna-s-2.1:free",
           "status": 404,
           "state": "unknown",
@@ -134,6 +98,18 @@
         },
         {
           "model": "poolside/laguna-xs-2.1:free",
+          "status": 404,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": "xingchen-agi/xing4.0-29b-a4b:free",
+          "status": 404,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": "liquid/lfm-2.5-2.6b:free",
           "status": 404,
           "state": "unknown",
           "error": ""
@@ -217,16 +193,16 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 8,
-      "limited": 2,
+      "ok": 10,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "Qwen3.8-27B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Qwen3.6-27B",
@@ -242,9 +218,9 @@
         },
         {
           "model": "Qwen3.5-9B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "gpt-oss-120b",
@@ -295,19 +271,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 0,
-      "limited": 1,
+      "ok": 1,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 502,
-          "state": "limited",
-          "error": "Vireonix is temporarily unavailable. Please try again shortly."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         }
       ],
-      "failStreak": 2,
+      "failStreak": 0,
       "suggestDead": false
     },
     {
@@ -343,22 +319,22 @@
       "modelsError": "",
       "modelsFound": 70,
       "freeModels": 7,
-      "ok": 1,
-      "limited": 6,
+      "ok": 0,
+      "limited": 7,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "DeepSeek-V4-Flash-0731",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "GLM-5.3-Flash",
           "status": -1,
           "state": "limited",
           "error": "TIMEOUT"
+        },
+        {
+          "model": "GLM-5.3-Flash",
+          "status": 429,
+          "state": "limited",
+          "error": "Too many concurrent requests for this client. Retry after 10 seconds."
         },
         {
           "model": "codestral-latest",
@@ -382,16 +358,16 @@
           "model": "mistral-Nemo-Instruct-2407",
           "status": 429,
           "state": "limited",
-          "error": "Rate limit exceeded. Retry after 29 seconds."
+          "error": "Rate limit exceeded. Retry after 39 seconds."
         },
         {
           "model": "nemotron-3-nano:30b",
           "status": 429,
           "state": "limited",
-          "error": "Rate limit exceeded. Retry after 25 seconds."
+          "error": "Rate limit exceeded. Retry after 38 seconds."
         }
       ],
-      "failStreak": 0,
+      "failStreak": 1,
       "suggestDead": false
     },
     {
@@ -451,7 +427,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 2,
+      "failStreak": 3,
       "suggestDead": false
     },
     {
@@ -481,7 +457,7 @@
           "error": ""
         }
       ],
-      "failStreak": 10,
+      "failStreak": 11,
       "suggestDead": true
     }
   ]
