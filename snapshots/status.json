@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-04T11:10:22.695Z",
+  "generatedAt": "2026-11-05T11:10:46.722Z",
   "env": "ci",
   "summary": {
     "providers": 9,
     "freeModels": 48,
-    "healthy": 27,
-    "limited": 14,
+    "healthy": 25,
+    "limited": 15,
     "blocked": 0,
-    "failed": 7
+    "failed": 8
   },
   "providers": [
     {
@@ -17,7 +17,7 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 385,
+      "modelsFound": 387,
       "freeModels": 15,
       "ok": 10,
       "limited": 0,
@@ -193,10 +193,10 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 10,
-      "limited": 0,
+      "ok": 8,
+      "limited": 1,
       "blocked": 0,
-      "failed": 0,
+      "failed": 1,
       "models": [
         {
           "model": "Qwen3.8-27B",
@@ -248,15 +248,15 @@
         },
         {
           "model": "Qwen2.5-VL-72B-Instruct",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "Mistral-Nemo-Instruct-2407",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 404,
+          "state": "unknown",
+          "error": "The model `Mistral-Nemo-Instruct-2407` does not exist."
         }
       ],
       "failStreak": 0,
@@ -358,16 +358,16 @@
           "model": "mistral-Nemo-Instruct-2407",
           "status": 429,
           "state": "limited",
-          "error": "Rate limit exceeded. Retry after 39 seconds."
+          "error": "Rate limit exceeded. Retry after 41 seconds."
         },
         {
           "model": "nemotron-3-nano:30b",
           "status": 429,
           "state": "limited",
-          "error": "Rate limit exceeded. Retry after 38 seconds."
+          "error": "Rate limit exceeded. Retry after 40 seconds."
         }
       ],
-      "failStreak": 1,
+      "failStreak": 2,
       "suggestDead": false
     },
     {
@@ -427,7 +427,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 3,
+      "failStreak": 4,
       "suggestDead": false
     },
     {
@@ -457,7 +457,7 @@
           "error": ""
         }
       ],
-      "failStreak": 11,
+      "failStreak": 12,
       "suggestDead": true
     }
   ]
