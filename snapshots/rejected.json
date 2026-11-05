@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-04T12:19:16.462Z",
+  "updatedAt": "2026-11-05T12:32:59.830Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -454,6 +454,27 @@
       "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
       "firstSeen": "2026-11-04T12:19:16.462Z",
       "lastChecked": "2026-11-04T12:19:16.462Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://perspectiveai.xyz/openrouter-alternative-2026",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-05T12:32:59.830Z",
+      "lastChecked": "2026-11-05T12:32:59.830Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://cloud.baidu.com/article/4419749",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-05T12:32:59.830Z",
+      "lastChecked": "2026-11-05T12:32:59.830Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://cloud.baidu.com/article/3706406",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-05T12:32:59.830Z",
+      "lastChecked": "2026-11-05T12:32:59.830Z",
       "failCount": 1
     }
   ]
