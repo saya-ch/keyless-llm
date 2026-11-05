@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-04T15:27:01.754Z",
+  "generatedAt": "2026-11-05T15:27:53.344Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 113
+      "urls": 84
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 12
+      "urls": 13
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 102
+      "urls": 103
     },
     {
       "source": "hackernews",
@@ -48,20 +48,6 @@
     }
   ],
   "candidates": [
-    {
-      "label": "api.kevoryn.com",
-      "base": "https://api.kevoryn.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.kevoryn.com",
-      "base": "https://api.kevoryn.com",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
     {
       "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1`，模型名填",
@@ -99,7 +85,63 @@
     },
     {
       "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/pricing",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.cxbl.top",
+      "base": "https://api.cxbl.top",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "edge.v2ex.com",
+      "base": "https://edge.v2ex.com/chat/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.openai.com",
+      "base": "https://api.openai.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "reapi.ai",
+      "base": "https://reapi.ai/api/v1/images/generations",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "127.0.0.1",
+      "base": "http://127.0.0.1:17777/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "cheapbuddy.cc",
+      "base": "https://cheapbuddy.cc/api-docs",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "chongai.pro",
+      "base": "https://chongai.pro/i/v2e",
       "testModel": null,
       "note": "",
       "source": "community"
