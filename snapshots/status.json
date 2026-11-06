@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-05T11:10:46.722Z",
+  "generatedAt": "2026-11-06T11:07:51.201Z",
   "env": "ci",
   "summary": {
     "providers": 9,
     "freeModels": 48,
-    "healthy": 25,
-    "limited": 15,
+    "healthy": 26,
+    "limited": 14,
     "blocked": 0,
     "failed": 8
   },
@@ -17,7 +17,7 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 387,
+      "modelsFound": 386,
       "freeModels": 15,
       "ok": 10,
       "limited": 0,
@@ -193,8 +193,8 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 8,
-      "limited": 1,
+      "ok": 9,
+      "limited": 0,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -248,9 +248,9 @@
         },
         {
           "model": "Qwen2.5-VL-72B-Instruct",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Mistral-Nemo-Instruct-2407",
@@ -271,19 +271,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 1,
-      "limited": 0,
+      "ok": 0,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 502,
+          "state": "limited",
+          "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 0,
+      "failStreak": 1,
       "suggestDead": false
     },
     {
@@ -319,22 +319,22 @@
       "modelsError": "",
       "modelsFound": 70,
       "freeModels": 7,
-      "ok": 0,
-      "limited": 7,
+      "ok": 1,
+      "limited": 6,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "DeepSeek-V4-Flash-0731",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "GLM-5.3-Flash",
-          "status": 429,
+          "status": -1,
           "state": "limited",
-          "error": "Too many concurrent requests for this client. Retry after 10 seconds."
+          "error": "TIMEOUT"
         },
         {
           "model": "codestral-latest",
@@ -352,13 +352,13 @@
           "model": "minimax-m2.7",
           "status": 429,
           "state": "limited",
-          "error": "Too many concurrent requests for this client. Retry after 10 seconds."
+          "error": "Rate limit exceeded. Retry after 1 seconds."
         },
         {
           "model": "mistral-Nemo-Instruct-2407",
           "status": 429,
           "state": "limited",
-          "error": "Rate limit exceeded. Retry after 41 seconds."
+          "error": "Too many concurrent requests for this client. Retry after 10 seconds."
         },
         {
           "model": "nemotron-3-nano:30b",
@@ -367,7 +367,7 @@
           "error": "Rate limit exceeded. Retry after 40 seconds."
         }
       ],
-      "failStreak": 2,
+      "failStreak": 0,
       "suggestDead": false
     },
     {
@@ -427,8 +427,8 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 4,
-      "suggestDead": false
+      "failStreak": 5,
+      "suggestDead": true
     },
     {
       "id": "aihorde",
@@ -457,7 +457,7 @@
           "error": ""
         }
       ],
-      "failStreak": 12,
+      "failStreak": 13,
       "suggestDead": true
     }
   ]
