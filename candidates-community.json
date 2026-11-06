@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-05T15:27:53.344Z",
+  "generatedAt": "2026-11-06T15:02:53.717Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 84
+      "urls": 83
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 13
+      "urls": 15
     },
     {
       "source": "v2ex",
@@ -85,13 +85,6 @@
     },
     {
       "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/pricing",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1",
       "testModel": null,
       "note": "",
@@ -121,6 +114,13 @@
     {
       "label": "reapi.ai",
       "base": "https://reapi.ai/api/v1/images/generations",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "reapi.ai",
+      "base": "https://reapi.ai/api/v1/tasks/TASK_ID",
       "testModel": null,
       "note": "",
       "source": "community"
