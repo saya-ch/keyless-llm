@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-05T12:32:59.830Z",
+  "updatedAt": "2026-11-06T12:17:25.956Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -475,6 +475,34 @@
       "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
       "firstSeen": "2026-11-05T12:32:59.830Z",
       "lastChecked": "2026-11-05T12:32:59.830Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://my.oschina.net/u/9487999/blog/19721096",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-06T12:17:25.956Z",
+      "lastChecked": "2026-11-06T12:17:25.956Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://blog.lynxflow.co/posts/free-llm-api-quotas-2026",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-06T12:17:25.956Z",
+      "lastChecked": "2026-11-06T12:17:25.956Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://jaesolshin.com/posts/github-inference-api",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-06T12:17:25.956Z",
+      "lastChecked": "2026-11-06T12:17:25.956Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://opentools.ai/resources/awesome-free-llm-apis",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-06T12:17:25.956Z",
+      "lastChecked": "2026-11-06T12:17:25.956Z",
       "failCount": 1
     }
   ]

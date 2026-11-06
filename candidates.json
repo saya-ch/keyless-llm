@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-05T12:31:45.065Z",
+  "generatedAt": "2026-11-06T12:15:28.411Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,19 +15,19 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 54
+      "found": 11
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 6
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
       "searchBackend": "bing",
       "llmBackend": "网关(auto)",
-      "found": 39
+      "found": 3
     },
     {
       "query": "openrouter alternative anonymous free api no signup",
@@ -39,31 +39,37 @@
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 56
+      "found": 6
     },
     {
       "query": "public inference API free without key openai format",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 50
+      "found": 7
     }
   ],
   "candidates": [
     {
-      "label": "perspectiveai.xyz",
-      "base": "https://perspectiveai.xyz/openrouter-alternative-2026",
+      "label": "my.oschina.net",
+      "base": "https://my.oschina.net/u/9487999/blog/19721096",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "cloud.baidu.com",
-      "base": "https://cloud.baidu.com/article/4419749",
+      "label": "blog.lynxflow.co",
+      "base": "https://blog.lynxflow.co/posts/free-llm-api-quotas-2026",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "cloud.baidu.com",
-      "base": "https://cloud.baidu.com/article/3706406",
+      "label": "jaesolshin.com",
+      "base": "https://jaesolshin.com/posts/github-inference-api",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "opentools.ai",
+      "base": "https://opentools.ai/resources/awesome-free-llm-apis",
       "testModel": null,
       "note": ""
     }
