@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T15:02:53.717Z",
+  "generatedAt": "2026-11-07T14:01:59.397Z",
   "sources": [
     {
       "source": "v2ex",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 15
+      "urls": 13
     },
     {
       "source": "v2ex",
@@ -100,48 +100,6 @@
     {
       "label": "edge.v2ex.com",
       "base": "https://edge.v2ex.com/chat/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.openai.com",
-      "base": "https://api.openai.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "reapi.ai",
-      "base": "https://reapi.ai/api/v1/images/generations",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "reapi.ai",
-      "base": "https://reapi.ai/api/v1/tasks/TASK_ID",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "127.0.0.1",
-      "base": "http://127.0.0.1:17777/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "cheapbuddy.cc",
-      "base": "https://cheapbuddy.cc/api-docs",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "chongai.pro",
-      "base": "https://chongai.pro/i/v2e",
       "testModel": null,
       "note": "",
       "source": "community"
