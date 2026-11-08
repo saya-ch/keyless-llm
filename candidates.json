@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-07T11:11:09.005Z",
+  "generatedAt": "2026-11-08T11:22:34.280Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -8,20 +8,20 @@
     "免费大模型 API 匿名调用 chat completions 不用注册",
     "public inference API free without key openai format"
   ],
-  "searchBackend": "bing",
+  "searchBackend": "duckduckgo",
   "llmBackend": "网关(auto)",
   "rounds": [
     {
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
-      "searchBackend": "bing",
+      "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 1
+      "found": 7
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
-      "searchBackend": "bing",
-      "llmBackend": "规则兜底",
-      "found": 0
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 9
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
@@ -31,21 +31,21 @@
     },
     {
       "query": "openrouter alternative anonymous free api no signup",
-      "searchBackend": "bing",
-      "llmBackend": "规则兜底",
-      "found": 0
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 51
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
-      "searchBackend": "bing",
-      "llmBackend": "规则兜底",
-      "found": 0
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 9
     },
     {
       "query": "public inference API free without key openai format",
-      "searchBackend": "bing",
-      "llmBackend": "规则兜底",
-      "found": 0
+      "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 7
     }
   ],
   "candidates": []
