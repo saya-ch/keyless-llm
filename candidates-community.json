@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-08T14:18:06.186Z",
+  "generatedAt": "2026-11-09T17:28:29.847Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 85
+      "urls": 133
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 11
+      "urls": 10
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 103
+      "urls": 111
     },
     {
       "source": "hackernews",
@@ -48,6 +48,13 @@
     }
   ],
   "candidates": [
+    {
+      "label": "api.kevoryn.com",
+      "base": "https://api.kevoryn.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
     {
       "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1`，模型名填",
@@ -72,6 +79,13 @@
     {
       "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1`",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
