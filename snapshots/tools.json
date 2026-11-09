@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-11-02T13:12:12.235Z",
+  "generatedAt": "2026-11-09T13:39:49.114Z",
   "env": "ci",
   "summary": {
     "checked": 35,
-    "confirmed": 26,
+    "confirmed": 24,
     "text": 0,
-    "rejected": 3,
-    "missing": 2,
-    "plain": 1,
-    "inconclusive": 3
+    "rejected": 2,
+    "missing": 7,
+    "plain": 0,
+    "inconclusive": 2
   },
   "models": [
     {
@@ -63,9 +63,9 @@
       "id": "kilo/kilo-auto/free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 400,
-      "verdict": "tools_rejected",
-      "detail": "HTTP 400: This model does not support a required or named tool choice. Remove it and retry."
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "kilo/kilo-auto/small",
@@ -79,9 +79,9 @@
       "id": "kilo/liquid/lfm-2.5-2.6b:free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "status": 404,
+      "verdict": "model_missing",
+      "detail": "HTTP 404: {\"error\":\"The requested model is currently unavailable. Please choose a different model.\",\"error_type\":\"unavailable_model\",\"message\":\"The requested model is cur"
     },
     {
       "id": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
@@ -135,25 +135,25 @@
       "id": "kilo/recursive/flint-v1.0:free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 503,
-      "verdict": "inconclusive",
-      "detail": "HTTP 503: Provider returned error"
+      "status": 404,
+      "verdict": "model_missing",
+      "detail": "HTTP 404: {\"error\":\"The requested model is currently unavailable. Please choose a different model.\",\"error_type\":\"unavailable_model\",\"message\":\"The requested model is cur"
     },
     {
       "id": "kilo/reflection/beam-free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "status": 404,
+      "verdict": "model_missing",
+      "detail": "HTTP 404: {\"error\":\"The requested model 'reflection/beam-free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly released "
     },
     {
       "id": "kilo/xingchen-agi/xing4.0-29b-a4b:free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 429,
-      "verdict": "inconclusive",
-      "detail": "429 限流"
+      "status": 404,
+      "verdict": "model_missing",
+      "detail": "HTTP 404: {\"error\":\"The requested model is currently unavailable. Please choose a different model.\",\"error_type\":\"unavailable_model\",\"message\":\"The requested model is cur"
     },
     {
       "id": "llm7/codestral-latest",
@@ -175,9 +175,9 @@
       "id": "llm7/minimax-m2.7",
       "provider": "llm7",
       "label": "LLM7.io",
-      "status": 429,
+      "status": 400,
       "verdict": "inconclusive",
-      "detail": "429 限流"
+      "detail": "HTTP 400（非工具相关错误）: Model 'minimax-m2.7' is currently unavailable."
     },
     {
       "id": "llm7/mistral-Nemo-Instruct-2407",
@@ -191,9 +191,9 @@
       "id": "llm7/nemotron-3-nano:30b",
       "provider": "llm7",
       "label": "LLM7.io",
-      "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "status": 400,
+      "verdict": "inconclusive",
+      "detail": "HTTP 400（非工具相关错误）: Model 'nemotron-3-nano:30b' is currently unavailable."
     },
     {
       "id": "ovh/gpt-oss-120b",
@@ -223,9 +223,9 @@
       "id": "ovh/Mistral-Nemo-Instruct-2407",
       "provider": "ovh",
       "label": "OVHcloud AI Endpoints",
-      "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "status": 404,
+      "verdict": "model_missing",
+      "detail": "HTTP 404: The model `Mistral-Nemo-Instruct-2407` does not exist."
     },
     {
       "id": "ovh/Mistral-Small-3.2-24B-Instruct-2506",
@@ -249,7 +249,7 @@
       "label": "OVHcloud AI Endpoints",
       "status": 200,
       "verdict": "tools_confirmed",
-      "detail": "finish_reason=tool_calls"
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "ovh/Qwen3.5-9B",
@@ -264,8 +264,8 @@
       "provider": "ovh",
       "label": "OVHcloud AI Endpoints",
       "status": 200,
-      "verdict": "text_only",
-      "detail": "200，未调用工具（可能模型选择直接回答）"
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "ovh/Qwen3.8-27B",
