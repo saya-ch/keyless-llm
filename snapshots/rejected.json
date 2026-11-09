@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-08T11:23:41.350Z",
+  "updatedAt": "2026-11-09T13:05:34.475Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -503,6 +503,27 @@
       "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
       "firstSeen": "2026-11-06T12:17:25.956Z",
       "lastChecked": "2026-11-06T12:17:25.956Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://blockrun.ai",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-09T13:05:34.475Z",
+      "lastChecked": "2026-11-09T13:05:34.475Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://awesomeagents.ai",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-09T13:05:34.475Z",
+      "lastChecked": "2026-11-09T13:05:34.475Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://freeapihub.com",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-09T13:05:34.475Z",
+      "lastChecked": "2026-11-09T13:05:34.475Z",
       "failCount": 1
     }
   ]

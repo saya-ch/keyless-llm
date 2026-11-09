@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T11:22:34.280Z",
+  "generatedAt": "2026-11-09T13:02:03.530Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,38 +15,57 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 54
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "duckduckgo",
-      "llmBackend": "网关(auto)",
-      "found": 9
+      "llmBackend": "规则兜底",
+      "found": 0
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
-      "searchBackend": "bing",
+      "searchBackend": "duckduckgo",
       "llmBackend": "规则兜底",
-      "found": 0
+      "found": 1
     },
     {
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 51
+      "found": 53
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 9
+      "found": 49
     },
     {
       "query": "public inference API free without key openai format",
       "searchBackend": "duckduckgo",
-      "llmBackend": "网关(auto)",
-      "found": 7
+      "llmBackend": "规则兜底",
+      "found": 6
     }
   ],
-  "candidates": []
+  "candidates": [
+    {
+      "label": "blockrun.ai",
+      "base": "https://blockrun.ai",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "awesomeagents.ai",
+      "base": "https://awesomeagents.ai",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "freeapihub.com",
+      "base": "https://freeapihub.com",
+      "testModel": null,
+      "note": ""
+    }
+  ]
 }
