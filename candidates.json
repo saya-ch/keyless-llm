@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-09T13:02:03.530Z",
+  "generatedAt": "2026-11-10T12:46:57.623Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -15,31 +15,31 @@
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 54
+      "found": 5
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "duckduckgo",
+      "llmBackend": "网关(auto)",
+      "found": 11
+    },
+    {
+      "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
+      "searchBackend": "bing",
       "llmBackend": "规则兜底",
       "found": 0
     },
     {
-      "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
-      "searchBackend": "duckduckgo",
-      "llmBackend": "规则兜底",
-      "found": 1
-    },
-    {
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
-      "llmBackend": "网关(auto)",
-      "found": 53
+      "llmBackend": "规则兜底",
+      "found": 4
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
-      "llmBackend": "网关(auto)",
-      "found": 49
+      "llmBackend": "规则兜底",
+      "found": 4
     },
     {
       "query": "public inference API free without key openai format",
@@ -50,20 +50,38 @@
   ],
   "candidates": [
     {
-      "label": "blockrun.ai",
-      "base": "https://blockrun.ai",
+      "label": "guzli.com",
+      "base": "https://guzli.com/learn/ai-assistants/free-llm-apis",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "awesomeagents.ai",
-      "base": "https://awesomeagents.ai",
+      "label": "cloud.tencent.com",
+      "base": "https://cloud.tencent.com/developer/article/2703836",
       "testModel": null,
       "note": ""
     },
     {
-      "label": "freeapihub.com",
-      "base": "https://freeapihub.com",
+      "label": "ningop.com",
+      "base": "https://ningop.com",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "cloudinsight.cc",
+      "base": "https://cloudinsight.cc",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "guzli.com",
+      "base": "https://guzli.com",
+      "testModel": null,
+      "note": ""
+    },
+    {
+      "label": "lmmarketcap.com",
+      "base": "https://lmmarketcap.com",
       "testModel": null,
       "note": ""
     }

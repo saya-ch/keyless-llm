@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-09T13:05:34.475Z",
+  "updatedAt": "2026-11-10T12:48:32.699Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -524,6 +524,48 @@
       "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
       "firstSeen": "2026-11-09T13:05:34.475Z",
       "lastChecked": "2026-11-09T13:05:34.475Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://guzli.com/learn/ai-assistants/free-llm-apis",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-10T12:48:32.699Z",
+      "lastChecked": "2026-11-10T12:48:32.699Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://cloud.tencent.com/developer/article/2703836",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-10T12:48:32.699Z",
+      "lastChecked": "2026-11-10T12:48:32.699Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://ningop.com",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-10T12:48:32.699Z",
+      "lastChecked": "2026-11-10T12:48:32.699Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://cloudinsight.cc",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-10T12:48:32.699Z",
+      "lastChecked": "2026-11-10T12:48:32.699Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://guzli.com",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-10T12:48:32.699Z",
+      "lastChecked": "2026-11-10T12:48:32.699Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://lmmarketcap.com",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-10T12:48:32.699Z",
+      "lastChecked": "2026-11-10T12:48:32.699Z",
       "failCount": 1
     }
   ]
