@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-09T11:48:41.923Z",
+  "generatedAt": "2026-11-10T11:24:54.293Z",
   "env": "ci",
   "summary": {
     "providers": 9,
-    "freeModels": 47,
-    "healthy": 26,
-    "limited": 10,
+    "freeModels": 48,
+    "healthy": 27,
+    "limited": 9,
     "blocked": 0,
-    "failed": 11
+    "failed": 12
   },
   "providers": [
     {
@@ -17,18 +17,18 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 385,
-      "freeModels": 16,
+      "modelsFound": 387,
+      "freeModels": 17,
       "ok": 9,
       "limited": 1,
       "blocked": 0,
-      "failed": 6,
+      "failed": 7,
       "models": [
         {
           "model": "kilo-auto/free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 400,
+          "state": "unknown",
+          "error": "The stealth model could not complete the request."
         },
         {
           "model": "nvidia/nemotron-3.5-super-vl:free",
@@ -37,10 +37,16 @@
           "error": ""
         },
         {
-          "model": "liquid/lfm-3-1.7b:free",
-          "status": -1,
+          "model": "thinkingmachines/inkling-2-small:free",
+          "status": 429,
           "state": "limited",
-          "error": "TIMEOUT"
+          "error": "Rate limit exceeded: limit_rpd/thinkingmachines/inkling-2-small-20261107/29add1e6-4e78-459f-bf7d-17faf77a0b44. Daily limit reached for thinkingmachines/inkling-2-small:free via Thinking Machines. Credits don't affect this cap. Add your own provider key to use your own limits: https://openrouter.ai/workspaces/default/byok"
+        },
+        {
+          "model": "liquid/lfm-3-1.7b:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "dots-studio/dots-3-note-preview:free",
@@ -157,8 +163,8 @@
       "modelsError": "",
       "modelsFound": 4,
       "freeModels": 4,
-      "ok": 4,
-      "limited": 0,
+      "ok": 3,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -170,9 +176,9 @@
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
         },
         {
           "model": "nvidia/step-3.7-flash",
@@ -199,16 +205,16 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 8,
-      "limited": 1,
+      "ok": 9,
+      "limited": 0,
       "blocked": 0,
       "failed": 1,
       "models": [
         {
           "model": "Qwen3.8-27B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Qwen3.6-27B",
@@ -323,10 +329,10 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 69,
+      "modelsFound": 70,
       "freeModels": 5,
-      "ok": 2,
-      "limited": 1,
+      "ok": 3,
+      "limited": 0,
       "blocked": 0,
       "failed": 2,
       "models": [
@@ -344,9 +350,9 @@
         },
         {
           "model": "mistral-Nemo-Instruct-2407",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded. Retry after 1 seconds."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nemotron-3-nano:30b",
@@ -421,7 +427,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 8,
+      "failStreak": 9,
       "suggestDead": true
     },
     {
@@ -451,7 +457,7 @@
           "error": ""
         }
       ],
-      "failStreak": 16,
+      "failStreak": 17,
       "suggestDead": true
     }
   ]
