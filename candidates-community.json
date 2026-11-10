@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-09T17:28:29.847Z",
+  "generatedAt": "2026-11-10T15:36:09.185Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 133
+      "urls": 134
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 10
+      "urls": 14
     },
     {
       "source": "v2ex",
@@ -49,15 +49,29 @@
   ],
   "candidates": [
     {
-      "label": "api.kevoryn.com",
-      "base": "https://api.kevoryn.com/v1",
+      "label": "api.aigatego.com",
+      "base": "https://api.aigatego.com",
       "testModel": null,
       "note": "",
       "source": "community"
     },
     {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`，模型名填",
+      "label": "api.aigatego.com",
+      "base": "https://api.aigatego.com/docs",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.aigatego.com",
+      "base": "https://api.aigatego.com/pricing",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.kevoryn.com",
+      "base": "https://api.kevoryn.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -71,21 +85,7 @@
     },
     {
       "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`，模型名用表里的完整",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1`",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
