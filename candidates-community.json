@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-10T15:36:09.185Z",
+  "generatedAt": "2026-11-11T15:11:40.610Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 134
+      "urls": 113
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 14
+      "urls": 12
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 111
+      "urls": 105
     },
     {
       "source": "hackernews",
@@ -51,41 +51,6 @@
     {
       "label": "api.aigatego.com",
       "base": "https://api.aigatego.com",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.aigatego.com",
-      "base": "https://api.aigatego.com/docs",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.aigatego.com",
-      "base": "https://api.aigatego.com/pricing",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.kevoryn.com",
-      "base": "https://api.kevoryn.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "aikey365.com",
-      "base": "https://aikey365.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`",
       "testModel": null,
       "note": "",
       "source": "community"
