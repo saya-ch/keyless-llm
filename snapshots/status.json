@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-10T11:24:54.293Z",
+  "generatedAt": "2026-11-11T11:12:11.391Z",
   "env": "ci",
   "summary": {
     "providers": 9,
-    "freeModels": 48,
-    "healthy": 27,
+    "freeModels": 49,
+    "healthy": 29,
     "limited": 9,
     "blocked": 0,
-    "failed": 12
+    "failed": 11
   },
   "providers": [
     {
@@ -17,21 +17,27 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 387,
-      "freeModels": 17,
-      "ok": 9,
-      "limited": 1,
+      "modelsFound": 391,
+      "freeModels": 18,
+      "ok": 10,
+      "limited": 2,
       "blocked": 0,
-      "failed": 7,
+      "failed": 6,
       "models": [
         {
           "model": "kilo-auto/free",
-          "status": 400,
-          "state": "unknown",
-          "error": "The stealth model could not complete the request."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3.5-super-vl:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "baidu/ernie-5.5-flash-preview:free",
           "status": 200,
           "state": "healthy",
           "error": ""
@@ -68,9 +74,9 @@
         },
         {
           "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 503,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
@@ -163,8 +169,8 @@
       "modelsError": "",
       "modelsFound": 4,
       "freeModels": 4,
-      "ok": 3,
-      "limited": 1,
+      "ok": 4,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -176,9 +182,9 @@
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": 429,
-          "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/step-3.7-flash",
@@ -329,7 +335,7 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 70,
+      "modelsFound": 71,
       "freeModels": 5,
       "ok": 3,
       "limited": 0,
@@ -427,7 +433,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 9,
+      "failStreak": 10,
       "suggestDead": true
     },
     {
@@ -457,7 +463,7 @@
           "error": ""
         }
       ],
-      "failStreak": 17,
+      "failStreak": 18,
       "suggestDead": true
     }
   ]
