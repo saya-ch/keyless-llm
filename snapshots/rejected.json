@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-10T12:48:32.699Z",
+  "updatedAt": "2026-11-11T12:01:07.704Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -566,6 +566,55 @@
       "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
       "firstSeen": "2026-11-10T12:48:32.699Z",
       "lastChecked": "2026-11-10T12:48:32.699Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-11T12:01:07.704Z",
+      "lastChecked": "2026-11-11T12:01:07.704Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://developers.openai.com/api/reference/overview",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-11T12:01:07.704Z",
+      "lastChecked": "2026-11-11T12:01:07.704Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://openai.com/api",
+      "reason": "/models 返回 403，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-11T12:01:07.704Z",
+      "lastChecked": "2026-11-11T12:01:07.704Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://freellmapihub.com/guides/openai-compatible-free-apis",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-11T12:01:07.704Z",
+      "lastChecked": "2026-11-11T12:01:07.704Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://itsfree.ai/openai-compatible-free-apis",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-11T12:01:07.704Z",
+      "lastChecked": "2026-11-11T12:01:07.704Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://apirank.vip/tutorials/openai-compatible-api-2026",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-11T12:01:07.704Z",
+      "lastChecked": "2026-11-11T12:01:07.704Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://tuan-gemini-api.github.io/ai-free-api",
+      "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-11T12:01:07.704Z",
+      "lastChecked": "2026-11-11T12:01:07.704Z",
       "failCount": 1
     }
   ]
