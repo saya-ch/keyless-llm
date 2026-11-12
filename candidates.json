@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-11T11:59:09.983Z",
+  "generatedAt": "2026-11-12T12:56:01.649Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -8,86 +8,50 @@
     "免费大模型 API 匿名调用 chat completions 不用注册",
     "public inference API free without key openai format"
   ],
-  "searchBackend": "duckduckgo",
+  "searchBackend": "bing",
   "llmBackend": "网关(auto)",
   "rounds": [
     {
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
-      "searchBackend": "duckduckgo",
+      "searchBackend": "bing",
       "llmBackend": "网关(auto)",
-      "found": 9
+      "found": 1
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
-      "searchBackend": "duckduckgo",
+      "searchBackend": "bing",
       "llmBackend": "规则兜底",
       "found": 0
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
-      "searchBackend": "duckduckgo",
-      "llmBackend": "网关(auto)",
-      "found": 1
+      "searchBackend": "bing",
+      "llmBackend": "规则兜底",
+      "found": 0
     },
     {
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
-      "llmBackend": "规则兜底",
-      "found": 6
+      "llmBackend": "网关(auto)",
+      "found": 7
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 5
+      "found": 7
     },
     {
       "query": "public inference API free without key openai format",
-      "searchBackend": "duckduckgo",
-      "llmBackend": "网关(auto)",
-      "found": 8
+      "searchBackend": "bing",
+      "llmBackend": "规则兜底",
+      "found": 0
     }
   ],
   "candidates": [
     {
-      "label": "developers.cloudflare.com",
-      "base": "https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "developers.openai.com",
-      "base": "https://developers.openai.com/api/reference/overview",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "openai.com",
-      "base": "https://openai.com/api",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "freellmapihub.com",
-      "base": "https://freellmapihub.com/guides/openai-compatible-free-apis",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "itsfree.ai",
-      "base": "https://itsfree.ai/openai-compatible-free-apis",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "apirank.vip",
-      "base": "https://apirank.vip/tutorials/openai-compatible-api-2026",
-      "testModel": null,
-      "note": ""
-    },
-    {
-      "label": "tuan-gemini-api.github.io",
-      "base": "https://tuan-gemini-api.github.io/ai-free-api",
+      "label": "devpress.csdn.net",
+      "base": "https://devpress.csdn.net/awstech/6a9160472b83d06f0ec6890d.html",
       "testModel": null,
       "note": ""
     }

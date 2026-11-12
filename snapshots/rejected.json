@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-11T12:01:07.704Z",
+  "updatedAt": "2026-11-12T12:58:09.859Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -615,6 +615,13 @@
       "reason": "/models 返回 404，无法枚举模型，也未指定 --model",
       "firstSeen": "2026-11-11T12:01:07.704Z",
       "lastChecked": "2026-11-11T12:01:07.704Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://devpress.csdn.net/awstech/6a9160472b83d06f0ec6890d.html",
+      "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
+      "firstSeen": "2026-11-12T12:58:09.859Z",
+      "lastChecked": "2026-11-12T12:58:09.859Z",
       "failCount": 1
     }
   ]
