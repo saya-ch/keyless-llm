@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-11T14:22:50.707Z",
+  "generatedAt": "2026-11-12T15:15:37.514Z",
   "sources": [
     {
       "name": "freellms",
@@ -10,8 +10,8 @@
     {
       "name": "awesome-free-llm-apis",
       "url": "https://raw.githubusercontent.com/mnfst/awesome-free-llm-apis/main/README.md",
-      "extracted": 22,
-      "candidates": 12
+      "extracted": 21,
+      "candidates": 11
     },
     {
       "name": "free-AI-free-token",
