@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-11T15:11:40.610Z",
+  "generatedAt": "2026-11-12T15:58:43.063Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 113
+      "urls": 105
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 12
+      "urls": 13
     },
     {
       "source": "v2ex",
@@ -51,6 +51,69 @@
     {
       "label": "api.aigatego.com",
       "base": "https://api.aigatego.com",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.kevoryn.com",
+      "base": "https://api.kevoryn.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`，模型名填",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "aikey365.com",
+      "base": "https://aikey365.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.cxbl.top",
+      "base": "https://api.cxbl.top",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "edge.v2ex.com",
+      "base": "https://edge.v2ex.com/chat/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.openai.com",
+      "base": "https://api.openai.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
