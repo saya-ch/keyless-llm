@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-12T11:29:32.612Z",
+  "generatedAt": "2026-11-13T11:13:43.779Z",
   "env": "ci",
   "summary": {
     "providers": 9,
-    "freeModels": 47,
-    "healthy": 25,
-    "limited": 11,
+    "freeModels": 51,
+    "healthy": 30,
+    "limited": 12,
     "blocked": 0,
-    "failed": 11
+    "failed": 9
   },
   "providers": [
     {
@@ -17,12 +17,12 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 388,
-      "freeModels": 17,
-      "ok": 11,
-      "limited": 0,
+      "modelsFound": 478,
+      "freeModels": 18,
+      "ok": 12,
+      "limited": 1,
       "blocked": 0,
-      "failed": 6,
+      "failed": 5,
       "models": [
         {
           "model": "kilo-auto/free",
@@ -49,6 +49,12 @@
           "error": ""
         },
         {
+          "model": "particle-ai/particle-1:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
           "model": "dots-studio/dots-3-note-preview:free",
           "status": 200,
           "state": "healthy",
@@ -62,9 +68,9 @@
         },
         {
           "model": "cohere/north-mini-code:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Rate limit exceeded: cohere/north-mini-code-20260617/d3a18412-b833-40de-bc07-c4ba9a1dea53. High demand for cohere/north-mini-code:free on OpenRouter - limited to 15 requests per minute. Please retry shortly."
         },
         {
           "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -85,15 +91,15 @@
           "error": ""
         },
         {
-          "model": "kilo-auto/small",
+          "model": "reflection/beam-free",
           "status": 200,
           "state": "healthy",
           "error": ""
         },
         {
-          "model": "reflection/beam-free",
-          "status": 404,
-          "state": "unknown",
+          "model": "kilo-auto/small",
+          "status": 200,
+          "state": "healthy",
           "error": ""
         },
         {
@@ -176,15 +182,15 @@
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "nvidia/step-3.7-flash",
           "status": 429,
           "state": "limited",
           "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
+        },
+        {
+          "model": "nvidia/step-3.7-flash",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/mistral-nemotron",
@@ -283,19 +289,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 0,
-      "limited": 1,
+      "ok": 1,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 502,
-          "state": "limited",
-          "error": "Vireonix is temporarily unavailable. Please try again shortly."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         }
       ],
-      "failStreak": 1,
+      "failStreak": 0,
       "suggestDead": false
     },
     {
@@ -329,15 +335,39 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 71,
-      "freeModels": 4,
-      "ok": 2,
-      "limited": 0,
+      "modelsFound": 72,
+      "freeModels": 7,
+      "ok": 5,
+      "limited": 1,
       "blocked": 0,
-      "failed": 2,
+      "failed": 1,
       "models": [
         {
+          "model": "DeepSeek-V4-Flash-0731",
+          "status": 503,
+          "state": "limited",
+          "error": "This model is temporarily busy. Please try again shortly or choose another model."
+        },
+        {
+          "model": "GLM-5.3-Flash",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
           "model": "codestral-latest",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "gpt-oss:20b",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "minimax-m2.7",
           "status": 200,
           "state": "healthy",
           "error": ""
@@ -353,12 +383,6 @@
           "status": 400,
           "state": "unknown",
           "error": "Model 'nemotron-3-nano:30b' is currently unavailable."
-        },
-        {
-          "model": "minimax-m2.7",
-          "status": 400,
-          "state": "unknown",
-          "error": "Model 'minimax-m2.7' is currently unavailable."
         }
       ],
       "failStreak": 0,
@@ -421,7 +445,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 11,
+      "failStreak": 12,
       "suggestDead": true
     },
     {
@@ -451,7 +475,7 @@
           "error": ""
         }
       ],
-      "failStreak": 19,
+      "failStreak": 20,
       "suggestDead": true
     }
   ]
