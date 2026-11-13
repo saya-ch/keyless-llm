@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12T12:56:01.649Z",
+  "generatedAt": "2026-11-13T12:22:23.210Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -9,19 +9,19 @@
     "public inference API free without key openai format"
   ],
   "searchBackend": "bing",
-  "llmBackend": "网关(auto)",
+  "llmBackend": "规则兜底",
   "rounds": [
     {
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "bing",
-      "llmBackend": "网关(auto)",
-      "found": 1
+      "llmBackend": "规则兜底",
+      "found": 0
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "bing",
-      "llmBackend": "规则兜底",
-      "found": 0
+      "llmBackend": "网关(auto)",
+      "found": 2
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
@@ -33,13 +33,13 @@
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 6
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 7
+      "found": 9
     },
     {
       "query": "public inference API free without key openai format",
@@ -48,12 +48,5 @@
       "found": 0
     }
   ],
-  "candidates": [
-    {
-      "label": "devpress.csdn.net",
-      "base": "https://devpress.csdn.net/awstech/6a9160472b83d06f0ec6890d.html",
-      "testModel": null,
-      "note": ""
-    }
-  ]
+  "candidates": []
 }
