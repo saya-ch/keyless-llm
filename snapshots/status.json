@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-13T11:13:43.779Z",
+  "generatedAt": "2026-11-14T10:39:53.525Z",
   "env": "ci",
   "summary": {
     "providers": 9,
-    "freeModels": 51,
-    "healthy": 30,
-    "limited": 12,
+    "freeModels": 52,
+    "healthy": 29,
+    "limited": 14,
     "blocked": 0,
     "failed": 9
   },
@@ -18,8 +18,8 @@
       "rate": "200 req/h/IP",
       "modelsError": "",
       "modelsFound": 478,
-      "freeModels": 18,
-      "ok": 12,
+      "freeModels": 19,
+      "ok": 13,
       "limited": 1,
       "blocked": 0,
       "failed": 5,
@@ -35,6 +35,12 @@
           "status": 200,
           "state": "healthy",
           "error": ""
+        },
+        {
+          "model": "inclusionai/ling-3.2-flash:free",
+          "status": 429,
+          "state": "limited",
+          "error": "Rate limit exceeded: limit_rpd/inclusionai/ling-3.2-flash-20261113/29d1aca3-0609-42eb-8d0a-cba9ed72226e. Daily limit reached for inclusionai/ling-3.2-flash:free via Ant Digital. Credits don't affect this cap. Add your own provider key to use your own limits: https://openrouter.ai/workspaces/default/byok"
         },
         {
           "model": "baidu/ernie-5.5-flash-preview:free",
@@ -68,9 +74,9 @@
         },
         {
           "model": "cohere/north-mini-code:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded: cohere/north-mini-code-20260617/d3a18412-b833-40de-bc07-c4ba9a1dea53. High demand for cohere/north-mini-code:free on OpenRouter - limited to 15 requests per minute. Please retry shortly."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -211,8 +217,8 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 9,
-      "limited": 0,
+      "ok": 8,
+      "limited": 1,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -254,9 +260,9 @@
         },
         {
           "model": "Meta-Llama-3_3-70B-Instruct",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "Mistral-Small-3.2-24B-Instruct-2506",
@@ -289,19 +295,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 1,
-      "limited": 0,
+      "ok": 0,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 502,
+          "state": "limited",
+          "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 0,
+      "failStreak": 1,
       "suggestDead": false
     },
     {
@@ -344,18 +350,18 @@
       "models": [
         {
           "model": "DeepSeek-V4-Flash-0731",
-          "status": 503,
-          "state": "limited",
-          "error": "This model is temporarily busy. Please try again shortly or choose another model."
-        },
-        {
-          "model": "GLM-5.3-Flash",
           "status": 200,
           "state": "healthy",
           "error": ""
         },
         {
           "model": "codestral-latest",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "glm-5.3-flash",
           "status": 200,
           "state": "healthy",
           "error": ""
@@ -374,9 +380,9 @@
         },
         {
           "model": "mistral-Nemo-Instruct-2407",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Rate limit exceeded. Retry after 52 seconds."
         },
         {
           "model": "nemotron-3-nano:30b",
@@ -445,7 +451,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 12,
+      "failStreak": 13,
       "suggestDead": true
     },
     {
@@ -475,7 +481,7 @@
           "error": ""
         }
       ],
-      "failStreak": 20,
+      "failStreak": 21,
       "suggestDead": true
     }
   ]
