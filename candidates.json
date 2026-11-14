@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T12:22:23.210Z",
+  "generatedAt": "2026-11-14T11:36:48.030Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -20,8 +20,8 @@
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
       "searchBackend": "bing",
-      "llmBackend": "网关(auto)",
-      "found": 2
+      "llmBackend": "规则兜底",
+      "found": 0
     },
     {
       "query": "\"no API key\" LLM inference endpoint openai compatible free tier",
@@ -33,13 +33,13 @@
       "query": "openrouter alternative anonymous free api no signup",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 6
+      "found": 7
     },
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "duckduckgo",
       "llmBackend": "网关(auto)",
-      "found": 9
+      "found": 12
     },
     {
       "query": "public inference API free without key openai format",
