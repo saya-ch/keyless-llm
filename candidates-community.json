@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-13T15:23:39.131Z",
+  "generatedAt": "2026-11-14T14:09:11.293Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 108
+      "urls": 118
     },
     {
       "source": "hackernews",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 105
+      "urls": 110
     },
     {
       "source": "hackernews",
@@ -49,6 +49,13 @@
   ],
   "candidates": [
     {
+      "label": "aiminis.info",
+      "base": "https://aiminis.info/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
       "label": "api.aigatego.com",
       "base": "https://api.aigatego.com",
       "testModel": null,
@@ -56,8 +63,113 @@
       "source": "community"
     },
     {
+      "label": "api.kevoryn.com",
+      "base": "https://api.kevoryn.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
       "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1`，模型名填",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "aikey365.com",
+      "base": "https://aikey365.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`，模型名用表里的完整",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.cxbl.top",
+      "base": "https://api.cxbl.top",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "edge.v2ex.com",
+      "base": "https://edge.v2ex.com/chat/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.openai.com",
+      "base": "https://api.openai.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "reapi.ai",
+      "base": "https://reapi.ai/api/v1/images/generations",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "reapi.ai",
+      "base": "https://reapi.ai/api/v1/tasks/TASK_ID",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "127.0.0.1",
+      "base": "http://127.0.0.1:17777/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.apichatgpt.org",
+      "base": "https://api.apichatgpt.org",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "earlylore.com",
+      "base": "https://earlylore.com/api/mcp",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "chongai.pro",
+      "base": "https://chongai.pro/i/v2e",
       "testModel": null,
       "note": "",
       "source": "community"
