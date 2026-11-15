@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-14T11:37:45.713Z",
+  "updatedAt": "2026-11-15T12:03:43.553Z",
   "entries": [
     {
       "base": "https://api.puter.com/v1",
@@ -622,6 +622,13 @@
       "reason": "base 指向网站根路径而非 API 端点，/models 返回的不是模型清单",
       "firstSeen": "2026-11-12T12:58:09.859Z",
       "lastChecked": "2026-11-12T12:58:09.859Z",
+      "failCount": 1
+    },
+    {
+      "base": "https://api.pollinations.ai/openai",
+      "reason": "/models 返回 522，无法枚举模型，也未指定 --model",
+      "firstSeen": "2026-11-15T12:03:43.553Z",
+      "lastChecked": "2026-11-15T12:03:43.553Z",
       "failCount": 1
     }
   ]
