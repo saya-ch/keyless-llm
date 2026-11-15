@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-14T14:09:11.293Z",
+  "generatedAt": "2026-11-15T14:45:10.938Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 118
+      "urls": 63
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 15
+      "urls": 11
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 110
+      "urls": 109
     },
     {
       "source": "hackernews",
@@ -49,8 +49,22 @@
   ],
   "candidates": [
     {
+      "label": "api.aicoding.sh",
+      "base": "https://api.aicoding.sh",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
       "label": "aiminis.info",
       "base": "https://aiminis.info/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "aiminis.info",
+      "base": "https://aiminis.info/docs/api-integration",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -63,8 +77,15 @@
       "source": "community"
     },
     {
-      "label": "api.kevoryn.com",
-      "base": "https://api.kevoryn.com/v1",
+      "label": "api.aigatego.com",
+      "base": "https://api.aigatego.com/docs",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.aigatego.com",
+      "base": "https://api.aigatego.com/pricing",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -79,20 +100,6 @@
     {
       "label": "aikey365.com",
       "base": "https://aikey365.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`，模型名用表里的完整",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -163,6 +170,13 @@
     {
       "label": "earlylore.com",
       "base": "https://earlylore.com/api/mcp",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "cheapbuddy.cc",
+      "base": "https://cheapbuddy.cc/api-docs",
       "testModel": null,
       "note": "",
       "source": "community"
