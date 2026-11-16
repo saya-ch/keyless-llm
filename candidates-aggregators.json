@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T13:56:24.430Z",
+  "generatedAt": "2026-11-16T15:46:35.648Z",
   "sources": [
     {
       "name": "freellms",
@@ -16,8 +16,8 @@
     {
       "name": "free-AI-free-token",
       "url": "https://raw.githubusercontent.com/konglong87/free-AI-free-token/main/README.md",
-      "extracted": 25,
-      "candidates": 9
+      "extracted": 27,
+      "candidates": 10
     },
     {
       "name": "free-llm-api",
@@ -163,6 +163,13 @@
     {
       "label": "maas-api.cn-huabei-1.xf-yun.com",
       "base": "https://maas-api.cn-huabei-1.xf-yun.com/v2",
+      "testModel": null,
+      "note": "",
+      "source": "free-AI-free-token"
+    },
+    {
+      "label": "api.exaone.ai",
+      "base": "https://api.exaone.ai/v1",
       "testModel": null,
       "note": "",
       "source": "free-AI-free-token"
