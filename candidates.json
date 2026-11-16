@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T12:02:03.982Z",
+  "generatedAt": "2026-11-16T12:55:09.090Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -49,12 +49,6 @@
     }
   ],
   "candidates": [
-    {
-      "label": "api.pollinations.ai",
-      "base": "https://api.pollinations.ai/openai",
-      "testModel": null,
-      "note": "种子兜底"
-    },
     {
       "label": "text.pollinations.ai",
       "base": "https://text.pollinations.ai/openai",
