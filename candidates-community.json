@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-15T14:45:10.938Z",
+  "generatedAt": "2026-11-16T16:59:54.555Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 63
+      "urls": 131
     },
     {
       "source": "hackernews",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 109
+      "urls": 110
     },
     {
       "source": "hackernews",
@@ -63,29 +63,8 @@
       "source": "community"
     },
     {
-      "label": "aiminis.info",
-      "base": "https://aiminis.info/docs/api-integration",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
       "label": "api.aigatego.com",
       "base": "https://api.aigatego.com",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.aigatego.com",
-      "base": "https://api.aigatego.com/docs",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.aigatego.com",
-      "base": "https://api.aigatego.com/pricing",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -100,6 +79,20 @@
     {
       "label": "aikey365.com",
       "base": "https://aikey365.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`，模型名用表里的完整",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -140,43 +133,8 @@
       "source": "community"
     },
     {
-      "label": "reapi.ai",
-      "base": "https://reapi.ai/api/v1/images/generations",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "reapi.ai",
-      "base": "https://reapi.ai/api/v1/tasks/TASK_ID",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "127.0.0.1",
-      "base": "http://127.0.0.1:17777/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
       "label": "api.apichatgpt.org",
       "base": "https://api.apichatgpt.org",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "earlylore.com",
-      "base": "https://earlylore.com/api/mcp",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "cheapbuddy.cc",
-      "base": "https://cheapbuddy.cc/api-docs",
       "testModel": null,
       "note": "",
       "source": "community"
