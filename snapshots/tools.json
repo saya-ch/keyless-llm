@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-11-09T13:39:49.114Z",
+  "generatedAt": "2026-11-16T13:24:39.860Z",
   "env": "ci",
   "summary": {
     "checked": 35,
-    "confirmed": 24,
-    "text": 0,
-    "rejected": 2,
-    "missing": 7,
-    "plain": 0,
-    "inconclusive": 2
+    "confirmed": 23,
+    "text": 1,
+    "rejected": 3,
+    "missing": 6,
+    "plain": 1,
+    "inconclusive": 1
   },
   "models": [
     {
@@ -24,8 +24,8 @@
       "provider": "blockrun",
       "label": "BlockRun",
       "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "verdict": "tools_text",
+      "detail": "200，工具调用以文本泄漏，无结构化 tool_calls"
     },
     {
       "id": "blockrun/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
@@ -56,16 +56,16 @@
       "provider": "kilo",
       "label": "Kilo Code",
       "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "verdict": "text_only",
+      "detail": "200，未调用工具（可能模型选择直接回答）"
     },
     {
       "id": "kilo/kilo-auto/free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "status": 400,
+      "verdict": "tools_rejected",
+      "detail": "HTTP 400: This model does not support a required or named tool choice. Remove it and retry."
     },
     {
       "id": "kilo/kilo-auto/small",
@@ -143,9 +143,9 @@
       "id": "kilo/reflection/beam-free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 404,
-      "verdict": "model_missing",
-      "detail": "HTTP 404: {\"error\":\"The requested model 'reflection/beam-free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly released "
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "kilo/xingchen-agi/xing4.0-29b-a4b:free",
@@ -175,9 +175,9 @@
       "id": "llm7/minimax-m2.7",
       "provider": "llm7",
       "label": "LLM7.io",
-      "status": 400,
-      "verdict": "inconclusive",
-      "detail": "HTTP 400（非工具相关错误）: Model 'minimax-m2.7' is currently unavailable."
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "llm7/mistral-Nemo-Instruct-2407",
