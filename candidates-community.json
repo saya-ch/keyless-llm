@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-16T16:59:54.555Z",
+  "generatedAt": "2026-11-17T16:53:40.934Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 131
+      "urls": 130
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 11
+      "urls": 14
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 110
+      "urls": 62
     },
     {
       "source": "hackernews",
@@ -58,13 +58,6 @@
     {
       "label": "aiminis.info",
       "base": "https://aiminis.info/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.aigatego.com",
-      "base": "https://api.aigatego.com",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -121,27 +114,6 @@
     {
       "label": "edge.v2ex.com",
       "base": "https://edge.v2ex.com/chat/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.openai.com",
-      "base": "https://api.openai.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.apichatgpt.org",
-      "base": "https://api.apichatgpt.org",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "chongai.pro",
-      "base": "https://chongai.pro/i/v2e",
       "testModel": null,
       "note": "",
       "source": "community"
