@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-16T11:42:37.694Z",
+  "generatedAt": "2026-11-17T12:04:15.531Z",
   "env": "ci",
   "summary": {
     "providers": 9,
     "freeModels": 52,
-    "healthy": 34,
-    "limited": 9,
+    "healthy": 31,
+    "limited": 12,
     "blocked": 0,
     "failed": 9
   },
@@ -18,9 +18,9 @@
       "rate": "200 req/h/IP",
       "modelsError": "",
       "modelsFound": 474,
-      "freeModels": 19,
+      "freeModels": 18,
       "ok": 13,
-      "limited": 1,
+      "limited": 0,
       "blocked": 0,
       "failed": 5,
       "models": [
@@ -29,18 +29,6 @@
           "status": 200,
           "state": "healthy",
           "error": ""
-        },
-        {
-          "model": "nvidia/nemotron-3.5-super-vl:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "inclusionai/ling-3.2-flash:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded: limit_rpd/inclusionai/ling-3.2-flash-20261113/29d1aca3-0609-42eb-8d0a-cba9ed72226e. Daily limit reached for inclusionai/ling-3.2-flash:free via Ant Digital. Credits don't affect this cap. Add your own provider key to use your own limits: https://openrouter.ai/workspaces/default/byok"
         },
         {
           "model": "baidu/ernie-5.5-flash-preview:free",
@@ -56,6 +44,12 @@
         },
         {
           "model": "particle-ai/particle-1:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
+          "model": "nvidia/nemotron-3.5-super-vl:free",
           "status": 200,
           "state": "healthy",
           "error": ""
@@ -175,16 +169,16 @@
       "modelsError": "",
       "modelsFound": 4,
       "freeModels": 4,
-      "ok": 4,
-      "limited": 0,
+      "ok": 2,
+      "limited": 2,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "nvidia/gpt-oss-120b",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
@@ -200,9 +194,9 @@
         },
         {
           "model": "nvidia/mistral-nemotron",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
         }
       ],
       "failStreak": 0,
@@ -295,19 +289,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 1,
-      "limited": 0,
+      "ok": 0,
+      "limited": 1,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 502,
+          "state": "limited",
+          "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 0,
+      "failStreak": 1,
       "suggestDead": false
     },
     {
@@ -341,10 +335,10 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 73,
-      "freeModels": 7,
+      "modelsFound": 75,
+      "freeModels": 8,
       "ok": 5,
-      "limited": 1,
+      "limited": 2,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -367,6 +361,12 @@
           "error": ""
         },
         {
+          "model": "gpt-oss:120b",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
+        },
+        {
           "model": "gpt-oss:20b",
           "status": 200,
           "state": "healthy",
@@ -374,9 +374,9 @@
         },
         {
           "model": "minimax-m2.7",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Rate limit exceeded. Retry after 49 seconds."
         },
         {
           "model": "mistral-Nemo-Instruct-2407",
@@ -451,7 +451,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 15,
+      "failStreak": 16,
       "suggestDead": true
     },
     {
@@ -481,7 +481,7 @@
           "error": ""
         }
       ],
-      "failStreak": 23,
+      "failStreak": 24,
       "suggestDead": true
     }
   ]
