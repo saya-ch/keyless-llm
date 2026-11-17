@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-16T15:46:35.648Z",
+  "generatedAt": "2026-11-17T15:59:34.682Z",
   "sources": [
     {
       "name": "freellms",
@@ -10,8 +10,8 @@
     {
       "name": "awesome-free-llm-apis",
       "url": "https://raw.githubusercontent.com/mnfst/awesome-free-llm-apis/main/README.md",
-      "extracted": 22,
-      "candidates": 11
+      "extracted": 23,
+      "candidates": 12
     },
     {
       "name": "free-AI-free-token",
@@ -121,6 +121,13 @@
     {
       "label": "generativelanguage.googleapis.com",
       "base": "https://generativelanguage.googleapis.com/v1beta/openai",
+      "testModel": null,
+      "note": "",
+      "source": "awesome-free-llm-apis"
+    },
+    {
+      "label": "api.axforge.ai",
+      "base": "https://api.axforge.ai/v1",
       "testModel": null,
       "note": "",
       "source": "awesome-free-llm-apis"
