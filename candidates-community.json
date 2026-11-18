@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-17T16:53:40.934Z",
+  "generatedAt": "2026-11-18T16:26:59.460Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 130
+      "urls": 140
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 14
+      "urls": 12
     },
     {
       "source": "v2ex",
@@ -49,6 +49,13 @@
   ],
   "candidates": [
     {
+      "label": "api.github.com",
+      "base": "https://api.github.com/repos/xjasonlyu/tun2socks/releases/latest",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
       "label": "api.aicoding.sh",
       "base": "https://api.aicoding.sh",
       "testModel": null,
@@ -58,6 +65,13 @@
     {
       "label": "aiminis.info",
       "base": "https://aiminis.info/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "metastar.world",
+      "base": "https://metastar.world/sdk/v1/docs",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -114,6 +128,13 @@
     {
       "label": "edge.v2ex.com",
       "base": "https://edge.v2ex.com/chat/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.openai.com",
+      "base": "https://api.openai.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
