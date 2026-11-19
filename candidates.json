@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T13:12:31.250Z",
+  "generatedAt": "2026-11-19T13:29:58.895Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -44,9 +44,16 @@
     {
       "query": "public inference API free without key openai format",
       "searchBackend": "bing",
-      "llmBackend": "网关(auto)",
-      "found": 15
+      "llmBackend": "规则兜底",
+      "found": 0
     }
   ],
-  "candidates": []
+  "candidates": [
+    {
+      "label": "text.pollinations.ai",
+      "base": "https://text.pollinations.ai/openai",
+      "testModel": null,
+      "note": "种子兜底"
+    }
+  ]
 }
