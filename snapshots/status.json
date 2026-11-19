@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-18T11:56:17.499Z",
+  "generatedAt": "2026-11-19T11:53:47.628Z",
   "env": "ci",
   "summary": {
     "providers": 9,
-    "freeModels": 56,
+    "freeModels": 51,
     "healthy": 28,
-    "limited": 18,
+    "limited": 13,
     "blocked": 0,
     "failed": 10
   },
@@ -17,18 +17,24 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 475,
-      "freeModels": 18,
+      "modelsFound": 477,
+      "freeModels": 19,
       "ok": 13,
-      "limited": 0,
+      "limited": 2,
       "blocked": 0,
-      "failed": 5,
+      "failed": 4,
       "models": [
         {
           "model": "kilo-auto/free",
           "status": 200,
           "state": "healthy",
           "error": ""
+        },
+        {
+          "model": "inclusionai/ling-3.2-flash:free",
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "baidu/ernie-5.5-flash-preview:free",
@@ -44,6 +50,12 @@
         },
         {
           "model": "particle-ai/particle-1:free",
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
+        },
+        {
+          "model": "recursive/flint-v1.0:free",
           "status": 200,
           "state": "healthy",
           "error": ""
@@ -100,12 +112,6 @@
           "model": "kilo-auto/small",
           "status": 200,
           "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "recursive/flint-v1.0:free",
-          "status": 404,
-          "state": "unknown",
           "error": ""
         },
         {
@@ -169,8 +175,8 @@
       "modelsError": "",
       "modelsFound": 4,
       "freeModels": 4,
-      "ok": 0,
-      "limited": 4,
+      "ok": 1,
+      "limited": 3,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -188,9 +194,9 @@
         },
         {
           "model": "nvidia/step-3.7-flash",
-          "status": 429,
-          "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/mistral-nemotron",
@@ -199,7 +205,7 @@
           "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
         }
       ],
-      "failStreak": 1,
+      "failStreak": 0,
       "suggestDead": false
     },
     {
@@ -301,7 +307,7 @@
           "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 2,
+      "failStreak": 3,
       "suggestDead": false
     },
     {
@@ -335,19 +341,13 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 88,
-      "freeModels": 12,
-      "ok": 5,
-      "limited": 6,
+      "modelsFound": 85,
+      "freeModels": 6,
+      "ok": 4,
+      "limited": 0,
       "blocked": 0,
-      "failed": 1,
+      "failed": 2,
       "models": [
-        {
-          "model": "DeepSeek-V4-Flash-0731",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
         {
           "model": "codestral-latest",
           "status": 200,
@@ -361,58 +361,28 @@
           "error": ""
         },
         {
-          "model": "gemma4:31b",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "glm-5.3-flash",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "gpt-oss:120b",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded. Retry after 50 seconds."
-        },
-        {
           "model": "gpt-oss:20b",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded. Retry after 49 seconds."
-        },
-        {
-          "model": "kimi-k2.7-code",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded. Retry after 48 seconds."
-        },
-        {
-          "model": "mimo-v2.6-flash",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded. Retry after 47 seconds."
-        },
-        {
-          "model": "minimax-m2.7",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded. Retry after 44 seconds."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "mistral-Nemo-Instruct-2407",
-          "status": 429,
-          "state": "limited",
-          "error": "Rate limit exceeded. Retry after 41 seconds."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nemotron-3-nano:30b",
           "status": 400,
           "state": "unknown",
           "error": "Model 'nemotron-3-nano:30b' is currently unavailable."
+        },
+        {
+          "model": "minimax-m2.7",
+          "status": 400,
+          "state": "unknown",
+          "error": "Model 'minimax-m2.7' is currently unavailable."
         }
       ],
       "failStreak": 0,
@@ -440,9 +410,9 @@
         },
         {
           "model": "glm-5.3-flash-free",
-          "status": 410,
+          "status": 400,
           "state": "unknown",
-          "error": "Model glm-5.3-flash-free has been deprecated. Use deepseek-v4.1-flash-free instead."
+          "error": "Upstream request failed: Model is unavailable."
         },
         {
           "model": "mimo-v2.6-flash-free",
@@ -475,7 +445,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 17,
+      "failStreak": 18,
       "suggestDead": true
     },
     {
@@ -505,7 +475,7 @@
           "error": ""
         }
       ],
-      "failStreak": 25,
+      "failStreak": 26,
       "suggestDead": true
     }
   ]
