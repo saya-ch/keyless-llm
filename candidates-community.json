@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-19T16:33:57.339Z",
+  "generatedAt": "2026-11-20T16:08:57.428Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 132
+      "urls": 143
     },
     {
       "source": "hackernews",
@@ -49,8 +49,8 @@
   ],
   "candidates": [
     {
-      "label": "api.aicoding.sh",
-      "base": "https://api.aicoding.sh",
+      "label": "llmbenchmark.ai",
+      "base": "https://llmbenchmark.ai/api",
       "testModel": null,
       "note": "",
       "source": "community"
@@ -92,7 +92,28 @@
     },
     {
       "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/pricing",
+      "base": "https://api.linktoagi.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.cxbl.top",
+      "base": "https://api.cxbl.top",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "edge.v2ex.com",
+      "base": "https://edge.v2ex.com/chat/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.openai.com",
+      "base": "https://api.openai.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
