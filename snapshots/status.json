@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-19T11:53:47.628Z",
+  "generatedAt": "2026-11-20T11:54:57.590Z",
   "env": "ci",
   "summary": {
     "providers": 9,
     "freeModels": 51,
-    "healthy": 28,
+    "healthy": 27,
     "limited": 13,
     "blocked": 0,
-    "failed": 10
+    "failed": 11
   },
   "providers": [
     {
@@ -17,12 +17,12 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 477,
+      "modelsFound": 476,
       "freeModels": 19,
       "ok": 13,
-      "limited": 2,
+      "limited": 1,
       "blocked": 0,
-      "failed": 4,
+      "failed": 5,
       "models": [
         {
           "model": "kilo-auto/free",
@@ -32,9 +32,9 @@
         },
         {
           "model": "inclusionai/ling-3.2-flash:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "baidu/ernie-5.5-flash-preview:free",
@@ -44,15 +44,15 @@
         },
         {
           "model": "liquid/lfm-3-1.7b:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "particle-ai/particle-1:free",
           "status": 429,
           "state": "limited",
           "error": "Provider returned error"
+        },
+        {
+          "model": "particle-ai/particle-1:free",
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "recursive/flint-v1.0:free",
@@ -74,12 +74,6 @@
         },
         {
           "model": "nvidia/nemotron-3.5-lightning:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "cohere/north-mini-code:free",
           "status": 200,
           "state": "healthy",
           "error": ""
@@ -122,6 +116,12 @@
         },
         {
           "model": "poolside/laguna-xs-2.1:free",
+          "status": 404,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": "cohere/north-mini-code:free",
           "status": 404,
           "state": "unknown",
           "error": ""
@@ -175,22 +175,22 @@
       "modelsError": "",
       "modelsFound": 4,
       "freeModels": 4,
-      "ok": 1,
-      "limited": 3,
+      "ok": 4,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "nvidia/gpt-oss-120b",
-          "status": 429,
-          "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "status": 429,
-          "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/step-3.7-flash",
@@ -200,9 +200,9 @@
         },
         {
           "model": "nvidia/mistral-nemotron",
-          "status": 429,
-          "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         }
       ],
       "failStreak": 0,
@@ -217,8 +217,8 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 8,
-      "limited": 1,
+      "ok": 6,
+      "limited": 3,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -236,9 +236,9 @@
         },
         {
           "model": "Qwen3.5-397B-A17B",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "Qwen3.5-9B",
@@ -266,9 +266,9 @@
         },
         {
           "model": "Mistral-Small-3.2-24B-Instruct-2506",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": -1,
+          "state": "limited",
+          "error": "TIMEOUT"
         },
         {
           "model": "Qwen2.5-VL-72B-Instruct",
@@ -307,7 +307,7 @@
           "error": "Vireonix is temporarily unavailable. Please try again shortly."
         }
       ],
-      "failStreak": 3,
+      "failStreak": 4,
       "suggestDead": false
     },
     {
@@ -341,10 +341,10 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 85,
+      "modelsFound": 88,
       "freeModels": 6,
-      "ok": 4,
-      "limited": 0,
+      "ok": 2,
+      "limited": 2,
       "blocked": 0,
       "failed": 2,
       "models": [
@@ -362,15 +362,15 @@
         },
         {
           "model": "gpt-oss:20b",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Your free token allowance has been reached. Please retry in 86716 seconds. To continue with pay-as-you-go, add funds to your account and use your API key: https://dash.llm7.io/#/billing"
         },
         {
           "model": "mistral-Nemo-Instruct-2407",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Your free token allowance has been reached. Please retry in 59 seconds. To continue with pay-as-you-go, add funds to your account and use your API key: https://dash.llm7.io/#/billing"
         },
         {
           "model": "nemotron-3-nano:30b",
@@ -445,7 +445,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 18,
+      "failStreak": 19,
       "suggestDead": true
     },
     {
@@ -475,7 +475,7 @@
           "error": ""
         }
       ],
-      "failStreak": 26,
+      "failStreak": 27,
       "suggestDead": true
     }
   ]
