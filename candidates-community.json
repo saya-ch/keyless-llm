@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-20T16:08:57.428Z",
+  "generatedAt": "2026-11-21T15:22:01.220Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 143
+      "urls": 147
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 11
+      "urls": 12
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 53
+      "urls": 50
     },
     {
       "source": "hackernews",
@@ -48,13 +48,6 @@
     }
   ],
   "candidates": [
-    {
-      "label": "llmbenchmark.ai",
-      "base": "https://llmbenchmark.ai/api",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
     {
       "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1`，模型名填",
@@ -107,13 +100,6 @@
     {
       "label": "edge.v2ex.com",
       "base": "https://edge.v2ex.com/chat/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.openai.com",
-      "base": "https://api.openai.com/v1",
       "testModel": null,
       "note": "",
       "source": "community"
