@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-20T11:54:57.590Z",
+  "generatedAt": "2026-11-21T11:23:07.953Z",
   "env": "ci",
   "summary": {
     "providers": 9,
     "freeModels": 51,
-    "healthy": 27,
-    "limited": 13,
+    "healthy": 32,
+    "limited": 7,
     "blocked": 0,
-    "failed": 11
+    "failed": 12
   },
   "providers": [
     {
@@ -19,10 +19,10 @@
       "modelsError": "",
       "modelsFound": 476,
       "freeModels": 19,
-      "ok": 13,
+      "ok": 12,
       "limited": 1,
       "blocked": 0,
-      "failed": 5,
+      "failed": 6,
       "models": [
         {
           "model": "kilo-auto/free",
@@ -32,9 +32,9 @@
         },
         {
           "model": "inclusionai/ling-3.2-flash:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "baidu/ernie-5.5-flash-preview:free",
@@ -44,9 +44,9 @@
         },
         {
           "model": "liquid/lfm-3-1.7b:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "particle-ai/particle-1:free",
@@ -62,12 +62,6 @@
         },
         {
           "model": "nvidia/nemotron-3.5-super-vl:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "dots-studio/dots-3-note-preview:free",
           "status": 200,
           "state": "healthy",
           "error": ""
@@ -122,6 +116,12 @@
         },
         {
           "model": "cohere/north-mini-code:free",
+          "status": 404,
+          "state": "unknown",
+          "error": ""
+        },
+        {
+          "model": "dots-studio/dots-3-note-preview:free",
           "status": 404,
           "state": "unknown",
           "error": ""
@@ -217,8 +217,8 @@
       "modelsError": "",
       "modelsFound": 10,
       "freeModels": 10,
-      "ok": 6,
-      "limited": 3,
+      "ok": 9,
+      "limited": 0,
       "blocked": 0,
       "failed": 1,
       "models": [
@@ -236,9 +236,9 @@
         },
         {
           "model": "Qwen3.5-397B-A17B",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Qwen3.5-9B",
@@ -260,15 +260,15 @@
         },
         {
           "model": "Meta-Llama-3_3-70B-Instruct",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Mistral-Small-3.2-24B-Instruct-2506",
-          "status": -1,
-          "state": "limited",
-          "error": "TIMEOUT"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "Qwen2.5-VL-72B-Instruct",
@@ -295,19 +295,19 @@
       "modelsError": "",
       "modelsFound": 1,
       "freeModels": 1,
-      "ok": 0,
-      "limited": 1,
+      "ok": 1,
+      "limited": 0,
       "blocked": 0,
       "failed": 0,
       "models": [
         {
           "model": "auto",
-          "status": 502,
-          "state": "limited",
-          "error": "Vireonix is temporarily unavailable. Please try again shortly."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         }
       ],
-      "failStreak": 4,
+      "failStreak": 0,
       "suggestDead": false
     },
     {
@@ -341,10 +341,10 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 88,
+      "modelsFound": 92,
       "freeModels": 6,
-      "ok": 2,
-      "limited": 2,
+      "ok": 4,
+      "limited": 0,
       "blocked": 0,
       "failed": 2,
       "models": [
@@ -362,15 +362,15 @@
         },
         {
           "model": "gpt-oss:20b",
-          "status": 429,
-          "state": "limited",
-          "error": "Your free token allowance has been reached. Please retry in 86716 seconds. To continue with pay-as-you-go, add funds to your account and use your API key: https://dash.llm7.io/#/billing"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "mistral-Nemo-Instruct-2407",
-          "status": 429,
-          "state": "limited",
-          "error": "Your free token allowance has been reached. Please retry in 59 seconds. To continue with pay-as-you-go, add funds to your account and use your API key: https://dash.llm7.io/#/billing"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nemotron-3-nano:30b",
@@ -445,7 +445,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 19,
+      "failStreak": 20,
       "suggestDead": true
     },
     {
@@ -475,7 +475,7 @@
           "error": ""
         }
       ],
-      "failStreak": 27,
+      "failStreak": 28,
       "suggestDead": true
     }
   ]
