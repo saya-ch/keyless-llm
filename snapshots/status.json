@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-21T11:23:07.953Z",
+  "generatedAt": "2026-11-22T11:39:55.443Z",
   "env": "ci",
   "summary": {
     "providers": 9,
     "freeModels": 51,
-    "healthy": 32,
-    "limited": 7,
+    "healthy": 30,
+    "limited": 9,
     "blocked": 0,
     "failed": 12
   },
@@ -19,16 +19,16 @@
       "modelsError": "",
       "modelsFound": 476,
       "freeModels": 19,
-      "ok": 12,
-      "limited": 1,
+      "ok": 10,
+      "limited": 3,
       "blocked": 0,
       "failed": 6,
       "models": [
         {
           "model": "kilo-auto/free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "inclusionai/ling-3.2-flash:free",
@@ -38,9 +38,9 @@
         },
         {
           "model": "baidu/ernie-5.5-flash-preview:free",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
+          "status": 429,
+          "state": "limited",
+          "error": "Provider returned error"
         },
         {
           "model": "liquid/lfm-3-1.7b:free",
@@ -341,7 +341,7 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 92,
+      "modelsFound": 91,
       "freeModels": 6,
       "ok": 4,
       "limited": 0,
@@ -445,7 +445,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 20,
+      "failStreak": 21,
       "suggestDead": true
     },
     {
@@ -475,7 +475,7 @@
           "error": ""
         }
       ],
-      "failStreak": 28,
+      "failStreak": 29,
       "suggestDead": true
     }
   ]
