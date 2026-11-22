@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-21T15:22:01.220Z",
+  "generatedAt": "2026-11-22T15:17:01.547Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 147
+      "urls": 79
     },
     {
       "source": "hackernews",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 50
+      "urls": 46
     },
     {
       "source": "hackernews",
@@ -48,6 +48,13 @@
     }
   ],
   "candidates": [
+    {
+      "label": "api.anthropic.com",
+      "base": "https://api.anthropic.com/v1/messages",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
     {
       "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1`，模型名填",
