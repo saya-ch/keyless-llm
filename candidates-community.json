@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-22T15:17:01.547Z",
+  "generatedAt": "2026-11-23T19:14:27.171Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 79
+      "urls": 141
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 12
+      "urls": 14
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 46
+      "urls": 49
     },
     {
       "source": "hackernews",
@@ -78,35 +78,7 @@
     },
     {
       "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
       "base": "https://api.linktoagi.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.cxbl.top",
-      "base": "https://api.cxbl.top",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "edge.v2ex.com",
-      "base": "https://edge.v2ex.com/chat/v1",
       "testModel": null,
       "note": "",
       "source": "community"
