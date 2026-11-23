@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22T14:34:55.835Z",
+  "generatedAt": "2026-11-23T18:08:12.144Z",
   "sources": [
     {
       "name": "freellms",
@@ -10,8 +10,8 @@
     {
       "name": "awesome-free-llm-apis",
       "url": "https://raw.githubusercontent.com/mnfst/awesome-free-llm-apis/main/README.md",
-      "extracted": 22,
-      "candidates": 12
+      "extracted": 24,
+      "candidates": 13
     },
     {
       "name": "free-AI-free-token",
@@ -142,6 +142,13 @@
     {
       "label": "api-inference.modelscope.cn",
       "base": "https://api-inference.modelscope.cn/v1",
+      "testModel": null,
+      "note": "",
+      "source": "awesome-free-llm-apis"
+    },
+    {
+      "label": "api.runcrate.ai",
+      "base": "https://api.runcrate.ai/v1",
       "testModel": null,
       "note": "",
       "source": "awesome-free-llm-apis"
