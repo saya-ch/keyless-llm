@@ -1,31 +1,31 @@
 {
-  "generatedAt": "2026-11-16T13:24:39.860Z",
+  "generatedAt": "2026-11-23T15:45:20.831Z",
   "env": "ci",
   "summary": {
     "checked": 35,
-    "confirmed": 23,
-    "text": 1,
-    "rejected": 3,
+    "confirmed": 24,
+    "text": 0,
+    "rejected": 2,
     "missing": 6,
     "plain": 1,
-    "inconclusive": 1
+    "inconclusive": 2
   },
   "models": [
     {
       "id": "blockrun/nvidia/gpt-oss-120b",
       "provider": "blockrun",
       "label": "BlockRun",
-      "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "status": 429,
+      "verdict": "inconclusive",
+      "detail": "429 限流"
     },
     {
       "id": "blockrun/nvidia/mistral-nemotron",
       "provider": "blockrun",
       "label": "BlockRun",
       "status": 200,
-      "verdict": "tools_text",
-      "detail": "200，工具调用以文本泄漏，无结构化 tool_calls"
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "blockrun/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
@@ -41,10 +41,18 @@
       "label": "BlockRun",
       "status": 200,
       "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "detail": "tool_calls: get_weather,get_weather"
     },
     {
       "id": "kilo/cohere/north-mini-code:free",
+      "provider": "kilo",
+      "label": "Kilo Code",
+      "status": 404,
+      "verdict": "model_missing",
+      "detail": "HTTP 404: {\"error\":\"The requested model 'cohere/north-mini-code:free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly re"
+    },
+    {
+      "id": "kilo/dots-studio/dots-3-note-preview:free",
       "provider": "kilo",
       "label": "Kilo Code",
       "status": 200,
@@ -52,20 +60,12 @@
       "detail": "tool_calls: get_weather"
     },
     {
-      "id": "kilo/dots-studio/dots-3-note-preview:free",
-      "provider": "kilo",
-      "label": "Kilo Code",
-      "status": 200,
-      "verdict": "text_only",
-      "detail": "200，未调用工具（可能模型选择直接回答）"
-    },
-    {
       "id": "kilo/kilo-auto/free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 400,
-      "verdict": "tools_rejected",
-      "detail": "HTTP 400: This model does not support a required or named tool choice. Remove it and retry."
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "kilo/kilo-auto/small",
@@ -81,7 +81,7 @@
       "label": "Kilo Code",
       "status": 404,
       "verdict": "model_missing",
-      "detail": "HTTP 404: {\"error\":\"The requested model is currently unavailable. Please choose a different model.\",\"error_type\":\"unavailable_model\",\"message\":\"The requested model is cur"
+      "detail": "HTTP 404: {\"error\":\"The requested model 'liquid/lfm-2.5-2.6b:free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly relea"
     },
     {
       "id": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
@@ -135,9 +135,9 @@
       "id": "kilo/recursive/flint-v1.0:free",
       "provider": "kilo",
       "label": "Kilo Code",
-      "status": 404,
-      "verdict": "model_missing",
-      "detail": "HTTP 404: {\"error\":\"The requested model is currently unavailable. Please choose a different model.\",\"error_type\":\"unavailable_model\",\"message\":\"The requested model is cur"
+      "status": 200,
+      "verdict": "tools_confirmed",
+      "detail": "tool_calls: get_weather"
     },
     {
       "id": "kilo/reflection/beam-free",
@@ -153,7 +153,7 @@
       "label": "Kilo Code",
       "status": 404,
       "verdict": "model_missing",
-      "detail": "HTTP 404: {\"error\":\"The requested model is currently unavailable. Please choose a different model.\",\"error_type\":\"unavailable_model\",\"message\":\"The requested model is cur"
+      "detail": "HTTP 404: {\"error\":\"The requested model 'xingchen-agi/xing4.0-29b-a4b:free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a ne"
     },
     {
       "id": "llm7/codestral-latest",
@@ -264,8 +264,8 @@
       "provider": "ovh",
       "label": "OVHcloud AI Endpoints",
       "status": 200,
-      "verdict": "tools_confirmed",
-      "detail": "tool_calls: get_weather"
+      "verdict": "text_only",
+      "detail": "200，未调用工具（可能模型选择直接回答）"
     },
     {
       "id": "ovh/Qwen3.8-27B",
