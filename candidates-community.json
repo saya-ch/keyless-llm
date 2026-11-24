@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-23T19:14:27.171Z",
+  "generatedAt": "2026-11-24T18:53:50.730Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 141
+      "urls": 131
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 14
+      "urls": 12
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 49
+      "urls": 73
     },
     {
       "source": "hackernews",
@@ -47,41 +47,5 @@
       "urls": 0
     }
   ],
-  "candidates": [
-    {
-      "label": "api.anthropic.com",
-      "base": "https://api.anthropic.com/v1/messages",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`，模型名填",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "aikey365.com",
-      "base": "https://aikey365.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1`，模型名用表里的完整",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com/v1",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    }
-  ]
+  "candidates": []
 }
