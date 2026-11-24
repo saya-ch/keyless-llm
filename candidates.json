@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T14:57:21.867Z",
+  "generatedAt": "2026-11-24T14:58:59.888Z",
   "queries": [
     "free no-auth OpenAI-compatible API endpoint no API key required",
     "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -9,13 +9,13 @@
     "public inference API free without key openai format"
   ],
   "searchBackend": "bing",
-  "llmBackend": "网关(auto)",
+  "llmBackend": "规则兜底",
   "rounds": [
     {
       "query": "free no-auth OpenAI-compatible API endpoint no API key required",
       "searchBackend": "bing",
-      "llmBackend": "网关(auto)",
-      "found": 1
+      "llmBackend": "规则兜底",
+      "found": 0
     },
     {
       "query": "免鉴权 大模型 API 免费 无需 key OpenAI 兼容",
@@ -38,8 +38,8 @@
     {
       "query": "免费大模型 API 匿名调用 chat completions 不用注册",
       "searchBackend": "bing",
-      "llmBackend": "规则兜底",
-      "found": 0
+      "llmBackend": "网关(auto)",
+      "found": 2
     },
     {
       "query": "public inference API free without key openai format",
