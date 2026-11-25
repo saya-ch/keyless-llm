@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-24T18:53:50.730Z",
+  "generatedAt": "2026-11-25T17:59:11.688Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 131
+      "urls": 143
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 12
+      "urls": 13
     },
     {
       "source": "v2ex",
@@ -47,5 +47,90 @@
       "urls": 0
     }
   ],
-  "candidates": []
+  "candidates": [
+    {
+      "label": "linyiapi.ai",
+      "base": "https://linyiapi.ai/v1`。",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "new.rundaocloud.com",
+      "base": "https://new.rundaocloud.com/v1/chat/completions",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.anthropic.com",
+      "base": "https://api.anthropic.com/v1/messages",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`，模型名填",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "aikey365.com",
+      "base": "https://aikey365.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`，模型名用表里的完整",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1`",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.cxbl.top",
+      "base": "https://api.cxbl.top",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "edge.v2ex.com",
+      "base": "https://edge.v2ex.com/chat/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
+      "label": "api.openai.com",
+      "base": "https://api.openai.com/v1",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    }
+  ]
 }
