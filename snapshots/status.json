@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-25T13:11:18.723Z",
+  "generatedAt": "2026-11-26T12:51:25.705Z",
   "env": "ci",
   "summary": {
     "providers": 9,
     "freeModels": 50,
-    "healthy": 27,
-    "limited": 11,
+    "healthy": 28,
+    "limited": 9,
     "blocked": 0,
-    "failed": 12
+    "failed": 13
   },
   "providers": [
     {
@@ -17,10 +17,10 @@
       "base": "https://api.kilo.ai/api/gateway",
       "rate": "200 req/h/IP",
       "modelsError": "",
-      "modelsFound": 473,
+      "modelsFound": 469,
       "freeModels": 19,
-      "ok": 12,
-      "limited": 1,
+      "ok": 13,
+      "limited": 0,
       "blocked": 0,
       "failed": 6,
       "models": [
@@ -50,9 +50,9 @@
         },
         {
           "model": "particle-ai/particle-1:free",
-          "status": 429,
-          "state": "limited",
-          "error": "Provider returned error"
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "recursive/flint-v1.0:free",
@@ -175,8 +175,8 @@
       "modelsError": "",
       "modelsFound": 4,
       "freeModels": 4,
-      "ok": 0,
-      "limited": 4,
+      "ok": 1,
+      "limited": 3,
       "blocked": 0,
       "failed": 0,
       "models": [
@@ -194,9 +194,9 @@
         },
         {
           "model": "nvidia/step-3.7-flash",
-          "status": 429,
-          "state": "limited",
-          "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
+          "status": 200,
+          "state": "healthy",
+          "error": ""
         },
         {
           "model": "nvidia/mistral-nemotron",
@@ -205,7 +205,7 @@
           "error": "Free model capacity exhausted — retry shortly, or use a paid model (from $0.002/request). Email hello@blockrun.ai for help."
         }
       ],
-      "failStreak": 1,
+      "failStreak": 0,
       "suggestDead": false
     },
     {
@@ -341,12 +341,12 @@
       "base": "https://api.llm7.io/v1",
       "rate": "匿名 10 req/min（仅 turbo 集）",
       "modelsError": "",
-      "modelsFound": 86,
+      "modelsFound": 88,
       "freeModels": 5,
-      "ok": 3,
+      "ok": 2,
       "limited": 0,
       "blocked": 0,
-      "failed": 2,
+      "failed": 3,
       "models": [
         {
           "model": "codestral-latest",
@@ -356,12 +356,6 @@
         },
         {
           "model": "gpt-oss:20b",
-          "status": 200,
-          "state": "healthy",
-          "error": ""
-        },
-        {
-          "model": "mistral-Nemo-Instruct-2407",
           "status": 200,
           "state": "healthy",
           "error": ""
@@ -377,6 +371,12 @@
           "status": 400,
           "state": "unknown",
           "error": "Model 'minimax-m2.7' is currently unavailable."
+        },
+        {
+          "model": "mistral-Nemo-Instruct-2407",
+          "status": 400,
+          "state": "unknown",
+          "error": "Model 'mistral-Nemo-Instruct-2407' is currently unavailable."
         }
       ],
       "failStreak": 0,
@@ -439,7 +439,7 @@
           "error": "Free usage limit reached. Free models work in OpenCode (https://opencode.ai); subscribe to OpenCode Go to keep going: https://opencode.ai/go"
         }
       ],
-      "failStreak": 24,
+      "failStreak": 25,
       "suggestDead": true
     },
     {
@@ -469,7 +469,7 @@
           "error": ""
         }
       ],
-      "failStreak": 32,
+      "failStreak": 33,
       "suggestDead": true
     }
   ]
