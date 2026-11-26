@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-25T17:59:11.688Z",
+  "generatedAt": "2026-11-26T17:44:31.719Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 143
+      "urls": 142
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 13
+      "urls": 12
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 73
+      "urls": 86
     },
     {
       "source": "hackernews",
@@ -49,6 +49,13 @@
   ],
   "candidates": [
     {
+      "label": "api.linktoagi.com",
+      "base": "https://api.linktoagi.com",
+      "testModel": null,
+      "note": "",
+      "source": "community"
+    },
+    {
       "label": "linyiapi.ai",
       "base": "https://linyiapi.ai/v1`。",
       "testModel": null,
@@ -58,13 +65,6 @@
     {
       "label": "new.rundaocloud.com",
       "base": "https://new.rundaocloud.com/v1/chat/completions",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.linktoagi.com",
-      "base": "https://api.linktoagi.com",
       "testModel": null,
       "note": "",
       "source": "community"
