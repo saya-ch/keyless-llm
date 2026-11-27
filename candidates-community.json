@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-26T17:44:31.719Z",
+  "generatedAt": "2026-11-27T17:27:40.525Z",
   "sources": [
     {
       "source": "v2ex",
       "query": "free llm api no api key",
-      "urls": 142
+      "urls": 83
     },
     {
       "source": "hackernews",
@@ -14,7 +14,7 @@
     {
       "source": "github-repos",
       "query": "free llm api no api key",
-      "urls": 12
+      "urls": 13
     },
     {
       "source": "v2ex",
@@ -34,7 +34,7 @@
     {
       "source": "v2ex",
       "query": "免鉴权 大模型 api 免费",
-      "urls": 86
+      "urls": 89
     },
     {
       "source": "hackernews",
@@ -65,13 +65,6 @@
     {
       "label": "new.rundaocloud.com",
       "base": "https://new.rundaocloud.com/v1/chat/completions",
-      "testModel": null,
-      "note": "",
-      "source": "community"
-    },
-    {
-      "label": "api.anthropic.com",
-      "base": "https://api.anthropic.com/v1/messages",
       "testModel": null,
       "note": "",
       "source": "community"
